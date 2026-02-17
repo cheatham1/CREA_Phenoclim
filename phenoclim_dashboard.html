@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phénoclim — Les Saisons en Montagne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep: #1a3c24;
+    --green-mid: #4a7c59;
+    --green-light: #7cb342;
+    --green-pale: #a5d6a7;
+    --green-ghost: #c8e6c9;
+    --amber: #c17817;
+    --amber-light: #e6a23c;
+    --bg-primary: #0a0f1a;
+    --bg-card: rgba(255,255,255,0.03);
+    --border-subtle: rgba(255,255,255,0.06);
+    --text-primary: #e8e6e1;
+    --text-secondary: #8a9a7a;
+    --text-muted: #6b7b6b;
+    --bouleau: #4a7c59;
+    --meleze: #c17817;
+    --noisetier: #7b5ea7;
+    --sorbier: #c25454;
+    --stage-debourrement: #7cb342;
+    --stage-feuillaison: #2e7d32;
+    --stage-floraison: #e91e63;
+    --stage-couleur: #e65100;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(160deg, var(--bg-primary) 0%, #111827 40%, #0f1a12 100%);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: linear-gradient(135deg, rgba(26,60,36,0.8), rgba(15,26,18,0.9));
+    border-bottom: 1px solid rgba(124,179,66,0.2);
+    padding: 28px 24px 20px;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .header-icon { font-size: 28px; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    font-weight: 400;
+    background: linear-gradient(135deg, var(--green-light), var(--green-pale));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+  }
+  .header-subtitle {
+    font-size: 11px; color: var(--text-secondary);
+    letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;
+  }
+  .stats-strip { display: flex; gap: 28px; margin-top: 16px; flex-wrap: wrap; }
+  .stat { display: flex; align-items: center; gap: 8px; }
+  .stat-icon { font-size: 16px; }
+  .stat-value { font-size: 18px; font-weight: 700; color: var(--green-ghost); }
+  .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ─── MAIN ─── */
+  .main { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── TABS ─── */
+  .tabs { display: flex; gap: 4px; margin: 20px 0; }
+  .tab {
+    flex: 1; padding: 10px 8px; border: 1px solid transparent;
+    border-radius: 8px; background: rgba(255,255,255,0.04);
+    color: var(--text-muted); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.25s; text-align: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab:hover { background: rgba(255,255,255,0.07); }
+  .tab.active {
+    background: rgba(124,179,66,0.2);
+    border-color: rgba(124,179,66,0.3);
+    color: var(--green-pale);
+  }
+  .tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
+
+  /* ─── SECTIONS ─── */
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px; font-weight: 400; margin: 0 0 4px;
+  }
+  .section-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5; }
+
+  /* ─── FILTER PILLS ─── */
+  .pills { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pill {
+    padding: 6px 14px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent; color: #888;
+    font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .pill:hover { border-color: rgba(255,255,255,0.25); }
+  .pill.active { background: var(--pill-bg); border-color: var(--pill-color); color: var(--pill-color); }
+
+  /* ─── CHART CONTAINER ─── */
+  .chart-box {
+    background: var(--bg-card); border-radius: 12px;
+    padding: 20px 16px 12px; border: 1px solid var(--border-subtle);
+    position: relative;
+  }
+  .chart-canvas { width: 100%; height: 340px; }
+
+  /* ─── INSIGHT BOX ─── */
+  .insight {
+    margin-top: 16px;
+    background: rgba(124,179,66,0.08);
+    border: 1px solid rgba(124,179,66,0.2);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .insight-title { font-size: 13px; font-weight: 700; color: var(--green-pale); margin-bottom: 6px; }
+  .insight p { font-size: 13px; color: #c8d6be; line-height: 1.65; }
+
+  /* ─── IMPACT TAB ─── */
+  .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .milestone {
+    background: rgba(255,255,255,0.04); border-radius: 10px;
+    padding: 16px; border: 1px solid var(--border-subtle); text-align: center;
+  }
+  .milestone-icon { font-size: 24px; }
+  .milestone-value { font-size: 18px; font-weight: 700; margin-top: 4px; }
+  .milestone-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .motivation {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(26,60,36,0.6), rgba(20,40,60,0.4));
+    border: 1px solid rgba(124,179,66,0.3);
+    border-radius: 12px; padding: 20px;
+  }
+  .motivation h3 { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--green-pale); margin-bottom: 12px; }
+  .motivation p { font-size: 13px; color: #c8d6be; line-height: 1.7; margin-bottom: 10px; }
+  .motivation p:last-child { margin-bottom: 0; }
+
+  .share-banner {
+    margin-top: 16px; padding: 14px 16px; text-align: center;
+    background: rgba(193,120,23,0.1); border: 1px solid rgba(193,120,23,0.3);
+    border-radius: 10px;
+  }
+  .share-banner strong { font-size: 14px; color: var(--amber-light); }
+  .share-banner p { font-size: 12px; color: #bbb; margin-top: 6px; }
+
+  /* ─── LEGEND ─── */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #aaa; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-line { width: 20px; height: 3px; border-radius: 2px; }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip {
+    position: absolute; pointer-events: none;
+    background: #1a1a2e; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 10px 14px; font-size: 12px;
+    z-index: 100; white-space: nowrap;
+    opacity: 0; transition: opacity 0.15s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .tooltip.visible { opacity: 1; }
+
+  .spacer { height: 40px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .header h1 { font-size: 19px; }
+    .stats-strip { gap: 16px; }
+    .section-title { font-size: 16px; }
+    .milestone-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <span class="header-icon">🌿</span>
+      <div>
+        <h1>Phénoclim — Les Saisons en Montagne</h1>
+        <div class="header-subtitle">CREA Mont-Blanc · Science Participative · 2004–2025</div>
+      </div>
+    </div>
+    <div class="stats-strip">
+      <div class="stat"><span class="stat-icon">📋</span><div><div class="stat-value">51 801</div><div class="stat-label">Observations</div></div></div>
+      <div class="stat"><span class="stat-icon">📅</span><div><div class="stat-value">21 ans</div><div class="stat-label">De données</div></div></div>
+      <div class="stat"><span class="stat-icon">🌳</span><div><div class="stat-value">9 espèces</div><div class="stat-label">Suivies</div></div></div>
+      <div class="stat"><span class="stat-icon">🏔️</span><div><div class="stat-value">7 régions</div><div class="stat-label">Couvertes</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="trends"><span class="tab-icon">📈</span>Tendances</button>
+    <button class="tab" data-tab="altitude"><span class="tab-icon">⛰️</span>Altitude</button>
+    <button class="tab" data-tab="regions"><span class="tab-icon">🗺️</span>Régions</button>
+    <button class="tab" data-tab="impact"><span class="tab-icon">🤝</span>Votre impact</button>
+  </div>
+
+  <!-- ═══════════ TRENDS ═══════════ -->
+  <div class="section active" id="sec-trends">
+    <h2 class="section-title" id="trends-title">🌱 Évolution du débourrement au fil des ans</h2>
+    <p class="section-subtitle">Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues</p>
+
+    <div class="pills" id="stage-pills">
+      <button class="pill active" data-stage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement</button>
+      <button class="pill" data-stage="Feuillaison" style="--pill-color:#2e7d32;--pill-bg:rgba(46,125,50,0.15)">🍃 Feuillaison</button>
+      <button class="pill" data-stage="Floraison" style="--pill-color:#e91e63;--pill-bg:rgba(233,30,99,0.15)">🌸 Floraison</button>
+      <button class="pill" data-stage="Changement de couleur" style="--pill-color:#e65100;--pill-bg:rgba(230,81,0,0.15)">🍂 Changement de couleur</button>
+    </div>
+
+    <div class="chart-box">
+      <canvas class="chart-canvas" id="chart-trends"></canvas>
+      <div class="tooltip" id="tooltip-trends"></div>
+    </div>
+    <div class="legend" id="legend-trends">
+      <div class="legend-item"><span class="legend-line" style="background:#4a7c59"></span>Bouleau</div>
+      <div class="legend-item"><span class="legend-line" style="background:#c17817"></span>Mélèze</div>
+      <div class="legend-item"><span class="legend-line" style="background:#7b5ea7"></span>Noisetier</div>
+      <div class="legend-item"><span class="legend-line" style="background:#c25454"></span>Sorbier</div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title">💡 Ce que montrent vos données</div>
+      <p id="trends-insight">Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ ALTITUDE ═══════════ -->
+  <div class="section" id="sec-altitude">
+    <h2 class="section-title">⛰️ Le gradient altitudinal : la montagne retarde le printemps</h2>
+    <p class="section-subtitle">Date moyenne du débourrement (10%) par tranche d'altitude — combien de jours gagne-t-on en montant ?</p>
+
+    <div class="pills" id="species-pills">
+      <button class="pill active" data-species="bouleau" style="--pill-color:#4a7c59;--pill-bg:rgba(74,124,89,0.15)">Bouleau</button>
+      <button class="pill" data-species="mélèze" style="--pill-color:#c17817;--pill-bg:rgba(193,120,23,0.15)">Mélèze</button>
+      <button class="pill" data-species="noisetier" style="--pill-color:#7b5ea7;--pill-bg:rgba(123,94,167,0.15)">Noisetier</button>
+      <button class="pill" data-species="sorbier" style="--pill-color:#c25454;--pill-bg:rgba(194,84,84,0.15)">Sorbier</button>
+    </div>
+
+    <div class="chart-box">
+      <canvas class="chart-canvas" id="chart-altitude"></canvas>
+      <div class="tooltip" id="tooltip-altitude"></div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title">💡 Le gradient altitudinal</div>
+      <p id="altitude-insight">Le bouleau débourre près de 46 jours plus tard à 1800 m qu'à 200 m d'altitude, soit environ 2,9 jours de retard par 100 m de dénivelé. C'est votre travail d'observation sur le terrain qui permet de quantifier précisément ce gradient !</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ REGIONS ═══════════ -->
+  <div class="section" id="sec-regions">
+    <h2 class="section-title">🗺️ Comparaison entre massifs montagneux</h2>
+    <p class="section-subtitle" id="regions-subtitle">Jour moyen du débourrement par région et par espèce</p>
+
+    <div class="pills" id="region-stage-pills">
+      <button class="pill active" data-rstage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement</button>
+      <button class="pill" data-rstage="Floraison" style="--pill-color:#e91e63;--pill-bg:rgba(233,30,99,0.15)">🌸 Floraison</button>
+    </div>
+
+    <div class="chart-box">
+      <canvas class="chart-canvas" id="chart-regions"></canvas>
+      <div class="tooltip" id="tooltip-regions"></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#4a7c59"></span>Bouleau</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c17817"></span>Mélèze</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#7b5ea7"></span>Noisetier</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c25454"></span>Sorbier</div>
+    </div>
+
+    <div class="insight">
+      <div class="insight-title">💡 Des massifs, des rythmes</div>
+      <p>Le Massif Central et les Vosges, à des altitudes plus modérées, voient le printemps arriver nettement plus tôt que les Alpes ou les Pyrénées. Ces comparaisons ne sont possibles que grâce au réseau d'observateurs répartis dans toute la France !</p>
+    </div>
+  </div>
+
+  <!-- ═══════════ IMPACT ═══════════ -->
+  <div class="section" id="sec-impact">
+    <h2 class="section-title">🤝 Votre contribution compte</h2>
+    <p class="section-subtitle">21 ans de science participative — chaque observation renforce la connaissance</p>
+
+    <div class="chart-box">
+      <canvas class="chart-canvas" id="chart-impact" style="height:260px"></canvas>
+      <div class="tooltip" id="tooltip-impact"></div>
+    </div>
+    <div style="text-align:center;font-size:11px;color:#888;margin-top:6px">
+      <span style="color:#c17817">■</span> 2025 encore en cours
+    </div>
+
+    <div class="milestone-grid">
+      <div class="milestone"><div class="milestone-icon">🎯</div><div class="milestone-value" style="color:#7cb342">51 801</div><div class="milestone-label">observations depuis 2004</div></div>
+      <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" style="color:#64b5f6">98 — 2280 m</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
+      <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" style="color:#e6a23c">9 espèces</div><div class="milestone-label">d'arbres suivies</div></div>
+      <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" style="color:#e57373">~3 jours / 100 m</div><div class="milestone-label">retard du printemps en altitude</div></div>
+    </div>
+
+    <div class="motivation">
+      <h3>🌱 Pourquoi continuer ?</h3>
+      <p><strong>Chaque observation est une donnée scientifique.</strong> Grâce à vos relevés, les chercheurs du CREA mesurent l'impact du changement climatique sur les écosystèmes de montagne avec une précision que les satellites seuls ne permettent pas.</p>
+      <p><strong>Les longues séries temporelles sont irremplaçables.</strong> Avec plus de 20 ans de données, Phénoclim est l'une des plus longues séries phénologiques citoyennes en montagne. Chaque année supplémentaire renforce la robustesse des tendances.</p>
+      <p><strong>Vos observations couvrent des endroits uniques.</strong> De 98 m à 2280 m, des Vosges à la Corse, votre réseau donne accès à des données qu'aucune station automatique ne pourrait fournir.</p>
+    </div>
+
+    <div class="share-banner">
+      <strong>📣 Partagez ces résultats !</strong>
+      <p>Montrez à vos proches l'impact de vos observations. Chaque nouvel observateur enrichit le réseau.</p>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  DATA
+// ════════════════════════════════════════════
+const TIMING = [
+  // bouleau
+  {s:"bouleau",st:"Débourrement",y:2005,d:106.1},{s:"bouleau",st:"Débourrement",y:2006,d:108.6},{s:"bouleau",st:"Débourrement",y:2007,d:97.7},{s:"bouleau",st:"Débourrement",y:2008,d:104.8},{s:"bouleau",st:"Débourrement",y:2009,d:100.6},{s:"bouleau",st:"Débourrement",y:2010,d:108.6},{s:"bouleau",st:"Débourrement",y:2011,d:91.2},{s:"bouleau",st:"Débourrement",y:2012,d:100.8},{s:"bouleau",st:"Débourrement",y:2013,d:113.2},{s:"bouleau",st:"Débourrement",y:2014,d:100.8},{s:"bouleau",st:"Débourrement",y:2015,d:101.8},{s:"bouleau",st:"Débourrement",y:2016,d:107.6},{s:"bouleau",st:"Débourrement",y:2017,d:97.7},{s:"bouleau",st:"Débourrement",y:2018,d:110},{s:"bouleau",st:"Débourrement",y:2019,d:109.7},{s:"bouleau",st:"Débourrement",y:2020,d:100.1},{s:"bouleau",st:"Débourrement",y:2021,d:105.2},{s:"bouleau",st:"Débourrement",y:2022,d:105.6},{s:"bouleau",st:"Débourrement",y:2023,d:107.4},{s:"bouleau",st:"Débourrement",y:2024,d:102.1},{s:"bouleau",st:"Débourrement",y:2025,d:104.3},
+  {s:"bouleau",st:"Feuillaison",y:2005,d:118},{s:"bouleau",st:"Feuillaison",y:2006,d:119.6},{s:"bouleau",st:"Feuillaison",y:2007,d:108.6},{s:"bouleau",st:"Feuillaison",y:2008,d:121.7},{s:"bouleau",st:"Feuillaison",y:2009,d:116.9},{s:"bouleau",st:"Feuillaison",y:2010,d:122.1},{s:"bouleau",st:"Feuillaison",y:2011,d:102.9},{s:"bouleau",st:"Feuillaison",y:2012,d:117.2},{s:"bouleau",st:"Feuillaison",y:2013,d:129.1},{s:"bouleau",st:"Feuillaison",y:2014,d:117.2},{s:"bouleau",st:"Feuillaison",y:2015,d:122.6},{s:"bouleau",st:"Feuillaison",y:2016,d:128.4},{s:"bouleau",st:"Feuillaison",y:2017,d:116.4},{s:"bouleau",st:"Feuillaison",y:2018,d:121.9},{s:"bouleau",st:"Feuillaison",y:2019,d:126.9},{s:"bouleau",st:"Feuillaison",y:2020,d:113.8},{s:"bouleau",st:"Feuillaison",y:2021,d:126.7},{s:"bouleau",st:"Feuillaison",y:2022,d:122.1},{s:"bouleau",st:"Feuillaison",y:2023,d:124.3},{s:"bouleau",st:"Feuillaison",y:2024,d:118.2},{s:"bouleau",st:"Feuillaison",y:2025,d:115.8},
+  {s:"bouleau",st:"Floraison",y:2005,d:125.8},{s:"bouleau",st:"Floraison",y:2006,d:120.4},{s:"bouleau",st:"Floraison",y:2007,d:112.6},{s:"bouleau",st:"Floraison",y:2008,d:121.5},{s:"bouleau",st:"Floraison",y:2009,d:118.3},{s:"bouleau",st:"Floraison",y:2010,d:122},{s:"bouleau",st:"Floraison",y:2011,d:105.4},{s:"bouleau",st:"Floraison",y:2012,d:114.9},{s:"bouleau",st:"Floraison",y:2013,d:125.6},{s:"bouleau",st:"Floraison",y:2014,d:115.7},{s:"bouleau",st:"Floraison",y:2015,d:116.5},{s:"bouleau",st:"Floraison",y:2016,d:125.4},{s:"bouleau",st:"Floraison",y:2017,d:109.6},{s:"bouleau",st:"Floraison",y:2018,d:119.8},{s:"bouleau",st:"Floraison",y:2019,d:126.1},{s:"bouleau",st:"Floraison",y:2020,d:110.9},{s:"bouleau",st:"Floraison",y:2021,d:124.8},{s:"bouleau",st:"Floraison",y:2022,d:118.1},{s:"bouleau",st:"Floraison",y:2023,d:120.6},{s:"bouleau",st:"Floraison",y:2024,d:115.4},{s:"bouleau",st:"Floraison",y:2025,d:114.1},
+  {s:"bouleau",st:"Changement de couleur",y:2006,d:273.1},{s:"bouleau",st:"Changement de couleur",y:2007,d:267.4},{s:"bouleau",st:"Changement de couleur",y:2008,d:265.9},{s:"bouleau",st:"Changement de couleur",y:2009,d:264.6},{s:"bouleau",st:"Changement de couleur",y:2010,d:267},{s:"bouleau",st:"Changement de couleur",y:2011,d:267.8},{s:"bouleau",st:"Changement de couleur",y:2012,d:265.6},{s:"bouleau",st:"Changement de couleur",y:2013,d:267.7},{s:"bouleau",st:"Changement de couleur",y:2014,d:260.4},{s:"bouleau",st:"Changement de couleur",y:2015,d:257.3},{s:"bouleau",st:"Changement de couleur",y:2016,d:261.2},{s:"bouleau",st:"Changement de couleur",y:2017,d:258.2},{s:"bouleau",st:"Changement de couleur",y:2018,d:264.9},{s:"bouleau",st:"Changement de couleur",y:2019,d:262.2},{s:"bouleau",st:"Changement de couleur",y:2020,d:262.6},{s:"bouleau",st:"Changement de couleur",y:2021,d:261.7},{s:"bouleau",st:"Changement de couleur",y:2022,d:261},{s:"bouleau",st:"Changement de couleur",y:2023,d:268.5},{s:"bouleau",st:"Changement de couleur",y:2024,d:260.4},
+  // mélèze
+  {s:"mélèze",st:"Débourrement",y:2005,d:104.2},{s:"mélèze",st:"Débourrement",y:2006,d:111.6},{s:"mélèze",st:"Débourrement",y:2007,d:97.7},{s:"mélèze",st:"Débourrement",y:2008,d:106.9},{s:"mélèze",st:"Débourrement",y:2009,d:107.2},{s:"mélèze",st:"Débourrement",y:2010,d:112.1},{s:"mélèze",st:"Débourrement",y:2011,d:95.1},{s:"mélèze",st:"Débourrement",y:2012,d:100.7},{s:"mélèze",st:"Débourrement",y:2013,d:117.3},{s:"mélèze",st:"Débourrement",y:2014,d:102},{s:"mélèze",st:"Débourrement",y:2015,d:103.3},{s:"mélèze",st:"Débourrement",y:2016,d:107.1},{s:"mélèze",st:"Débourrement",y:2017,d:95.1},{s:"mélèze",st:"Débourrement",y:2018,d:106.2},{s:"mélèze",st:"Débourrement",y:2019,d:100.9},{s:"mélèze",st:"Débourrement",y:2020,d:97.3},{s:"mélèze",st:"Débourrement",y:2021,d:98.6},{s:"mélèze",st:"Débourrement",y:2022,d:103.7},{s:"mélèze",st:"Débourrement",y:2023,d:101},{s:"mélèze",st:"Débourrement",y:2024,d:100.1},{s:"mélèze",st:"Débourrement",y:2025,d:101},
+  {s:"mélèze",st:"Feuillaison",y:2005,d:126.7},{s:"mélèze",st:"Feuillaison",y:2006,d:126.9},{s:"mélèze",st:"Feuillaison",y:2007,d:113.6},{s:"mélèze",st:"Feuillaison",y:2008,d:127.1},{s:"mélèze",st:"Feuillaison",y:2009,d:126.5},{s:"mélèze",st:"Feuillaison",y:2010,d:131.2},{s:"mélèze",st:"Feuillaison",y:2011,d:112},{s:"mélèze",st:"Feuillaison",y:2012,d:126.1},{s:"mélèze",st:"Feuillaison",y:2013,d:132.9},{s:"mélèze",st:"Feuillaison",y:2014,d:124},{s:"mélèze",st:"Feuillaison",y:2015,d:120},{s:"mélèze",st:"Feuillaison",y:2016,d:130.1},{s:"mélèze",st:"Feuillaison",y:2017,d:118.8},{s:"mélèze",st:"Feuillaison",y:2018,d:124.6},{s:"mélèze",st:"Feuillaison",y:2019,d:125.8},{s:"mélèze",st:"Feuillaison",y:2020,d:119.6},{s:"mélèze",st:"Feuillaison",y:2021,d:127.9},{s:"mélèze",st:"Feuillaison",y:2022,d:123.6},{s:"mélèze",st:"Feuillaison",y:2023,d:123.4},{s:"mélèze",st:"Feuillaison",y:2024,d:126.3},{s:"mélèze",st:"Feuillaison",y:2025,d:125.7},
+  {s:"mélèze",st:"Floraison",y:2005,d:121.7},{s:"mélèze",st:"Floraison",y:2006,d:116.8},{s:"mélèze",st:"Floraison",y:2007,d:103.4},{s:"mélèze",st:"Floraison",y:2008,d:115.2},{s:"mélèze",st:"Floraison",y:2009,d:113.1},{s:"mélèze",st:"Floraison",y:2010,d:120.9},{s:"mélèze",st:"Floraison",y:2011,d:101.7},{s:"mélèze",st:"Floraison",y:2012,d:108.2},{s:"mélèze",st:"Floraison",y:2013,d:119.9},{s:"mélèze",st:"Floraison",y:2014,d:106.1},{s:"mélèze",st:"Floraison",y:2015,d:109.1},{s:"mélèze",st:"Floraison",y:2016,d:115.2},{s:"mélèze",st:"Floraison",y:2017,d:101.4},{s:"mélèze",st:"Floraison",y:2018,d:114.6},{s:"mélèze",st:"Floraison",y:2019,d:112.1},{s:"mélèze",st:"Floraison",y:2020,d:105.9},{s:"mélèze",st:"Floraison",y:2021,d:116.5},{s:"mélèze",st:"Floraison",y:2022,d:112.2},{s:"mélèze",st:"Floraison",y:2023,d:109.8},{s:"mélèze",st:"Floraison",y:2024,d:106.3},{s:"mélèze",st:"Floraison",y:2025,d:110.6},
+  {s:"mélèze",st:"Changement de couleur",y:2006,d:283.2},{s:"mélèze",st:"Changement de couleur",y:2007,d:277.9},{s:"mélèze",st:"Changement de couleur",y:2008,d:276.4},{s:"mélèze",st:"Changement de couleur",y:2009,d:278.4},{s:"mélèze",st:"Changement de couleur",y:2010,d:273.1},{s:"mélèze",st:"Changement de couleur",y:2011,d:281.9},{s:"mélèze",st:"Changement de couleur",y:2012,d:278.6},{s:"mélèze",st:"Changement de couleur",y:2013,d:281.2},{s:"mélèze",st:"Changement de couleur",y:2014,d:275.6},{s:"mélèze",st:"Changement de couleur",y:2015,d:267.2},{s:"mélèze",st:"Changement de couleur",y:2016,d:276.7},{s:"mélèze",st:"Changement de couleur",y:2017,d:276.3},{s:"mélèze",st:"Changement de couleur",y:2018,d:279.1},{s:"mélèze",st:"Changement de couleur",y:2019,d:280.9},{s:"mélèze",st:"Changement de couleur",y:2020,d:277.1},{s:"mélèze",st:"Changement de couleur",y:2021,d:281.7},{s:"mélèze",st:"Changement de couleur",y:2022,d:280.5},{s:"mélèze",st:"Changement de couleur",y:2023,d:275.5},{s:"mélèze",st:"Changement de couleur",y:2024,d:277.6},
+  // noisetier
+  {s:"noisetier",st:"Floraison",y:2006,d:72.3},{s:"noisetier",st:"Floraison",y:2007,d:41.6},{s:"noisetier",st:"Floraison",y:2008,d:42.1},{s:"noisetier",st:"Floraison",y:2009,d:62.9},{s:"noisetier",st:"Floraison",y:2010,d:70.6},{s:"noisetier",st:"Floraison",y:2011,d:43.9},{s:"noisetier",st:"Floraison",y:2012,d:55.6},{s:"noisetier",st:"Floraison",y:2013,d:59.1},{s:"noisetier",st:"Floraison",y:2014,d:51.2},{s:"noisetier",st:"Floraison",y:2015,d:54.7},{s:"noisetier",st:"Floraison",y:2016,d:40.8},{s:"noisetier",st:"Floraison",y:2017,d:52.6},{s:"noisetier",st:"Floraison",y:2018,d:51.3},{s:"noisetier",st:"Floraison",y:2019,d:48.2},{s:"noisetier",st:"Floraison",y:2020,d:35.4},{s:"noisetier",st:"Floraison",y:2021,d:49.5},{s:"noisetier",st:"Floraison",y:2022,d:42.1},{s:"noisetier",st:"Floraison",y:2023,d:46.5},{s:"noisetier",st:"Floraison",y:2024,d:40.4},{s:"noisetier",st:"Floraison",y:2025,d:48.6},
+  {s:"noisetier",st:"Débourrement",y:2006,d:98.4},{s:"noisetier",st:"Débourrement",y:2007,d:82.8},{s:"noisetier",st:"Débourrement",y:2008,d:84.6},{s:"noisetier",st:"Débourrement",y:2009,d:88.7},{s:"noisetier",st:"Débourrement",y:2010,d:94.3},{s:"noisetier",st:"Débourrement",y:2011,d:82.4},{s:"noisetier",st:"Débourrement",y:2012,d:82.7},{s:"noisetier",st:"Débourrement",y:2013,d:99.5},{s:"noisetier",st:"Débourrement",y:2014,d:86.5},{s:"noisetier",st:"Débourrement",y:2015,d:92},{s:"noisetier",st:"Débourrement",y:2016,d:90.5},{s:"noisetier",st:"Débourrement",y:2017,d:82.7},{s:"noisetier",st:"Débourrement",y:2018,d:98.1},{s:"noisetier",st:"Débourrement",y:2019,d:88.3},{s:"noisetier",st:"Débourrement",y:2020,d:84.9},{s:"noisetier",st:"Débourrement",y:2021,d:86.4},{s:"noisetier",st:"Débourrement",y:2022,d:88.8},{s:"noisetier",st:"Débourrement",y:2023,d:90.1},{s:"noisetier",st:"Débourrement",y:2024,d:83.1},{s:"noisetier",st:"Débourrement",y:2025,d:85.3},
+  {s:"noisetier",st:"Feuillaison",y:2005,d:110.7},{s:"noisetier",st:"Feuillaison",y:2006,d:114.4},{s:"noisetier",st:"Feuillaison",y:2007,d:105},{s:"noisetier",st:"Feuillaison",y:2008,d:111.5},{s:"noisetier",st:"Feuillaison",y:2009,d:106.4},{s:"noisetier",st:"Feuillaison",y:2010,d:117.1},{s:"noisetier",st:"Feuillaison",y:2011,d:99.5},{s:"noisetier",st:"Feuillaison",y:2012,d:103.5},{s:"noisetier",st:"Feuillaison",y:2013,d:118.1},{s:"noisetier",st:"Feuillaison",y:2014,d:105.7},{s:"noisetier",st:"Feuillaison",y:2015,d:116.8},{s:"noisetier",st:"Feuillaison",y:2016,d:119.6},{s:"noisetier",st:"Feuillaison",y:2017,d:108.7},{s:"noisetier",st:"Feuillaison",y:2018,d:116.5},{s:"noisetier",st:"Feuillaison",y:2019,d:118.6},{s:"noisetier",st:"Feuillaison",y:2020,d:111.2},{s:"noisetier",st:"Feuillaison",y:2021,d:116.3},{s:"noisetier",st:"Feuillaison",y:2022,d:116.1},{s:"noisetier",st:"Feuillaison",y:2023,d:117.2},{s:"noisetier",st:"Feuillaison",y:2024,d:110.2},{s:"noisetier",st:"Feuillaison",y:2025,d:106.7},
+  // sorbier
+  {s:"sorbier",st:"Débourrement",y:2006,d:111.9},{s:"sorbier",st:"Débourrement",y:2007,d:105.4},{s:"sorbier",st:"Débourrement",y:2008,d:104.8},{s:"sorbier",st:"Débourrement",y:2009,d:103.1},{s:"sorbier",st:"Débourrement",y:2010,d:111.4},{s:"sorbier",st:"Débourrement",y:2011,d:98.2},{s:"sorbier",st:"Débourrement",y:2012,d:111.9},{s:"sorbier",st:"Débourrement",y:2013,d:117.8},{s:"sorbier",st:"Débourrement",y:2014,d:111},{s:"sorbier",st:"Débourrement",y:2015,d:109.2},{s:"sorbier",st:"Débourrement",y:2016,d:113.1},{s:"sorbier",st:"Débourrement",y:2017,d:100.3},{s:"sorbier",st:"Débourrement",y:2018,d:112.7},{s:"sorbier",st:"Débourrement",y:2019,d:111.7},{s:"sorbier",st:"Débourrement",y:2020,d:99.4},{s:"sorbier",st:"Débourrement",y:2021,d:107.5},{s:"sorbier",st:"Débourrement",y:2022,d:99.4},{s:"sorbier",st:"Débourrement",y:2023,d:106.4},{s:"sorbier",st:"Débourrement",y:2024,d:104.4},{s:"sorbier",st:"Débourrement",y:2025,d:106.2},
+  {s:"sorbier",st:"Feuillaison",y:2006,d:131},{s:"sorbier",st:"Feuillaison",y:2007,d:119.3},{s:"sorbier",st:"Feuillaison",y:2008,d:128.2},{s:"sorbier",st:"Feuillaison",y:2009,d:126.7},{s:"sorbier",st:"Feuillaison",y:2010,d:133.7},{s:"sorbier",st:"Feuillaison",y:2011,d:117.4},{s:"sorbier",st:"Feuillaison",y:2012,d:133},{s:"sorbier",st:"Feuillaison",y:2013,d:137.8},{s:"sorbier",st:"Feuillaison",y:2014,d:132.6},{s:"sorbier",st:"Feuillaison",y:2015,d:129.2},{s:"sorbier",st:"Feuillaison",y:2016,d:141.3},{s:"sorbier",st:"Feuillaison",y:2017,d:123.7},{s:"sorbier",st:"Feuillaison",y:2018,d:131},{s:"sorbier",st:"Feuillaison",y:2019,d:137.9},{s:"sorbier",st:"Feuillaison",y:2020,d:121.8},{s:"sorbier",st:"Feuillaison",y:2021,d:138.2},{s:"sorbier",st:"Feuillaison",y:2022,d:128.1},{s:"sorbier",st:"Feuillaison",y:2023,d:129.4},{s:"sorbier",st:"Feuillaison",y:2024,d:128},{s:"sorbier",st:"Feuillaison",y:2025,d:127.3},
+  {s:"sorbier",st:"Floraison",y:2006,d:154.6},{s:"sorbier",st:"Floraison",y:2007,d:142.2},{s:"sorbier",st:"Floraison",y:2008,d:143.1},{s:"sorbier",st:"Floraison",y:2009,d:145.3},{s:"sorbier",st:"Floraison",y:2010,d:151.2},{s:"sorbier",st:"Floraison",y:2011,d:138.9},{s:"sorbier",st:"Floraison",y:2012,d:151.8},{s:"sorbier",st:"Floraison",y:2013,d:163.1},{s:"sorbier",st:"Floraison",y:2014,d:158.2},{s:"sorbier",st:"Floraison",y:2015,d:147.2},{s:"sorbier",st:"Floraison",y:2016,d:160.6},{s:"sorbier",st:"Floraison",y:2017,d:142.9},{s:"sorbier",st:"Floraison",y:2018,d:150},{s:"sorbier",st:"Floraison",y:2019,d:159.2},{s:"sorbier",st:"Floraison",y:2020,d:142.9},{s:"sorbier",st:"Floraison",y:2021,d:151.1},{s:"sorbier",st:"Floraison",y:2022,d:140},{s:"sorbier",st:"Floraison",y:2023,d:157.2},{s:"sorbier",st:"Floraison",y:2024,d:151.3},{s:"sorbier",st:"Floraison",y:2025,d:145.8},
+  {s:"sorbier",st:"Changement de couleur",y:2006,d:275.8},{s:"sorbier",st:"Changement de couleur",y:2007,d:260.9},{s:"sorbier",st:"Changement de couleur",y:2008,d:263.5},{s:"sorbier",st:"Changement de couleur",y:2009,d:265.6},{s:"sorbier",st:"Changement de couleur",y:2010,d:259.4},{s:"sorbier",st:"Changement de couleur",y:2011,d:263.3},{s:"sorbier",st:"Changement de couleur",y:2012,d:267.3},{s:"sorbier",st:"Changement de couleur",y:2013,d:271.6},{s:"sorbier",st:"Changement de couleur",y:2014,d:267.8},{s:"sorbier",st:"Changement de couleur",y:2015,d:262.1},{s:"sorbier",st:"Changement de couleur",y:2016,d:271.3},{s:"sorbier",st:"Changement de couleur",y:2017,d:262},{s:"sorbier",st:"Changement de couleur",y:2018,d:268.6},{s:"sorbier",st:"Changement de couleur",y:2019,d:263.1},{s:"sorbier",st:"Changement de couleur",y:2020,d:266.6},{s:"sorbier",st:"Changement de couleur",y:2021,d:257.9},{s:"sorbier",st:"Changement de couleur",y:2022,d:266.9},{s:"sorbier",st:"Changement de couleur",y:2023,d:264.8},{s:"sorbier",st:"Changement de couleur",y:2024,d:268.6},{s:"sorbier",st:"Changement de couleur",y:2025,d:261.5},
+];
+
+const ALT = [
+  {s:"bouleau",a:200,d:84.5},{s:"bouleau",a:400,d:86.1},{s:"bouleau",a:600,d:95.1},{s:"bouleau",a:800,d:99.5},{s:"bouleau",a:1000,d:101.3},{s:"bouleau",a:1200,d:108.5},{s:"bouleau",a:1400,d:112},{s:"bouleau",a:1600,d:114},{s:"bouleau",a:1800,d:130.3},
+  {s:"mélèze",a:400,d:72.9},{s:"mélèze",a:600,d:76.5},{s:"mélèze",a:800,d:93.4},{s:"mélèze",a:1000,d:92.8},{s:"mélèze",a:1200,d:100.2},{s:"mélèze",a:1400,d:102.9},{s:"mélèze",a:1600,d:106.7},{s:"mélèze",a:1800,d:115.7},{s:"mélèze",a:2000,d:140.3},
+  {s:"noisetier",a:0,d:74.2},{s:"noisetier",a:200,d:75.5},{s:"noisetier",a:400,d:80.2},{s:"noisetier",a:600,d:87.8},{s:"noisetier",a:800,d:87.3},{s:"noisetier",a:1000,d:95.2},{s:"noisetier",a:1200,d:98.3},{s:"noisetier",a:1400,d:101.8},
+  {s:"sorbier",a:400,d:83.2},{s:"sorbier",a:800,d:92.2},{s:"sorbier",a:1000,d:95},{s:"sorbier",a:1200,d:111.5},{s:"sorbier",a:1400,d:105.8},{s:"sorbier",a:1600,d:107.5},{s:"sorbier",a:1800,d:119},{s:"sorbier",a:2000,d:130.9},
+];
+
+const OBS = [{y:2004,c:66},{y:2005,c:275},{y:2006,c:981},{y:2007,c:1079},{y:2008,c:1374},{y:2009,c:1748},{y:2010,c:2467},{y:2011,c:2612},{y:2012,c:1782},{y:2013,c:1605},{y:2014,c:1335},{y:2015,c:1433},{y:2016,c:1535},{y:2017,c:1696},{y:2018,c:1907},{y:2019,c:1780},{y:2020,c:1543},{y:2021,c:1669},{y:2022,c:1665},{y:2023,c:1504},{y:2024,c:1477},{y:2025,c:1050}];
+
+const REGIONS = [
+  {r:"Alps",s:"bouleau",st:"Débourrement",d:103.7},{r:"Alps",s:"noisetier",st:"Débourrement",d:89.3},{r:"Alps",s:"mélèze",st:"Débourrement",d:104.3},{r:"Alps",s:"sorbier",st:"Débourrement",d:107.4},
+  {r:"Pyrenees",s:"bouleau",st:"Débourrement",d:109.6},{r:"Pyrenees",s:"noisetier",st:"Débourrement",d:91.2},{r:"Pyrenees",s:"mélèze",st:"Débourrement",d:101.5},{r:"Pyrenees",s:"sorbier",st:"Débourrement",d:113.3},
+  {r:"Mont-Blanc",s:"bouleau",st:"Débourrement",d:102.5},{r:"Mont-Blanc",s:"noisetier",st:"Débourrement",d:91.2},{r:"Mont-Blanc",s:"mélèze",st:"Débourrement",d:97.5},{r:"Mont-Blanc",s:"sorbier",st:"Débourrement",d:98.6},
+  {r:"Massif Central",s:"bouleau",st:"Débourrement",d:90.2},{r:"Massif Central",s:"noisetier",st:"Débourrement",d:72},{r:"Massif Central",s:"mélèze",st:"Débourrement",d:73.9},{r:"Massif Central",s:"sorbier",st:"Débourrement",d:93.9},
+  {r:"Jura",s:"bouleau",st:"Débourrement",d:92.9},{r:"Jura",s:"noisetier",st:"Débourrement",d:90},
+  {r:"Vosges",s:"bouleau",st:"Débourrement",d:84},{r:"Vosges",s:"noisetier",st:"Débourrement",d:82},
+  {r:"Alps",s:"bouleau",st:"Floraison",d:117.3},{r:"Alps",s:"noisetier",st:"Floraison",d:53.2},{r:"Alps",s:"mélèze",st:"Floraison",d:111.5},{r:"Alps",s:"sorbier",st:"Floraison",d:151.2},
+  {r:"Pyrenees",s:"bouleau",st:"Floraison",d:126.1},{r:"Pyrenees",s:"noisetier",st:"Floraison",d:41.4},{r:"Pyrenees",s:"sorbier",st:"Floraison",d:155.6},
+  {r:"Mont-Blanc",s:"bouleau",st:"Floraison",d:115.2},{r:"Mont-Blanc",s:"noisetier",st:"Floraison",d:57.9},{r:"Mont-Blanc",s:"mélèze",st:"Floraison",d:105.7},{r:"Mont-Blanc",s:"sorbier",st:"Floraison",d:139.2},
+  {r:"Massif Central",s:"bouleau",st:"Floraison",d:106.9},{r:"Massif Central",s:"noisetier",st:"Floraison",d:35.9},{r:"Massif Central",s:"sorbier",st:"Floraison",d:126.2},
+];
+
+const SPECIES_COLORS = {bouleau:"#4a7c59",mélèze:"#c17817",noisetier:"#7b5ea7",sorbier:"#c25454"};
+const SPECIES_LIST = ["bouleau","mélèze","noisetier","sorbier"];
+
+// ════════════════════════════════════════════
+//  UTILITIES
+// ════════════════════════════════════════════
+function doyToDate(doy) {
+  const m = ["Jan","Fév","Mar","Avr","Mai","Jun","Jul","Aoû","Sep","Oct","Nov","Déc"];
+  const c = [0,31,59,90,120,151,181,212,243,273,304,334];
+  let mi = 0;
+  for (let i = 11; i >= 0; i--) { if (doy > c[i]) { mi = i; break; } }
+  return Math.round(doy - c[mi]) + " " + m[mi];
+}
+
+function getPixelRatio() { return window.devicePixelRatio || 1; }
+
+function setupCanvas(canvas) {
+  const r = getPixelRatio();
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * r;
+  canvas.height = rect.height * r;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(r, r);
+  return { ctx, w: rect.width, h: rect.height };
+}
+
+// ════════════════════════════════════════════
+//  CHART RENDERERS
+// ════════════════════════════════════════════
+let currentStage = "Débourrement";
+let currentSpecies = "bouleau";
+let currentRegionStage = "Débourrement";
+
+function drawTrends() {
+  const canvas = document.getElementById("chart-trends");
+  const { ctx, w, h } = setupCanvas(canvas);
+  const pad = { l: 60, r: 20, t: 15, b: 35 };
+  const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Get data per species
+  const series = {};
+  SPECIES_LIST.forEach(sp => {
+    series[sp] = TIMING.filter(d => d.s === sp && d.st === currentStage).sort((a,b) => a.y - b.y);
+  });
+
+  // Compute ranges
+  const allYears = [...new Set(TIMING.filter(d => d.st === currentStage).map(d => d.y))].sort();
+  const allDoys = TIMING.filter(d => d.st === currentStage && SPECIES_LIST.includes(d.s)).map(d => d.d);
+  const minY = Math.min(...allYears), maxY = Math.max(...allYears);
+  let minD = Math.min(...allDoys) - 5, maxD = Math.max(...allDoys) + 5;
+
+  const xScale = v => pad.l + ((v - minY) / (maxY - minY)) * cw;
+  const yScale = v => {
+    if (currentStage === "Changement de couleur") return pad.t + ((maxD - v) / (maxD - minD)) * ch;
+    return pad.t + ch - ((v - minD) / (maxD - minD)) * ch;
+  };
+
+  // Grid
+  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.lineWidth = 1;
+  for (let y = minY; y <= maxY; y += 3) {
+    const x = xScale(y);
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch); ctx.stroke();
+  }
+  const dStep = currentStage === "Changement de couleur" ? 5 : (maxD - minD > 80 ? 15 : 10);
+  for (let d = Math.ceil(minD / dStep) * dStep; d <= maxD; d += dStep) {
+    const y = yScale(d);
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
+  }
+
+  // Axes labels
+  ctx.fillStyle = "#888";
+  ctx.font = "11px 'DM Sans', sans-serif";
+  ctx.textAlign = "center";
+  for (let y = minY; y <= maxY; y += 3) {
+    ctx.fillText(y, xScale(y), pad.t + ch + 20);
+  }
+  ctx.textAlign = "right";
+  for (let d = Math.ceil(minD / dStep) * dStep; d <= maxD; d += dStep) {
+    ctx.fillText(doyToDate(d), pad.l - 8, yScale(d) + 4);
+  }
+
+  // Lines
+  SPECIES_LIST.forEach(sp => {
+    const pts = series[sp];
+    if (!pts || pts.length < 2) return;
+    ctx.strokeStyle = SPECIES_COLORS[sp];
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    pts.forEach((p, i) => {
+      const x = xScale(p.y), y = yScale(p.d);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Dots
+    pts.forEach(p => {
+      const x = xScale(p.y), y = yScale(p.d);
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = SPECIES_COLORS[sp];
+      ctx.fill();
+    });
+  });
+
+  // Tooltip hitboxes stored for hover
+  canvas._data = { series, xScale, yScale, pad, cw, ch, minY, maxY };
+}
+
+function drawAltitude() {
+  const canvas = document.getElementById("chart-altitude");
+  const { ctx, w, h } = setupCanvas(canvas);
+  const pad = { l: 65, r: 20, t: 15, b: 40 };
+  const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+  ctx.clearRect(0, 0, w, h);
+
+  const pts = ALT.filter(d => d.s === currentSpecies).sort((a,b) => a.a - b.a);
+  if (!pts.length) return;
+
+  const minA = Math.min(...pts.map(d => d.a)) - 100, maxA = Math.max(...pts.map(d => d.a)) + 100;
+  const minD = Math.min(...pts.map(d => d.d)) - 8, maxD = Math.max(...pts.map(d => d.d)) + 8;
+
+  const xScale = v => pad.l + ((v - minA) / (maxA - minA)) * cw;
+  const yScale = v => pad.t + ch - ((v - minD) / (maxD - minD)) * ch;
+
+  // Grid
+  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  for (let a = 0; a <= 2200; a += 400) {
+    if (a < minA || a > maxA) continue;
+    const x = xScale(a);
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch); ctx.stroke();
+  }
+  for (let d = Math.ceil(minD / 10) * 10; d <= maxD; d += 10) {
+    const y = yScale(d);
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
+  }
+
+  // Axis labels
+  ctx.fillStyle = "#888"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+  for (let a = 0; a <= 2200; a += 400) {
+    if (a < minA || a > maxA) continue;
+    ctx.fillText(a + " m", xScale(a), pad.t + ch + 20);
+  }
+  ctx.textAlign = "right";
+  for (let d = Math.ceil(minD / 10) * 10; d <= maxD; d += 10) {
+    ctx.fillText(doyToDate(d), pad.l - 8, yScale(d) + 4);
+  }
+
+  // Trend line
+  const color = SPECIES_COLORS[currentSpecies];
+  ctx.strokeStyle = color + "44"; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  if (pts.length >= 2) {
+    const n = pts.length;
+    const mx = pts.reduce((s,p) => s + p.a, 0) / n;
+    const my = pts.reduce((s,p) => s + p.d, 0) / n;
+    const num = pts.reduce((s,p) => s + (p.a - mx) * (p.d - my), 0);
+    const den = pts.reduce((s,p) => s + (p.a - mx) * (p.a - mx), 0);
+    const slope = num / den, intercept = my - slope * mx;
+    ctx.moveTo(xScale(minA + 50), yScale(slope * (minA + 50) + intercept));
+    ctx.lineTo(xScale(maxA - 50), yScale(slope * (maxA - 50) + intercept));
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // Points
+  pts.forEach(p => {
+    const x = xScale(p.a), y = yScale(p.d);
+    ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2);
+    ctx.fillStyle = color + "99"; ctx.fill();
+    ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+  });
+
+  canvas._data = { pts, xScale, yScale };
+}
+
+function drawRegions() {
+  const canvas = document.getElementById("chart-regions");
+  const { ctx, w, h } = setupCanvas(canvas);
+  const pad = { l: 110, r: 30, t: 15, b: 35 };
+  const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+  ctx.clearRect(0, 0, w, h);
+
+  const filtered = REGIONS.filter(d => d.st === currentRegionStage);
+  const regionOrder = [...new Set(filtered.map(d => d.r))];
+
+  // Sort regions by avg DOY
+  regionOrder.sort((a, b) => {
+    const avgA = filtered.filter(d => d.r === a).reduce((s, d) => s + d.d, 0) / filtered.filter(d => d.r === a).length;
+    const avgB = filtered.filter(d => d.r === b).reduce((s, d) => s + d.d, 0) / filtered.filter(d => d.r === b).length;
+    return avgB - avgA;
+  });
+
+  const allDoys = filtered.map(d => d.d);
+  const minD = Math.min(...allDoys) - 10, maxD = Math.max(...allDoys) + 10;
+  const barH = Math.min(10, (ch / regionOrder.length - 8) / 4);
+  const groupH = barH * 4 + 12;
+
+  const xScale = v => pad.l + ((v - minD) / (maxD - minD)) * cw;
+
+  // Grid
+  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  const step = maxD - minD > 100 ? 20 : 15;
+  for (let d = Math.ceil(minD / step) * step; d <= maxD; d += step) {
+    const x = xScale(d);
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch); ctx.stroke();
+  }
+
+  // X axis labels
+  ctx.fillStyle = "#888"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+  for (let d = Math.ceil(minD / step) * step; d <= maxD; d += step) {
+    ctx.fillText(doyToDate(d), xScale(d), pad.t + ch + 20);
+  }
+
+  // Bars
+  regionOrder.forEach((reg, ri) => {
+    const baseY = pad.t + ri * (ch / regionOrder.length) + (ch / regionOrder.length) / 2;
+
+    // Region label
+    ctx.fillStyle = "#bbb"; ctx.font = "12px 'DM Sans', sans-serif"; ctx.textAlign = "right";
+    ctx.fillText(reg, pad.l - 10, baseY + 4);
+
+    SPECIES_LIST.forEach((sp, si) => {
+      const entry = filtered.find(d => d.r === reg && d.s === sp);
+      if (!entry) return;
+      const y = baseY - (1.5 - si) * (barH + 2);
+      const x0 = xScale(minD);
+      const x1 = xScale(entry.d);
+      ctx.fillStyle = SPECIES_COLORS[sp];
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      ctx.roundRect(x0, y - barH / 2, x1 - x0, barH, [0, 3, 3, 0]);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+  });
+}
+
+function drawImpact() {
+  const canvas = document.getElementById("chart-impact");
+  const { ctx, w, h } = setupCanvas(canvas);
+  const pad = { l: 50, r: 15, t: 15, b: 35 };
+  const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
+  ctx.clearRect(0, 0, w, h);
+
+  const maxC = Math.max(...OBS.map(d => d.c));
+  const barW = Math.min(28, (cw / OBS.length) * 0.7);
+  const gap = (cw - barW * OBS.length) / (OBS.length);
+
+  // Grid
+  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  for (let v = 500; v <= maxC; v += 500) {
+    const y = pad.t + ch - (v / maxC) * ch;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
+    ctx.fillStyle = "#888"; ctx.font = "10px 'DM Sans', sans-serif"; ctx.textAlign = "right";
+    ctx.fillText(v.toLocaleString(), pad.l - 6, y + 4);
+  }
+
+  OBS.forEach((d, i) => {
+    const x = pad.l + i * (barW + gap) + gap / 2;
+    const barH = (d.c / maxC) * ch;
+    const y = pad.t + ch - barH;
+
+    ctx.fillStyle = d.y === 2025 ? "#c17817" : "#4a7c59";
+    ctx.globalAlpha = d.y === 2025 ? 0.7 : 0.8;
+    ctx.beginPath();
+    ctx.roundRect(x, y, barW, barH, [3, 3, 0, 0]);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Year label
+    if (i % 2 === 0 || OBS.length < 15) {
+      ctx.fillStyle = "#888"; ctx.font = "9px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+      ctx.save(); ctx.translate(x + barW / 2, pad.t + ch + 16); ctx.rotate(-0.3);
+      ctx.fillText(d.y, 0, 0); ctx.restore();
+    }
+  });
+}
+
+// ════════════════════════════════════════════
+//  TAB & PILL INTERACTIONS
+// ════════════════════════════════════════════
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const tabId = btn.dataset.tab;
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.getElementById("sec-" + tabId).classList.add("active");
+
+    requestAnimationFrame(() => {
+      if (tabId === "trends") drawTrends();
+      if (tabId === "altitude") drawAltitude();
+      if (tabId === "regions") drawRegions();
+      if (tabId === "impact") drawImpact();
+    });
+  });
+});
+
+const INSIGHTS = {
+  "Débourrement": "Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.",
+  "Feuillaison": "La mise en feuilles suit le débourrement. On observe 3 à 4 semaines de différence entre les espèces précoces (noisetier) et tardives (sorbier). L'année 2011 reste exceptionnellement précoce pour toutes les espèces.",
+  "Floraison": "La floraison du noisetier est remarquablement précoce (dès février !) et tend à avancer. En 2020, elle a été observée en moyenne dès le 4 février. Les autres espèces fleurissent plus classiquement en avril-mai.",
+  "Changement de couleur": "Le changement de couleur automnale du bouleau tend à arriver plus tôt qu'au début des observations, une tendance cohérente avec le raccourcissement de la saison de végétation observé dans d'autres études alpines."
+};
+const STAGE_ICONS = {"Débourrement":"🌱","Feuillaison":"🍃","Floraison":"🌸","Changement de couleur":"🍂"};
+
+document.querySelectorAll("#stage-pills .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#stage-pills .pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentStage = btn.dataset.stage;
+    document.getElementById("trends-title").textContent = STAGE_ICONS[currentStage] + " Évolution du " + currentStage.toLowerCase() + " au fil des ans";
+    document.getElementById("trends-insight").textContent = INSIGHTS[currentStage];
+    drawTrends();
+  });
+});
+
+const ALT_INSIGHTS = {
+  bouleau: "Le bouleau débourre près de 46 jours plus tard à 1800 m qu'à 200 m d'altitude, soit environ 2,9 jours de retard par 100 m de dénivelé. C'est votre travail d'observation qui permet de quantifier ce gradient !",
+  mélèze: "Le mélèze montre un gradient spectaculaire : de mi-mars à 400 m jusqu'à mi-mai à 2000 m, soit ~67 jours de différence ! Cette espèce de haute montagne est particulièrement sensible à l'altitude.",
+  noisetier: "Le noisetier débourre dès mi-mars en plaine et début avril en altitude. Son gradient est plus modéré (~2 jours/100 m) car il pousse surtout à des altitudes basses à moyennes.",
+  sorbier: "Le sorbier montre un retard d'environ 48 jours entre 400 m et 2000 m. Cette espèce est suivie jusqu'en haute altitude, rendant vos observations particulièrement précieuses.",
+};
+
+document.querySelectorAll("#species-pills .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#species-pills .pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentSpecies = btn.dataset.species;
+    document.getElementById("altitude-insight").textContent = ALT_INSIGHTS[currentSpecies];
+    drawAltitude();
+  });
+});
+
+document.querySelectorAll("#region-stage-pills .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#region-stage-pills .pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentRegionStage = btn.dataset.rstage;
+    document.getElementById("regions-subtitle").textContent = "Jour moyen du " + currentRegionStage.toLowerCase() + " par région et par espèce";
+    drawRegions();
+  });
+});
+
+// ════════════════════════════════════════════
+//  TOOLTIP HOVER (Trends chart)
+// ════════════════════════════════════════════
+const trendsCanvas = document.getElementById("chart-trends");
+const trendsTip = document.getElementById("tooltip-trends");
+
+trendsCanvas.addEventListener("mousemove", (e) => {
+  const data = trendsCanvas._data;
+  if (!data) return;
+  const rect = trendsCanvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+
+  let closest = null, minDist = 20;
+  SPECIES_LIST.forEach(sp => {
+    (data.series[sp] || []).forEach(p => {
+      const px = data.xScale(p.y), py = data.yScale(p.d);
+      const dist = Math.sqrt((mx - px) ** 2 + (my - py) ** 2);
+      if (dist < minDist) { minDist = dist; closest = { ...p, sp, px, py }; }
+    });
+  });
+
+  if (closest) {
+    const labels = {bouleau:"Bouleau",mélèze:"Mélèze",noisetier:"Noisetier",sorbier:"Sorbier"};
+    trendsTip.innerHTML = `<div style="color:#aaa;font-weight:600;margin-bottom:3px">${closest.y}</div>
+      <div style="color:${SPECIES_COLORS[closest.sp]}"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SPECIES_COLORS[closest.sp]};margin-right:5px"></span>${labels[closest.sp]}: <strong>${doyToDate(closest.d)}</strong></div>`;
+    trendsTip.style.left = (closest.px + 15) + "px";
+    trendsTip.style.top = (closest.py - 30) + "px";
+    trendsTip.classList.add("visible");
+  } else {
+    trendsTip.classList.remove("visible");
+  }
+});
+trendsCanvas.addEventListener("mouseleave", () => trendsTip.classList.remove("visible"));
+
+// ════════════════════════════════════════════
+//  INIT + RESIZE
+// ════════════════════════════════════════════
+function init() { drawTrends(); }
+window.addEventListener("resize", () => {
+  const active = document.querySelector(".section.active")?.id;
+  if (active === "sec-trends") drawTrends();
+  if (active === "sec-altitude") drawAltitude();
+  if (active === "sec-regions") drawRegions();
+  if (active === "sec-impact") drawImpact();
+});
+init();
+</script>
+</body>
+</html>
