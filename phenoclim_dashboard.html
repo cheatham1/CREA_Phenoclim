@@ -122,6 +122,29 @@
   }
   .chart-canvas { width: 100%; height: 340px; }
 
+  /* ─── PCT TOGGLE ─── */
+  .pct-toggle {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 12px;
+  }
+  .pct-toggle-label {
+    font-size: 12px; color: #888; margin-right: 4px;
+  }
+  .pct-btn {
+    padding: 5px 14px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent; color: #888;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .pct-btn:hover { border-color: rgba(255,255,255,0.25); color: #aaa; }
+  .pct-btn.active {
+    background: rgba(230,81,0,0.15);
+    border-color: rgba(230,81,0,0.4);
+    color: #ff9e40;
+  }
+
   /* ─── INSIGHT BOX ─── */
   .insight {
     margin-top: 16px;
@@ -303,13 +326,20 @@
   <!-- ═══════════ TRENDS ═══════════ -->
   <div class="section active" id="sec-trends">
     <h2 class="section-title" id="trends-title">🌱 Évolution du débourrement au fil des ans</h2>
-    <p class="section-subtitle">Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues</p>
+    <p class="section-subtitle" id="trends-subtitle">Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues</p>
 
     <div class="pills" id="stage-pills">
       <button class="pill active" data-stage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement</button>
       <button class="pill" data-stage="Feuillaison" style="--pill-color:#2e7d32;--pill-bg:rgba(46,125,50,0.15)">🍃 Feuillaison</button>
       <button class="pill" data-stage="Floraison" style="--pill-color:#e91e63;--pill-bg:rgba(233,30,99,0.15)">🌸 Floraison</button>
       <button class="pill" data-stage="Changement de couleur" style="--pill-color:#e65100;--pill-bg:rgba(230,81,0,0.15)">🍂 Changement de couleur</button>
+    </div>
+
+    <!-- 10%/50% toggle — only visible for Changement de couleur -->
+    <div class="pct-toggle" id="pct-toggle" style="display:none">
+      <span class="pct-toggle-label">Montrer :</span>
+      <button class="pct-btn active" data-pct="10">Début (10%)</button>
+      <button class="pct-btn" data-pct="50">Mi-canopée (50%)</button>
     </div>
 
     <div class="chart-box">
@@ -331,8 +361,13 @@
 
   <!-- ═══════════ ALTITUDE ═══════════ -->
   <div class="section" id="sec-altitude">
-    <h2 class="section-title">⛰️ Le gradient altitudinal : la montagne retarde le printemps</h2>
-    <p class="section-subtitle">Date moyenne du débourrement (10%) par tranche d'altitude — combien de jours gagne-t-on en montant ?</p>
+    <h2 class="section-title" id="alt-title">⛰️ Le gradient altitudinal : la montagne retarde le printemps</h2>
+    <p class="section-subtitle" id="alt-subtitle">Date moyenne du débourrement (10%) par tranche d'altitude — combien de jours gagne-t-on en montant ?</p>
+
+    <div class="pills" id="alt-stage-pills">
+      <button class="pill active" data-altstage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement (10%)</button>
+      <button class="pill" data-altstage="Changement de couleur" style="--pill-color:#e65100;--pill-bg:rgba(230,81,0,0.15)">🍂 Changement de couleur (10% → 50%)</button>
+    </div>
 
     <div class="pills" id="species-pills">
       <button class="pill active" data-species="bouleau" style="--pill-color:#4a7c59;--pill-bg:rgba(74,124,89,0.15)">Bouleau</button>
@@ -586,6 +621,10 @@ const ALT = [
   {s:"mélèze",a:400,d:72.9},{s:"mélèze",a:600,d:76.5},{s:"mélèze",a:800,d:93.4},{s:"mélèze",a:1000,d:92.8},{s:"mélèze",a:1200,d:100.2},{s:"mélèze",a:1400,d:102.9},{s:"mélèze",a:1600,d:106.7},{s:"mélèze",a:1800,d:115.7},{s:"mélèze",a:2000,d:140.3},
   {s:"noisetier",a:0,d:74.2},{s:"noisetier",a:200,d:75.5},{s:"noisetier",a:400,d:80.2},{s:"noisetier",a:600,d:87.8},{s:"noisetier",a:800,d:87.3},{s:"noisetier",a:1000,d:95.2},{s:"noisetier",a:1200,d:98.3},{s:"noisetier",a:1400,d:101.8},
   {s:"sorbier",a:400,d:83.2},{s:"sorbier",a:800,d:92.2},{s:"sorbier",a:1000,d:95},{s:"sorbier",a:1200,d:111.5},{s:"sorbier",a:1400,d:105.8},{s:"sorbier",a:1600,d:107.5},{s:"sorbier",a:1800,d:119},{s:"sorbier",a:2000,d:130.9},
+  // Changement de couleur 10%
+  {s:"bouleau",st:"Changement de couleur",a:200,d:275.1},{s:"bouleau",st:"Changement de couleur",a:400,d:271},{s:"bouleau",st:"Changement de couleur",a:600,d:277.2},{s:"bouleau",st:"Changement de couleur",a:800,d:261.7},{s:"bouleau",st:"Changement de couleur",a:1000,d:262},{s:"bouleau",st:"Changement de couleur",a:1200,d:262.3},{s:"bouleau",st:"Changement de couleur",a:1400,d:260.5},{s:"bouleau",st:"Changement de couleur",a:1600,d:263.1},{s:"bouleau",st:"Changement de couleur",a:1800,d:266.4},{s:"bouleau",st:"Changement de couleur",a:2000,d:246},
+  {s:"mélèze",st:"Changement de couleur",a:600,d:291.4},{s:"mélèze",st:"Changement de couleur",a:800,d:284.9},{s:"mélèze",st:"Changement de couleur",a:1000,d:283.6},{s:"mélèze",st:"Changement de couleur",a:1200,d:279},{s:"mélèze",st:"Changement de couleur",a:1400,d:274},{s:"mélèze",st:"Changement de couleur",a:1600,d:277.5},{s:"mélèze",st:"Changement de couleur",a:1800,d:268.7},{s:"mélèze",st:"Changement de couleur",a:2000,d:281.1},
+  {s:"sorbier",st:"Changement de couleur",a:400,d:281.7},{s:"sorbier",st:"Changement de couleur",a:600,d:267.4},{s:"sorbier",st:"Changement de couleur",a:800,d:254.7},{s:"sorbier",st:"Changement de couleur",a:1000,d:261.4},{s:"sorbier",st:"Changement de couleur",a:1200,d:265.4},{s:"sorbier",st:"Changement de couleur",a:1400,d:264.5},{s:"sorbier",st:"Changement de couleur",a:1600,d:266},{s:"sorbier",st:"Changement de couleur",a:1800,d:268.2},{s:"sorbier",st:"Changement de couleur",a:2000,d:264},
 ];
 
 const OBS = [{y:2004,c:66},{y:2005,c:275},{y:2006,c:981},{y:2007,c:1079},{y:2008,c:1374},{y:2009,c:1748},{y:2010,c:2467},{y:2011,c:2612},{y:2012,c:1782},{y:2013,c:1605},{y:2014,c:1335},{y:2015,c:1433},{y:2016,c:1535},{y:2017,c:1696},{y:2018,c:1907},{y:2019,c:1780},{y:2020,c:1543},{y:2021,c:1669},{y:2022,c:1665},{y:2023,c:1504},{y:2024,c:1477},{y:2025,c:1050}];
@@ -605,6 +644,19 @@ const REGIONS = [
 
 const SPECIES_COLORS = {bouleau:"#4a7c59",mélèze:"#c17817",noisetier:"#7b5ea7",sorbier:"#c25454"};
 const SPECIES_LIST = ["bouleau","mélèze","noisetier","sorbier"];
+
+// 50% data (only available for Changement de couleur)
+const TIMING50 = [
+  {s:"bouleau",st:"Changement de couleur",y:2004,d:296.3},{s:"bouleau",st:"Changement de couleur",y:2005,d:299},{s:"bouleau",st:"Changement de couleur",y:2006,d:293.7},{s:"bouleau",st:"Changement de couleur",y:2007,d:284.9},{s:"bouleau",st:"Changement de couleur",y:2008,d:284},{s:"bouleau",st:"Changement de couleur",y:2009,d:288.2},{s:"bouleau",st:"Changement de couleur",y:2010,d:286.4},{s:"bouleau",st:"Changement de couleur",y:2011,d:287.4},{s:"bouleau",st:"Changement de couleur",y:2012,d:285.2},{s:"bouleau",st:"Changement de couleur",y:2013,d:290.5},{s:"bouleau",st:"Changement de couleur",y:2014,d:280},{s:"bouleau",st:"Changement de couleur",y:2015,d:276.4},{s:"bouleau",st:"Changement de couleur",y:2016,d:283.6},{s:"bouleau",st:"Changement de couleur",y:2017,d:276.4},{s:"bouleau",st:"Changement de couleur",y:2018,d:282},{s:"bouleau",st:"Changement de couleur",y:2019,d:280.9},{s:"bouleau",st:"Changement de couleur",y:2020,d:280.7},{s:"bouleau",st:"Changement de couleur",y:2021,d:283.2},{s:"bouleau",st:"Changement de couleur",y:2022,d:283.3},{s:"bouleau",st:"Changement de couleur",y:2023,d:287.5},{s:"bouleau",st:"Changement de couleur",y:2024,d:281.1},{s:"bouleau",st:"Changement de couleur",y:2025,d:274.4},
+  {s:"mélèze",st:"Changement de couleur",y:2004,d:306.4},{s:"mélèze",st:"Changement de couleur",y:2005,d:300.7},{s:"mélèze",st:"Changement de couleur",y:2006,d:301.6},{s:"mélèze",st:"Changement de couleur",y:2007,d:300.4},{s:"mélèze",st:"Changement de couleur",y:2008,d:293.4},{s:"mélèze",st:"Changement de couleur",y:2009,d:293.9},{s:"mélèze",st:"Changement de couleur",y:2010,d:289.6},{s:"mélèze",st:"Changement de couleur",y:2011,d:298.9},{s:"mélèze",st:"Changement de couleur",y:2012,d:296.4},{s:"mélèze",st:"Changement de couleur",y:2013,d:297.5},{s:"mélèze",st:"Changement de couleur",y:2014,d:292.9},{s:"mélèze",st:"Changement de couleur",y:2015,d:287.6},{s:"mélèze",st:"Changement de couleur",y:2016,d:298.2},{s:"mélèze",st:"Changement de couleur",y:2017,d:294.1},{s:"mélèze",st:"Changement de couleur",y:2018,d:297.8},{s:"mélèze",st:"Changement de couleur",y:2019,d:301.6},{s:"mélèze",st:"Changement de couleur",y:2020,d:292.7},{s:"mélèze",st:"Changement de couleur",y:2021,d:301.2},{s:"mélèze",st:"Changement de couleur",y:2022,d:301.7},{s:"mélèze",st:"Changement de couleur",y:2023,d:299.3},{s:"mélèze",st:"Changement de couleur",y:2024,d:297.4},{s:"mélèze",st:"Changement de couleur",y:2025,d:274},
+  {s:"sorbier",st:"Changement de couleur",y:2004,d:291.7},{s:"sorbier",st:"Changement de couleur",y:2005,d:283.7},{s:"sorbier",st:"Changement de couleur",y:2006,d:286.3},{s:"sorbier",st:"Changement de couleur",y:2007,d:269.5},{s:"sorbier",st:"Changement de couleur",y:2008,d:277.4},{s:"sorbier",st:"Changement de couleur",y:2009,d:280.5},{s:"sorbier",st:"Changement de couleur",y:2010,d:273},{s:"sorbier",st:"Changement de couleur",y:2011,d:278.8},{s:"sorbier",st:"Changement de couleur",y:2012,d:277.5},{s:"sorbier",st:"Changement de couleur",y:2013,d:286.5},{s:"sorbier",st:"Changement de couleur",y:2014,d:278.6},{s:"sorbier",st:"Changement de couleur",y:2015,d:274.4},{s:"sorbier",st:"Changement de couleur",y:2016,d:283.8},{s:"sorbier",st:"Changement de couleur",y:2017,d:273.9},{s:"sorbier",st:"Changement de couleur",y:2018,d:279.5},{s:"sorbier",st:"Changement de couleur",y:2019,d:279.8},{s:"sorbier",st:"Changement de couleur",y:2020,d:281.2},{s:"sorbier",st:"Changement de couleur",y:2021,d:277},{s:"sorbier",st:"Changement de couleur",y:2022,d:279.2},{s:"sorbier",st:"Changement de couleur",y:2023,d:279},{s:"sorbier",st:"Changement de couleur",y:2024,d:279.8},{s:"sorbier",st:"Changement de couleur",y:2025,d:275.6},
+];
+
+const ALT50 = [
+  {s:"bouleau",st:"Changement de couleur",a:200,d:295.5},{s:"bouleau",st:"Changement de couleur",a:400,d:294.3},{s:"bouleau",st:"Changement de couleur",a:600,d:296.2},{s:"bouleau",st:"Changement de couleur",a:800,d:285.6},{s:"bouleau",st:"Changement de couleur",a:1000,d:282},{s:"bouleau",st:"Changement de couleur",a:1200,d:280.2},{s:"bouleau",st:"Changement de couleur",a:1400,d:282.6},{s:"bouleau",st:"Changement de couleur",a:1600,d:282.4},{s:"bouleau",st:"Changement de couleur",a:1800,d:284.5},{s:"bouleau",st:"Changement de couleur",a:2000,d:270.5},
+  {s:"mélèze",st:"Changement de couleur",a:600,d:309.1},{s:"mélèze",st:"Changement de couleur",a:800,d:303.7},{s:"mélèze",st:"Changement de couleur",a:1000,d:301.1},{s:"mélèze",st:"Changement de couleur",a:1200,d:298.1},{s:"mélèze",st:"Changement de couleur",a:1400,d:294},{s:"mélèze",st:"Changement de couleur",a:1600,d:297.4},{s:"mélèze",st:"Changement de couleur",a:1800,d:287.8},{s:"mélèze",st:"Changement de couleur",a:2000,d:291.4},
+  {s:"sorbier",st:"Changement de couleur",a:400,d:295.8},{s:"sorbier",st:"Changement de couleur",a:600,d:282.1},{s:"sorbier",st:"Changement de couleur",a:800,d:272.8},{s:"sorbier",st:"Changement de couleur",a:1000,d:276.5},{s:"sorbier",st:"Changement de couleur",a:1200,d:279.2},{s:"sorbier",st:"Changement de couleur",a:1400,d:277.7},{s:"sorbier",st:"Changement de couleur",a:1600,d:279.1},{s:"sorbier",st:"Changement de couleur",a:1800,d:279.4},{s:"sorbier",st:"Changement de couleur",a:2000,d:277.5},
+];
 
 // ════════════════════════════════════════════
 //  UTILITIES
@@ -636,6 +688,8 @@ let currentStage = "Débourrement";
 let currentSpecies = "bouleau";
 let currentRegionStage = "Débourrement";
 
+let currentTrendsPct = "10"; // "10" or "50"
+
 function drawTrends() {
   const canvas = document.getElementById("chart-trends");
   const { ctx, w, h } = setupCanvas(canvas);
@@ -644,21 +698,27 @@ function drawTrends() {
 
   ctx.clearRect(0, 0, w, h);
 
-  // Get data per species
+  const isCouleur = currentStage === "Changement de couleur";
+  const use50 = isCouleur && currentTrendsPct === "50";
+
+  // Pick the right data source
+  const source = use50 ? TIMING50 : TIMING;
   const series = {};
   SPECIES_LIST.forEach(sp => {
-    series[sp] = TIMING.filter(d => d.s === sp && d.st === currentStage).sort((a,b) => a.y - b.y);
+    series[sp] = source.filter(d => d.s === sp && d.st === currentStage).sort((a,b) => a.y - b.y);
   });
 
   // Compute ranges
-  const allYears = [...new Set(TIMING.filter(d => d.st === currentStage).map(d => d.y))].sort();
-  const allDoys = TIMING.filter(d => d.st === currentStage && SPECIES_LIST.includes(d.s)).map(d => d.d);
+  const allPts = source.filter(d => d.st === currentStage && SPECIES_LIST.includes(d.s));
+  if (!allPts.length) return;
+  const allYears = [...new Set(allPts.map(d => d.y))].sort();
+  const allDoys = allPts.map(d => d.d);
   const minY = Math.min(...allYears), maxY = Math.max(...allYears);
   let minD = Math.min(...allDoys) - 5, maxD = Math.max(...allDoys) + 5;
 
   const xScale = v => pad.l + ((v - minY) / (maxY - minY)) * cw;
   const yScale = v => {
-    if (currentStage === "Changement de couleur") return pad.t + ((maxD - v) / (maxD - minD)) * ch;
+    if (isCouleur) return pad.t + ((maxD - v) / (maxD - minD)) * ch;
     return pad.t + ch - ((v - minD) / (maxD - minD)) * ch;
   };
 
@@ -669,7 +729,7 @@ function drawTrends() {
     const x = xScale(y);
     ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch); ctx.stroke();
   }
-  const dStep = currentStage === "Changement de couleur" ? 5 : (maxD - minD > 80 ? 15 : 10);
+  const dStep = isCouleur ? 10 : (maxD - minD > 80 ? 15 : 10);
   for (let d = Math.ceil(minD / dStep) * dStep; d <= maxD; d += dStep) {
     const y = yScale(d);
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
@@ -687,7 +747,7 @@ function drawTrends() {
     ctx.fillText(doyToDate(d), pad.l - 8, yScale(d) + 4);
   }
 
-  // Lines
+  // Lines + dots
   SPECIES_LIST.forEach(sp => {
     const pts = series[sp];
     if (!pts || pts.length < 2) return;
@@ -701,7 +761,6 @@ function drawTrends() {
     });
     ctx.stroke();
 
-    // Dots
     pts.forEach(p => {
       const x = xScale(p.y), y = yScale(p.d);
       ctx.beginPath();
@@ -711,9 +770,11 @@ function drawTrends() {
     });
   });
 
-  // Tooltip hitboxes stored for hover
-  canvas._data = { series, xScale, yScale, pad, cw, ch, minY, maxY };
+  // Store for tooltip
+  canvas._data = { series, xScale, yScale, pad, cw, ch, minY, maxY, pct: use50 ? "50%" : "10%" };
 }
+
+let currentAltStage = "Débourrement";
 
 function drawAltitude() {
   const canvas = document.getElementById("chart-altitude");
@@ -722,11 +783,33 @@ function drawAltitude() {
   const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
   ctx.clearRect(0, 0, w, h);
 
-  const pts = ALT.filter(d => d.s === currentSpecies).sort((a,b) => a.a - b.a);
+  const isCouleur = currentAltStage === "Changement de couleur";
+  const color = SPECIES_COLORS[currentSpecies];
+
+  // Get 10% data
+  let pts;
+  if (isCouleur) {
+    pts = ALT.filter(d => d.s === currentSpecies && d.st === "Changement de couleur").sort((a,b) => a.a - b.a);
+    // Noisetier has no Changement de couleur data
+    if (!pts.length) {
+      ctx.fillStyle = "#888"; ctx.font = "14px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+      ctx.fillText("Pas de données « changement de couleur » pour cette espèce", w/2, h/2);
+      return;
+    }
+  } else {
+    // Débourrement: entries without st field or with st=Débourrement
+    pts = ALT.filter(d => d.s === currentSpecies && (!d.st)).sort((a,b) => a.a - b.a);
+  }
   if (!pts.length) return;
 
+  // Get 50% data if couleur
+  const pts50 = isCouleur ? ALT50.filter(d => d.s === currentSpecies).sort((a,b) => a.a - b.a) : [];
+
+  // Compute ranges
+  let allDoys = pts.map(d => d.d);
+  if (pts50.length) allDoys = allDoys.concat(pts50.map(d => d.d));
   const minA = Math.min(...pts.map(d => d.a)) - 100, maxA = Math.max(...pts.map(d => d.a)) + 100;
-  const minD = Math.min(...pts.map(d => d.d)) - 8, maxD = Math.max(...pts.map(d => d.d)) + 8;
+  const minD = Math.min(...allDoys) - 8, maxD = Math.max(...allDoys) + 8;
 
   const xScale = v => pad.l + ((v - minA) / (maxA - minA)) * cw;
   const yScale = v => pad.t + ch - ((v - minD) / (maxD - minD)) * ch;
@@ -738,7 +821,8 @@ function drawAltitude() {
     const x = xScale(a);
     ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + ch); ctx.stroke();
   }
-  for (let d = Math.ceil(minD / 10) * 10; d <= maxD; d += 10) {
+  const dStep = maxD - minD > 50 ? 15 : 10;
+  for (let d = Math.ceil(minD / dStep) * dStep; d <= maxD; d += dStep) {
     const y = yScale(d);
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
   }
@@ -750,14 +834,32 @@ function drawAltitude() {
     ctx.fillText(a + " m", xScale(a), pad.t + ch + 20);
   }
   ctx.textAlign = "right";
-  for (let d = Math.ceil(minD / 10) * 10; d <= maxD; d += 10) {
+  for (let d = Math.ceil(minD / dStep) * dStep; d <= maxD; d += dStep) {
     ctx.fillText(doyToDate(d), pad.l - 8, yScale(d) + 4);
   }
 
-  // Trend line
-  const color = SPECIES_COLORS[currentSpecies];
+  // Draw shaded band between 10% and 50% if couleur
+  if (isCouleur && pts50.length >= 2) {
+    const map50 = {};
+    pts50.forEach(p => { map50[p.a] = p.d; });
+    const matched = pts.filter(p => map50[p.a] !== undefined);
+    if (matched.length >= 2) {
+      ctx.fillStyle = color + "20";
+      ctx.beginPath();
+      matched.forEach((p, i) => {
+        const x = xScale(p.a), y = yScale(p.d);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      for (let i = matched.length - 1; i >= 0; i--) {
+        ctx.lineTo(xScale(matched[i].a), yScale(map50[matched[i].a]));
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  // Trend line for 10%
   ctx.strokeStyle = color + "44"; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
-  ctx.beginPath();
   if (pts.length >= 2) {
     const n = pts.length;
     const mx = pts.reduce((s,p) => s + p.a, 0) / n;
@@ -765,19 +867,52 @@ function drawAltitude() {
     const num = pts.reduce((s,p) => s + (p.a - mx) * (p.d - my), 0);
     const den = pts.reduce((s,p) => s + (p.a - mx) * (p.a - mx), 0);
     const slope = num / den, intercept = my - slope * mx;
+    ctx.beginPath();
     ctx.moveTo(xScale(minA + 50), yScale(slope * (minA + 50) + intercept));
     ctx.lineTo(xScale(maxA - 50), yScale(slope * (maxA - 50) + intercept));
     ctx.stroke();
   }
   ctx.setLineDash([]);
 
-  // Points
+  // 10% Points (solid, larger)
   pts.forEach(p => {
     const x = xScale(p.a), y = yScale(p.d);
     ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2);
     ctx.fillStyle = color + "99"; ctx.fill();
     ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
   });
+
+  // 50% Points (open circles) if couleur
+  if (isCouleur && pts50.length) {
+    pts50.forEach(p => {
+      const x = xScale(p.a), y = yScale(p.d);
+      ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "transparent"; ctx.strokeStyle = color; ctx.lineWidth = 2;
+      ctx.setLineDash([3, 2]); ctx.stroke(); ctx.setLineDash([]);
+    });
+    // Connect 50% with dashed line
+    ctx.strokeStyle = color + "66"; ctx.lineWidth = 1.5; ctx.setLineDash([5, 3]);
+    ctx.beginPath();
+    pts50.forEach((p, i) => {
+      const x = xScale(p.a), y = yScale(p.d);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Labels for 10%/50% if couleur
+  if (isCouleur && pts.length && pts50.length) {
+    ctx.font = "bold 10px 'DM Sans', sans-serif";
+    ctx.textAlign = "left";
+    const lastPt10 = pts[pts.length - 1];
+    ctx.fillStyle = color;
+    ctx.fillText("← 10% (début)", xScale(lastPt10.a) + 12, yScale(lastPt10.d) + 4);
+    if (pts50.length) {
+      const lastPt50 = pts50[pts50.length - 1];
+      ctx.fillText("← 50%", xScale(lastPt50.a) + 12, yScale(lastPt50.d) + 4);
+    }
+  }
 
   canvas._data = { pts, xScale, yScale };
 }
@@ -909,17 +1044,58 @@ const INSIGHTS = {
   "Débourrement": "Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.",
   "Feuillaison": "La mise en feuilles suit le débourrement. On observe 3 à 4 semaines de différence entre les espèces précoces (noisetier) et tardives (sorbier). L'année 2011 reste exceptionnellement précoce pour toutes les espèces.",
   "Floraison": "La floraison du noisetier est remarquablement précoce (dès février !) et tend à avancer. En 2020, elle a été observée en moyenne dès le 4 février. Les autres espèces fleurissent plus classiquement en avril-mai.",
-  "Changement de couleur": "Le changement de couleur automnale du bouleau tend à arriver plus tôt qu'au début des observations, une tendance cohérente avec le raccourcissement de la saison de végétation observé dans d'autres études alpines."
+  "Changement de couleur 10": "Début du changement de couleur : quand les premières feuilles (10% de la canopée) changent de couleur. Le bouleau tend à commencer plus tôt qu'il y a 20 ans, une tendance cohérente avec le raccourcissement de la saison de végétation observé en montagne.",
+  "Changement de couleur 50": "Mi-canopée (50%) : quand la moitié des feuilles ont changé de couleur. Le mélèze atteint ce stade début novembre, le plus tardif des arbres suivis. Comparez avec « Début (10%) » pour voir la vitesse de progression — le sorbier passe de 10% à 50% en ~14 jours, le bouleau en ~18 jours."
 };
 const STAGE_ICONS = {"Débourrement":"🌱","Feuillaison":"🍃","Floraison":"🌸","Changement de couleur":"🍂"};
+
+function updateTrendsUI() {
+  const isCouleur = currentStage === "Changement de couleur";
+  document.getElementById("pct-toggle").style.display = isCouleur ? "flex" : "none";
+  document.getElementById("trends-title").textContent = STAGE_ICONS[currentStage] + " Évolution du " + currentStage.toLowerCase() + " au fil des ans";
+  if (isCouleur) {
+    const pctLabel = currentTrendsPct === "50" ? "mi-canopée (50%)" : "début (10%)";
+    document.getElementById("trends-subtitle").textContent = "Jour moyen du changement de couleur — " + pctLabel + " — toutes altitudes confondues";
+    document.getElementById("trends-insight").textContent = INSIGHTS["Changement de couleur " + currentTrendsPct];
+    // Update noisetier legend note
+    const noisetierLegend = document.getElementById("legend-trends");
+    const note = document.getElementById("legend-note-couleur");
+    if (!note) {
+      const n = document.createElement("div");
+      n.id = "legend-note-couleur";
+      n.className = "legend-item";
+      n.style.color = "#666";
+      n.textContent = "(noisetier : pas de données automnales)";
+      noisetierLegend.appendChild(n);
+    }
+  } else {
+    document.getElementById("trends-subtitle").textContent = "Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues";
+    document.getElementById("trends-insight").textContent = INSIGHTS[currentStage];
+    const note = document.getElementById("legend-note-couleur");
+    if (note) note.remove();
+  }
+}
 
 document.querySelectorAll("#stage-pills .pill").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#stage-pills .pill").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentStage = btn.dataset.stage;
-    document.getElementById("trends-title").textContent = STAGE_ICONS[currentStage] + " Évolution du " + currentStage.toLowerCase() + " au fil des ans";
-    document.getElementById("trends-insight").textContent = INSIGHTS[currentStage];
+    currentTrendsPct = "10"; // Reset to 10% when switching stage
+    document.querySelectorAll("#pct-toggle .pct-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector('#pct-toggle .pct-btn[data-pct="10"]').classList.add("active");
+    updateTrendsUI();
+    drawTrends();
+  });
+});
+
+// 10% / 50% toggle
+document.querySelectorAll("#pct-toggle .pct-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#pct-toggle .pct-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentTrendsPct = btn.dataset.pct;
+    updateTrendsUI();
     drawTrends();
   });
 });
@@ -931,12 +1107,41 @@ const ALT_INSIGHTS = {
   sorbier: "Le sorbier montre un retard d'environ 48 jours entre 400 m et 2000 m. Cette espèce est suivie jusqu'en haute altitude, rendant vos observations particulièrement précieuses.",
 };
 
+const ALT_INSIGHTS_COULEUR = {
+  bouleau: "Les ronds pleins = début du changement de couleur (10%). Les cercles tiretés = 50% de la canopée colorée. La bande ombrée montre la durée de progression. Fait intéressant : en altitude, le bouleau commence ET atteint 50% plus tôt — la montagne raccourcit l'automne.",
+  mélèze: "Le mélèze montre un gradient automnal inversé : en haute altitude, les couleurs arrivent plus tôt. La bande 10%→50% reste assez constante (~15 jours) quelle que soit l'altitude, ce qui suggère une vitesse de sénescence similaire.",
+  noisetier: "Le noisetier n'a pas assez de données de changement de couleur pour cette visualisation. C'est un arbre caducifolié de basse altitude dont le changement de couleur est rarement observé dans le protocole.",
+  sorbier: "Le sorbier montre un changement de couleur précoce et rapide en altitude. La bande 10%→50% est relativement étroite, indiquant une progression rapide de la coloration automnale chez cette espèce.",
+};
+
+function updateAltInsight() {
+  const isCouleur = currentAltStage === "Changement de couleur";
+  const insights = isCouleur ? ALT_INSIGHTS_COULEUR : ALT_INSIGHTS;
+  document.getElementById("altitude-insight").textContent = insights[currentSpecies];
+  document.getElementById("alt-title").textContent = isCouleur
+    ? "🍂 Gradient altitudinal du changement de couleur"
+    : "⛰️ Le gradient altitudinal : la montagne retarde le printemps";
+  document.getElementById("alt-subtitle").textContent = isCouleur
+    ? "Ronds pleins = début (10%) · Cercles tiretés = mi-canopée (50%) · Bande = durée de progression"
+    : "Date moyenne du débourrement (10%) par tranche d'altitude — combien de jours gagne-t-on en montant ?";
+}
+
 document.querySelectorAll("#species-pills .pill").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll("#species-pills .pill").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentSpecies = btn.dataset.species;
-    document.getElementById("altitude-insight").textContent = ALT_INSIGHTS[currentSpecies];
+    updateAltInsight();
+    drawAltitude();
+  });
+});
+
+document.querySelectorAll("#alt-stage-pills .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#alt-stage-pills .pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentAltStage = btn.dataset.altstage;
+    updateAltInsight();
     drawAltitude();
   });
 });
@@ -974,8 +1179,9 @@ trendsCanvas.addEventListener("mousemove", (e) => {
 
   if (closest) {
     const labels = {bouleau:"Bouleau",mélèze:"Mélèze",noisetier:"Noisetier",sorbier:"Sorbier"};
+    const pctLabel = data.pct || "10%";
     trendsTip.innerHTML = `<div style="color:#aaa;font-weight:600;margin-bottom:3px">${closest.y}</div>
-      <div style="color:${SPECIES_COLORS[closest.sp]}"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SPECIES_COLORS[closest.sp]};margin-right:5px"></span>${labels[closest.sp]}: <strong>${doyToDate(closest.d)}</strong></div>`;
+      <div style="color:${SPECIES_COLORS[closest.sp]}"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SPECIES_COLORS[closest.sp]};margin-right:5px"></span>${labels[closest.sp]}: <strong>${doyToDate(closest.d)}</strong> <span style="color:#888;font-size:10px">(${pctLabel})</span></div>`;
     trendsTip.style.left = (closest.px + 15) + "px";
     trendsTip.style.top = (closest.py - 30) + "px";
     trendsTip.classList.add("visible");
