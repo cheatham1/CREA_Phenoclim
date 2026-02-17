@@ -160,6 +160,86 @@
   .share-banner strong { font-size: 14px; color: var(--amber-light); }
   .share-banner p { font-size: 12px; color: #bbb; margin-top: 6px; }
 
+  /* ─── DATA GAPS ─── */
+  .gaps-panel {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(60,20,20,0.3), rgba(40,15,50,0.3));
+    border: 1px solid rgba(229,115,115,0.25);
+    border-radius: 12px; padding: 20px; overflow: hidden;
+  }
+  .gaps-panel h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px; color: #ef9a9a; margin-bottom: 14px;
+  }
+  .gaps-intro {
+    font-size: 13px; color: #c8b8b8; line-height: 1.6; margin-bottom: 16px;
+  }
+  .gap-section { margin-bottom: 18px; }
+  .gap-section:last-child { margin-bottom: 0; }
+  .gap-section-title {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: #e57373; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .gap-bar-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .gap-bar-label {
+    width: 105px; font-size: 12px; color: #bbb;
+    text-align: right; flex-shrink: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .gap-bar-track {
+    flex: 1; height: 18px; background: rgba(255,255,255,0.04);
+    border-radius: 9px; position: relative; overflow: hidden;
+  }
+  .gap-bar-fill {
+    height: 100%; border-radius: 9px;
+    transition: width 0.6s ease;
+    position: relative;
+  }
+  .gap-bar-value {
+    font-size: 10px; color: #aaa; width: 55px; flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .gap-tag {
+    display: inline-block; padding: 3px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-left: 4px;
+  }
+  .gap-tag-critical { background: rgba(229,57,53,0.2); color: #ef5350; }
+  .gap-tag-low { background: rgba(255,167,38,0.2); color: #ffa726; }
+  .gap-tag-new { background: rgba(66,165,245,0.2); color: #42a5f5; }
+
+  .gap-species-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .gap-species-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 10px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .gap-species-icon { font-size: 20px; }
+  .gap-species-name { font-size: 12px; color: #ccc; font-weight: 600; }
+  .gap-species-detail { font-size: 11px; color: #888; margin-top: 1px; }
+
+  .gap-callout {
+    margin-top: 14px; padding: 12px 14px;
+    background: rgba(229,115,115,0.08);
+    border: 1px dashed rgba(229,115,115,0.3);
+    border-radius: 8px; font-size: 12px; color: #d4a9a9;
+    line-height: 1.6;
+  }
+  .gap-callout strong { color: #ef9a9a; }
+
+  @media (max-width: 600px) {
+    .gap-species-grid { grid-template-columns: 1fr; }
+    .gap-bar-label { width: 80px; }
+  }
+
   /* ─── LEGEND ─── */
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
   .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #aaa; }
@@ -302,7 +382,7 @@
   <!-- ═══════════ IMPACT ═══════════ -->
   <div class="section" id="sec-impact">
     <h2 class="section-title">🤝 Votre contribution compte</h2>
-    <p class="section-subtitle">21 ans de science participative — chaque observation renforce la connaissance</p>
+    <p class="section-subtitle">21 ans de science participative — chaque observation renforce la connaissance. Découvrez aussi où nous avons le plus besoin de vous.</p>
 
     <div class="chart-box">
       <canvas class="chart-canvas" id="chart-impact" style="height:260px"></canvas>
@@ -317,6 +397,146 @@
       <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" style="color:#64b5f6">98 — 2280 m</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
       <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" style="color:#e6a23c">9 espèces</div><div class="milestone-label">d'arbres suivies</div></div>
       <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" style="color:#e57373">~3 jours / 100 m</div><div class="milestone-label">retard du printemps en altitude</div></div>
+    </div>
+
+    <!-- ─── DATA GAPS PANEL ─── -->
+    <div class="gaps-panel">
+      <h3>🔍 Où avons-nous besoin de vous ?</h3>
+      <p class="gaps-intro">
+        Le réseau Phénoclim a des forces remarquables — mais aussi des zones d'ombre. 
+        Voici les lacunes que vos futures observations pourraient combler.
+      </p>
+
+      <!-- Region gaps -->
+      <div class="gap-section">
+        <div class="gap-section-title">
+          <span>🗺️</span> Couverture par région
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Alpes</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:100%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">37 301 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Pyrénées</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:16.7%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">6 224 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Mont-Blanc</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:10.9%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">4 074 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Massif Central</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:7.3%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
+          <div class="gap-bar-value">2 718 obs <span class="gap-tag gap-tag-low">à renforcer</span></div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Jura</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:3.4%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
+          <div class="gap-bar-value">1 273 obs <span class="gap-tag gap-tag-low">à renforcer</span></div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Vosges</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:0.8%;background:linear-gradient(90deg,#ef5350,#e53935);min-width:4px"></div></div>
+          <div class="gap-bar-value">197 obs <span class="gap-tag gap-tag-critical">critique</span></div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">Corse</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:0.1%;background:linear-gradient(90deg,#ef5350,#e53935);min-width:4px"></div></div>
+          <div class="gap-bar-value">14 obs <span class="gap-tag gap-tag-critical">critique</span></div>
+        </div>
+      </div>
+
+      <!-- Species gaps -->
+      <div class="gap-section">
+        <div class="gap-section-title">
+          <span>🌳</span> Espèces sous-représentées
+        </div>
+        <div class="gap-species-grid">
+          <div class="gap-species-card">
+            <div class="gap-species-icon">🌲</div>
+            <div>
+              <div class="gap-species-name">Pin sylvestre <span class="gap-tag gap-tag-critical">38 obs</span></div>
+              <div class="gap-species-detail">5 années · 4 régions — quasi inexploré</div>
+            </div>
+          </div>
+          <div class="gap-species-card">
+            <div class="gap-species-icon">🌲</div>
+            <div>
+              <div class="gap-species-name">Épicéa <span class="gap-tag gap-tag-critical">103 obs</span></div>
+              <div class="gap-species-detail">8 années · 3 régions — très insuffisant</div>
+            </div>
+          </div>
+          <div class="gap-species-card">
+            <div class="gap-species-icon">🌲</div>
+            <div>
+              <div class="gap-species-name">Sapin <span class="gap-tag gap-tag-low">172 obs</span></div>
+              <div class="gap-species-detail">8 années · 6 régions — à renforcer</div>
+            </div>
+          </div>
+          <div class="gap-species-card">
+            <div class="gap-species-icon">🌳</div>
+            <div>
+              <div class="gap-species-name">Frêne <span class="gap-tag gap-tag-low">370 obs</span></div>
+              <div class="gap-species-detail">9 années · 5 régions — à renforcer</div>
+            </div>
+          </div>
+          <div class="gap-species-card">
+            <div class="gap-species-icon">🌳</div>
+            <div>
+              <div class="gap-species-name">Hêtre <span class="gap-tag gap-tag-low">389 obs</span></div>
+              <div class="gap-species-detail">8 années · 7 régions — prometteur mais jeune</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Observation trend concern -->
+      <div class="gap-section">
+        <div class="gap-section-title">
+          <span>📉</span> Tendance récente des contributions
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2020</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:78%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">2 673 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2021</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:100%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">3 453 obs ✨</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2022</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:79%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
+          <div class="gap-bar-value">2 731 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2023</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:69%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
+          <div class="gap-bar-value">2 392 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2024</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:62%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
+          <div class="gap-bar-value">2 150 obs</div>
+        </div>
+        <div class="gap-bar-row">
+          <div class="gap-bar-label">2025 (en cours)</div>
+          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:49%;background:linear-gradient(90deg,#ef5350,#e53935)"></div></div>
+          <div class="gap-bar-value">1 697 obs</div>
+        </div>
+      </div>
+
+      <!-- Call to action -->
+      <div class="gap-callout">
+        <strong>🎯 Les 3 priorités pour les observateurs :</strong><br>
+        1. <strong>Corse et Vosges</strong> — Ces massifs sont quasi invisibles dans les données. Même quelques arbres suivis régulièrement feraient une différence majeure.<br>
+        2. <strong>Conifères (pin sylvestre, épicéa, sapin)</strong> — Ces espèces ont trop peu de données pour détecter des tendances fiables. Si vous en avez près de chez vous, vos observations sont précieuses.<br>
+        3. <strong>Maintenir l'effort</strong> — Les contributions baissent depuis 2021. Chaque année manquée affaiblit la série temporelle. Continuez, et recrutez un voisin !
+      </div>
     </div>
 
     <div class="motivation">
