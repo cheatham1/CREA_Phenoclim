@@ -317,14 +317,12 @@
 
   <!-- TABS -->
   <div class="tabs">
-    <button class="tab active" data-tab="trends"><span class="tab-icon">📈</span>Tendances</button>
+    <button class="tab active" data-tab="impact"><span class="tab-icon">🤝</span>Votre impact</button>
     <button class="tab" data-tab="altitude"><span class="tab-icon">⛰️</span>Altitude</button>
-    <button class="tab" data-tab="regions"><span class="tab-icon">🗺️</span>Régions</button>
-    <button class="tab" data-tab="impact"><span class="tab-icon">🤝</span>Votre impact</button>
   </div>
 
   <!-- ═══════════ TRENDS ═══════════ -->
-  <div class="section active" id="sec-trends">
+  <div class="section" id="sec-trends">
     <h2 class="section-title" id="trends-title">🌱 Évolution du débourrement au fil des ans</h2>
     <p class="section-subtitle" id="trends-subtitle">Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues</p>
 
@@ -415,7 +413,7 @@
   </div>
 
   <!-- ═══════════ IMPACT ═══════════ -->
-  <div class="section" id="sec-impact">
+  <div class="section active" id="sec-impact">
     <h2 class="section-title">🤝 Votre contribution compte</h2>
     <p class="section-subtitle">21 ans de science participative — chaque observation renforce la connaissance. Découvrez aussi où nous avons le plus besoin de vous.</p>
 
@@ -585,6 +583,29 @@
       <strong>📣 Partagez ces résultats !</strong>
       <p>Montrez à vos proches l'impact de vos observations. Chaque nouvel observateur enrichit le réseau.</p>
     </div>
+
+    <!-- ═══════════ HEATMAPS SECTION (inside sec-impact) ═══════════ -->
+    <div id="heatmaps-section" style="margin-top:32px;">
+      <h2 class="section-title">🏔️ Couverture des observations dans les Alpes</h2>
+      <p class="section-subtitle">Nombre d'observations par année et par tranche d'altitude (200 m) — Région Alpes uniquement. La couleur révèle les lacunes : plus c'est sombre, moins il y a d'observateurs. Toutes les espèces sont sur la même échelle pour faciliter la comparaison.</p>
+
+      <div class="insight" style="margin-bottom:20px;background:rgba(229,57,53,0.08);border-color:rgba(229,57,53,0.3);">
+        <div class="insight-title" style="color:#ef9a9a;">🎯 Pourquoi ces cartes sont importantes pour CREA</div>
+        <p style="color:#d4a9a9;">Les observations dans les Alpes sont en déclin depuis 2021. Ces cartes montrent <strong style="color:#ef9a9a;">exactement où les données manquent</strong> — certaines espèces à des altitudes clés n'ont presque plus d'observateurs. Ce sont les zones prioritaires pour recruter de nouveaux bénévoles.</p>
+      </div>
+
+      <!-- Species selector buttons -->
+      <div id="heatmap-species-btns" class="pills" style="margin-bottom:16px;">
+        <button class="pill active" data-hsp="bouleau" style="--pill-color:#4a7c59;--pill-bg:rgba(74,124,89,0.15)">🌿 Bouleau</button>
+        <button class="pill" data-hsp="mélèze" style="--pill-color:#c17817;--pill-bg:rgba(193,120,23,0.15)">🌲 Mélèze</button>
+        <button class="pill" data-hsp="sorbier" style="--pill-color:#c25454;--pill-bg:rgba(194,84,84,0.15)">🍁 Sorbier</button>
+        <button class="pill" data-hsp="noisetier" style="--pill-color:#7b5ea7;--pill-bg:rgba(123,94,167,0.15)">🌰 Noisetier</button>
+      </div>
+
+      <!-- Single heatmap display -->
+      <div id="heatmap-single" style="background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(255,255,255,0.06);padding:16px 16px 12px;"></div>
+    </div>
+
   </div>
 
   <div class="spacer"></div>
@@ -1035,10 +1056,235 @@ document.querySelectorAll(".tab").forEach(btn => {
       if (tabId === "trends") drawTrends();
       if (tabId === "altitude") drawAltitude();
       if (tabId === "regions") drawRegions();
-      if (tabId === "impact") drawImpact();
+      if (tabId === "impact") { drawImpact(); setTimeout(drawHeatmaps, 50); }
     });
   });
 });
+
+// ════════════════════════════════════════════
+//  ALPINE HEATMAP DATA
+// ════════════════════════════════════════════
+const HEATMAP_DATA = {
+  "bouleau": {"data":[{"year":2004,"alt":200,"count":0},{"year":2004,"alt":400,"count":0},{"year":2004,"alt":600,"count":4},{"year":2004,"alt":800,"count":6},{"year":2004,"alt":1000,"count":0},{"year":2004,"alt":1200,"count":6},{"year":2004,"alt":1400,"count":3},{"year":2004,"alt":1600,"count":0},{"year":2004,"alt":1800,"count":3},{"year":2004,"alt":2000,"count":0},{"year":2005,"alt":200,"count":6},{"year":2005,"alt":400,"count":7},{"year":2005,"alt":600,"count":9},{"year":2005,"alt":800,"count":15},{"year":2005,"alt":1000,"count":15},{"year":2005,"alt":1200,"count":20},{"year":2005,"alt":1400,"count":12},{"year":2005,"alt":1600,"count":0},{"year":2005,"alt":1800,"count":0},{"year":2005,"alt":2000,"count":0},{"year":2006,"alt":200,"count":22},{"year":2006,"alt":400,"count":23},{"year":2006,"alt":600,"count":40},{"year":2006,"alt":800,"count":49},{"year":2006,"alt":1000,"count":57},{"year":2006,"alt":1200,"count":65},{"year":2006,"alt":1400,"count":33},{"year":2006,"alt":1600,"count":3},{"year":2006,"alt":1800,"count":6},{"year":2006,"alt":2000,"count":13},{"year":2007,"alt":200,"count":9},{"year":2007,"alt":400,"count":32},{"year":2007,"alt":600,"count":38},{"year":2007,"alt":800,"count":33},{"year":2007,"alt":1000,"count":75},{"year":2007,"alt":1200,"count":76},{"year":2007,"alt":1400,"count":27},{"year":2007,"alt":1600,"count":0},{"year":2007,"alt":1800,"count":15},{"year":2007,"alt":2000,"count":0},{"year":2008,"alt":200,"count":43},{"year":2008,"alt":400,"count":28},{"year":2008,"alt":600,"count":81},{"year":2008,"alt":800,"count":42},{"year":2008,"alt":1000,"count":100},{"year":2008,"alt":1200,"count":65},{"year":2008,"alt":1400,"count":31},{"year":2008,"alt":1600,"count":7},{"year":2008,"alt":1800,"count":10},{"year":2008,"alt":2000,"count":0},{"year":2009,"alt":200,"count":51},{"year":2009,"alt":400,"count":24},{"year":2009,"alt":600,"count":69},{"year":2009,"alt":800,"count":55},{"year":2009,"alt":1000,"count":102},{"year":2009,"alt":1200,"count":79},{"year":2009,"alt":1400,"count":55},{"year":2009,"alt":1600,"count":18},{"year":2009,"alt":1800,"count":14},{"year":2009,"alt":2000,"count":0},{"year":2010,"alt":200,"count":35},{"year":2010,"alt":400,"count":41},{"year":2010,"alt":600,"count":85},{"year":2010,"alt":800,"count":81},{"year":2010,"alt":1000,"count":179},{"year":2010,"alt":1200,"count":131},{"year":2010,"alt":1400,"count":89},{"year":2010,"alt":1600,"count":33},{"year":2010,"alt":1800,"count":12},{"year":2010,"alt":2000,"count":0},{"year":2011,"alt":200,"count":84},{"year":2011,"alt":400,"count":62},{"year":2011,"alt":600,"count":59},{"year":2011,"alt":800,"count":74},{"year":2011,"alt":1000,"count":216},{"year":2011,"alt":1200,"count":116},{"year":2011,"alt":1400,"count":65},{"year":2011,"alt":1600,"count":14},{"year":2011,"alt":1800,"count":18},{"year":2011,"alt":2000,"count":0},{"year":2012,"alt":200,"count":56},{"year":2012,"alt":400,"count":0},{"year":2012,"alt":600,"count":45},{"year":2012,"alt":800,"count":55},{"year":2012,"alt":1000,"count":129},{"year":2012,"alt":1200,"count":84},{"year":2012,"alt":1400,"count":81},{"year":2012,"alt":1600,"count":3},{"year":2012,"alt":1800,"count":16},{"year":2012,"alt":2000,"count":0},{"year":2013,"alt":200,"count":21},{"year":2013,"alt":400,"count":0},{"year":2013,"alt":600,"count":15},{"year":2013,"alt":800,"count":40},{"year":2013,"alt":1000,"count":97},{"year":2013,"alt":1200,"count":84},{"year":2013,"alt":1400,"count":61},{"year":2013,"alt":1600,"count":3},{"year":2013,"alt":1800,"count":12},{"year":2013,"alt":2000,"count":0},{"year":2014,"alt":200,"count":15},{"year":2014,"alt":400,"count":0},{"year":2014,"alt":600,"count":15},{"year":2014,"alt":800,"count":38},{"year":2014,"alt":1000,"count":74},{"year":2014,"alt":1200,"count":78},{"year":2014,"alt":1400,"count":56},{"year":2014,"alt":1600,"count":0},{"year":2014,"alt":1800,"count":15},{"year":2014,"alt":2000,"count":0},{"year":2015,"alt":200,"count":3},{"year":2015,"alt":400,"count":2},{"year":2015,"alt":600,"count":10},{"year":2015,"alt":800,"count":38},{"year":2015,"alt":1000,"count":93},{"year":2015,"alt":1200,"count":92},{"year":2015,"alt":1400,"count":76},{"year":2015,"alt":1600,"count":15},{"year":2015,"alt":1800,"count":3},{"year":2015,"alt":2000,"count":0},{"year":2016,"alt":200,"count":0},{"year":2016,"alt":400,"count":2},{"year":2016,"alt":600,"count":15},{"year":2016,"alt":800,"count":28},{"year":2016,"alt":1000,"count":116},{"year":2016,"alt":1200,"count":84},{"year":2016,"alt":1400,"count":72},{"year":2016,"alt":1600,"count":15},{"year":2016,"alt":1800,"count":13},{"year":2016,"alt":2000,"count":0},{"year":2017,"alt":200,"count":0},{"year":2017,"alt":400,"count":8},{"year":2017,"alt":600,"count":16},{"year":2017,"alt":800,"count":31},{"year":2017,"alt":1000,"count":134},{"year":2017,"alt":1200,"count":113},{"year":2017,"alt":1400,"count":81},{"year":2017,"alt":1600,"count":15},{"year":2017,"alt":1800,"count":6},{"year":2017,"alt":2000,"count":0},{"year":2018,"alt":200,"count":3},{"year":2018,"alt":400,"count":25},{"year":2018,"alt":600,"count":9},{"year":2018,"alt":800,"count":38},{"year":2018,"alt":1000,"count":142},{"year":2018,"alt":1200,"count":98},{"year":2018,"alt":1400,"count":79},{"year":2018,"alt":1600,"count":15},{"year":2018,"alt":1800,"count":9},{"year":2018,"alt":2000,"count":0},{"year":2019,"alt":200,"count":3},{"year":2019,"alt":400,"count":7},{"year":2019,"alt":600,"count":12},{"year":2019,"alt":800,"count":29},{"year":2019,"alt":1000,"count":136},{"year":2019,"alt":1200,"count":104},{"year":2019,"alt":1400,"count":85},{"year":2019,"alt":1600,"count":15},{"year":2019,"alt":1800,"count":7},{"year":2019,"alt":2000,"count":0},{"year":2020,"alt":200,"count":5},{"year":2020,"alt":400,"count":23},{"year":2020,"alt":600,"count":0},{"year":2020,"alt":800,"count":30},{"year":2020,"alt":1000,"count":135},{"year":2020,"alt":1200,"count":80},{"year":2020,"alt":1400,"count":64},{"year":2020,"alt":1600,"count":15},{"year":2020,"alt":1800,"count":3},{"year":2020,"alt":2000,"count":0},{"year":2021,"alt":200,"count":0},{"year":2021,"alt":400,"count":27},{"year":2021,"alt":600,"count":0},{"year":2021,"alt":800,"count":36},{"year":2021,"alt":1000,"count":127},{"year":2021,"alt":1200,"count":107},{"year":2021,"alt":1400,"count":64},{"year":2021,"alt":1600,"count":15},{"year":2021,"alt":1800,"count":3},{"year":2021,"alt":2000,"count":0},{"year":2022,"alt":200,"count":9},{"year":2022,"alt":400,"count":17},{"year":2022,"alt":600,"count":0},{"year":2022,"alt":800,"count":21},{"year":2022,"alt":1000,"count":120},{"year":2022,"alt":1200,"count":81},{"year":2022,"alt":1400,"count":70},{"year":2022,"alt":1600,"count":15},{"year":2022,"alt":1800,"count":13},{"year":2022,"alt":2000,"count":0},{"year":2023,"alt":200,"count":4},{"year":2023,"alt":400,"count":0},{"year":2023,"alt":600,"count":0},{"year":2023,"alt":800,"count":26},{"year":2023,"alt":1000,"count":139},{"year":2023,"alt":1200,"count":72},{"year":2023,"alt":1400,"count":63},{"year":2023,"alt":1600,"count":15},{"year":2023,"alt":1800,"count":3},{"year":2023,"alt":2000,"count":0},{"year":2024,"alt":200,"count":0},{"year":2024,"alt":400,"count":0},{"year":2024,"alt":600,"count":0},{"year":2024,"alt":800,"count":26},{"year":2024,"alt":1000,"count":140},{"year":2024,"alt":1200,"count":78},{"year":2024,"alt":1400,"count":60},{"year":2024,"alt":1600,"count":17},{"year":2024,"alt":1800,"count":14},{"year":2024,"alt":2000,"count":0},{"year":2025,"alt":200,"count":1},{"year":2025,"alt":400,"count":15},{"year":2025,"alt":600,"count":0},{"year":2025,"alt":800,"count":15},{"year":2025,"alt":1000,"count":85},{"year":2025,"alt":1200,"count":67},{"year":2025,"alt":1400,"count":24},{"year":2025,"alt":1600,"count":2},{"year":2025,"alt":1800,"count":6},{"year":2025,"alt":2000,"count":0}],"bands":[200,400,600,800,1000,1200,1400,1600,1800,2000]},
+  "mélèze": {"data":[{"year":2004,"alt":200,"count":0},{"year":2004,"alt":400,"count":0},{"year":2004,"alt":600,"count":0},{"year":2004,"alt":800,"count":0},{"year":2004,"alt":1000,"count":3},{"year":2004,"alt":1200,"count":6},{"year":2004,"alt":1400,"count":6},{"year":2004,"alt":1600,"count":3},{"year":2004,"alt":1800,"count":5},{"year":2004,"alt":2000,"count":0},{"year":2005,"alt":200,"count":0},{"year":2005,"alt":400,"count":0},{"year":2005,"alt":600,"count":0},{"year":2005,"alt":800,"count":0},{"year":2005,"alt":1000,"count":11},{"year":2005,"alt":1200,"count":21},{"year":2005,"alt":1400,"count":18},{"year":2005,"alt":1600,"count":12},{"year":2005,"alt":1800,"count":6},{"year":2005,"alt":2000,"count":0},{"year":2006,"alt":200,"count":0},{"year":2006,"alt":400,"count":0},{"year":2006,"alt":600,"count":0},{"year":2006,"alt":800,"count":19},{"year":2006,"alt":1000,"count":51},{"year":2006,"alt":1200,"count":41},{"year":2006,"alt":1400,"count":85},{"year":2006,"alt":1600,"count":31},{"year":2006,"alt":1800,"count":15},{"year":2006,"alt":2000,"count":14},{"year":2007,"alt":200,"count":0},{"year":2007,"alt":400,"count":0},{"year":2007,"alt":600,"count":6},{"year":2007,"alt":800,"count":18},{"year":2007,"alt":1000,"count":70},{"year":2007,"alt":1200,"count":49},{"year":2007,"alt":1400,"count":105},{"year":2007,"alt":1600,"count":42},{"year":2007,"alt":1800,"count":21},{"year":2007,"alt":2000,"count":3},{"year":2008,"alt":200,"count":0},{"year":2008,"alt":400,"count":0},{"year":2008,"alt":600,"count":11},{"year":2008,"alt":800,"count":45},{"year":2008,"alt":1000,"count":60},{"year":2008,"alt":1200,"count":32},{"year":2008,"alt":1400,"count":117},{"year":2008,"alt":1600,"count":46},{"year":2008,"alt":1800,"count":23},{"year":2008,"alt":2000,"count":3},{"year":2009,"alt":200,"count":0},{"year":2009,"alt":400,"count":0},{"year":2009,"alt":600,"count":9},{"year":2009,"alt":800,"count":57},{"year":2009,"alt":1000,"count":58},{"year":2009,"alt":1200,"count":45},{"year":2009,"alt":1400,"count":148},{"year":2009,"alt":1600,"count":78},{"year":2009,"alt":1800,"count":69},{"year":2009,"alt":2000,"count":36},{"year":2010,"alt":200,"count":0},{"year":2010,"alt":400,"count":0},{"year":2010,"alt":600,"count":5},{"year":2010,"alt":800,"count":53},{"year":2010,"alt":1000,"count":117},{"year":2010,"alt":1200,"count":132},{"year":2010,"alt":1400,"count":245},{"year":2010,"alt":1600,"count":115},{"year":2010,"alt":1800,"count":78},{"year":2010,"alt":2000,"count":36},{"year":2011,"alt":200,"count":0},{"year":2011,"alt":400,"count":0},{"year":2011,"alt":600,"count":0},{"year":2011,"alt":800,"count":53},{"year":2011,"alt":1000,"count":125},{"year":2011,"alt":1200,"count":156},{"year":2011,"alt":1400,"count":199},{"year":2011,"alt":1600,"count":108},{"year":2011,"alt":1800,"count":91},{"year":2011,"alt":2000,"count":36},{"year":2012,"alt":200,"count":0},{"year":2012,"alt":400,"count":0},{"year":2012,"alt":600,"count":3},{"year":2012,"alt":800,"count":45},{"year":2012,"alt":1000,"count":74},{"year":2012,"alt":1200,"count":81},{"year":2012,"alt":1400,"count":127},{"year":2012,"alt":1600,"count":81},{"year":2012,"alt":1800,"count":82},{"year":2012,"alt":2000,"count":36},{"year":2013,"alt":200,"count":0},{"year":2013,"alt":400,"count":0},{"year":2013,"alt":600,"count":0},{"year":2013,"alt":800,"count":39},{"year":2013,"alt":1000,"count":44},{"year":2013,"alt":1200,"count":96},{"year":2013,"alt":1400,"count":117},{"year":2013,"alt":1600,"count":78},{"year":2013,"alt":1800,"count":66},{"year":2013,"alt":2000,"count":36},{"year":2014,"alt":200,"count":0},{"year":2014,"alt":400,"count":0},{"year":2014,"alt":600,"count":0},{"year":2014,"alt":800,"count":28},{"year":2014,"alt":1000,"count":39},{"year":2014,"alt":1200,"count":69},{"year":2014,"alt":1400,"count":102},{"year":2014,"alt":1600,"count":58},{"year":2014,"alt":1800,"count":45},{"year":2014,"alt":2000,"count":36},{"year":2015,"alt":200,"count":0},{"year":2015,"alt":400,"count":0},{"year":2015,"alt":600,"count":0},{"year":2015,"alt":800,"count":30},{"year":2015,"alt":1000,"count":51},{"year":2015,"alt":1200,"count":76},{"year":2015,"alt":1400,"count":154},{"year":2015,"alt":1600,"count":67},{"year":2015,"alt":1800,"count":38},{"year":2015,"alt":2000,"count":10},{"year":2016,"alt":200,"count":0},{"year":2016,"alt":400,"count":0},{"year":2016,"alt":600,"count":0},{"year":2016,"alt":800,"count":14},{"year":2016,"alt":1000,"count":54},{"year":2016,"alt":1200,"count":71},{"year":2016,"alt":1400,"count":157},{"year":2016,"alt":1600,"count":58},{"year":2016,"alt":1800,"count":50},{"year":2016,"alt":2000,"count":12},{"year":2017,"alt":200,"count":4},{"year":2017,"alt":400,"count":6},{"year":2017,"alt":600,"count":0},{"year":2017,"alt":800,"count":16},{"year":2017,"alt":1000,"count":50},{"year":2017,"alt":1200,"count":111},{"year":2017,"alt":1400,"count":161},{"year":2017,"alt":1600,"count":58},{"year":2017,"alt":1800,"count":39},{"year":2017,"alt":2000,"count":35},{"year":2018,"alt":200,"count":0},{"year":2018,"alt":400,"count":6},{"year":2018,"alt":600,"count":0},{"year":2018,"alt":800,"count":25},{"year":2018,"alt":1000,"count":61},{"year":2018,"alt":1200,"count":123},{"year":2018,"alt":1400,"count":157},{"year":2018,"alt":1600,"count":40},{"year":2018,"alt":1800,"count":42},{"year":2018,"alt":2000,"count":0},{"year":2019,"alt":200,"count":0},{"year":2019,"alt":400,"count":6},{"year":2019,"alt":600,"count":0},{"year":2019,"alt":800,"count":3},{"year":2019,"alt":1000,"count":55},{"year":2019,"alt":1200,"count":100},{"year":2019,"alt":1400,"count":152},{"year":2019,"alt":1600,"count":49},{"year":2019,"alt":1800,"count":41},{"year":2019,"alt":2000,"count":0},{"year":2020,"alt":200,"count":0},{"year":2020,"alt":400,"count":6},{"year":2020,"alt":600,"count":0},{"year":2020,"alt":800,"count":0},{"year":2020,"alt":1000,"count":54},{"year":2020,"alt":1200,"count":63},{"year":2020,"alt":1400,"count":138},{"year":2020,"alt":1600,"count":33},{"year":2020,"alt":1800,"count":38},{"year":2020,"alt":2000,"count":0},{"year":2021,"alt":200,"count":0},{"year":2021,"alt":400,"count":6},{"year":2021,"alt":600,"count":0},{"year":2021,"alt":800,"count":2},{"year":2021,"alt":1000,"count":48},{"year":2021,"alt":1200,"count":67},{"year":2021,"alt":1400,"count":119},{"year":2021,"alt":1600,"count":36},{"year":2021,"alt":1800,"count":25},{"year":2021,"alt":2000,"count":0},{"year":2022,"alt":200,"count":0},{"year":2022,"alt":400,"count":0},{"year":2022,"alt":600,"count":0},{"year":2022,"alt":800,"count":0},{"year":2022,"alt":1000,"count":45},{"year":2022,"alt":1200,"count":72},{"year":2022,"alt":1400,"count":137},{"year":2022,"alt":1600,"count":50},{"year":2022,"alt":1800,"count":40},{"year":2022,"alt":2000,"count":0},{"year":2023,"alt":200,"count":0},{"year":2023,"alt":400,"count":0},{"year":2023,"alt":600,"count":0},{"year":2023,"alt":800,"count":0},{"year":2023,"alt":1000,"count":47},{"year":2023,"alt":1200,"count":64},{"year":2023,"alt":1400,"count":143},{"year":2023,"alt":1600,"count":31},{"year":2023,"alt":1800,"count":36},{"year":2023,"alt":2000,"count":0},{"year":2024,"alt":200,"count":0},{"year":2024,"alt":400,"count":0},{"year":2024,"alt":600,"count":0},{"year":2024,"alt":800,"count":0},{"year":2024,"alt":1000,"count":35},{"year":2024,"alt":1200,"count":56},{"year":2024,"alt":1400,"count":112},{"year":2024,"alt":1600,"count":33},{"year":2024,"alt":1800,"count":52},{"year":2024,"alt":2000,"count":0},{"year":2025,"alt":200,"count":0},{"year":2025,"alt":400,"count":0},{"year":2025,"alt":600,"count":0},{"year":2025,"alt":800,"count":0},{"year":2025,"alt":1000,"count":13},{"year":2025,"alt":1200,"count":36},{"year":2025,"alt":1400,"count":29},{"year":2025,"alt":1600,"count":19},{"year":2025,"alt":1800,"count":40},{"year":2025,"alt":2000,"count":0}],"bands":[200,400,600,800,1000,1200,1400,1600,1800,2000]},
+  "sorbier": {"data":[{"year":2004,"alt":200,"count":0},{"year":2004,"alt":400,"count":0},{"year":2004,"alt":600,"count":0},{"year":2004,"alt":800,"count":0},{"year":2004,"alt":1000,"count":0},{"year":2004,"alt":1200,"count":3},{"year":2004,"alt":1400,"count":0},{"year":2004,"alt":1600,"count":0},{"year":2004,"alt":1800,"count":0},{"year":2004,"alt":2000,"count":0},{"year":2005,"alt":200,"count":0},{"year":2005,"alt":400,"count":0},{"year":2005,"alt":600,"count":0},{"year":2005,"alt":800,"count":0},{"year":2005,"alt":1000,"count":0},{"year":2005,"alt":1200,"count":12},{"year":2005,"alt":1400,"count":3},{"year":2005,"alt":1600,"count":0},{"year":2005,"alt":1800,"count":0},{"year":2005,"alt":2000,"count":0},{"year":2006,"alt":200,"count":0},{"year":2006,"alt":400,"count":4},{"year":2006,"alt":600,"count":0},{"year":2006,"alt":800,"count":3},{"year":2006,"alt":1000,"count":11},{"year":2006,"alt":1200,"count":39},{"year":2006,"alt":1400,"count":33},{"year":2006,"alt":1600,"count":15},{"year":2006,"alt":1800,"count":0},{"year":2006,"alt":2000,"count":11},{"year":2007,"alt":200,"count":0},{"year":2007,"alt":400,"count":6},{"year":2007,"alt":600,"count":0},{"year":2007,"alt":800,"count":2},{"year":2007,"alt":1000,"count":8},{"year":2007,"alt":1200,"count":40},{"year":2007,"alt":1400,"count":37},{"year":2007,"alt":1600,"count":15},{"year":2007,"alt":1800,"count":0},{"year":2007,"alt":2000,"count":0},{"year":2008,"alt":200,"count":0},{"year":2008,"alt":400,"count":15},{"year":2008,"alt":600,"count":0},{"year":2008,"alt":800,"count":5},{"year":2008,"alt":1000,"count":12},{"year":2008,"alt":1200,"count":37},{"year":2008,"alt":1400,"count":35},{"year":2008,"alt":1600,"count":16},{"year":2008,"alt":1800,"count":4},{"year":2008,"alt":2000,"count":0},{"year":2009,"alt":200,"count":0},{"year":2009,"alt":400,"count":2},{"year":2009,"alt":600,"count":0},{"year":2009,"alt":800,"count":3},{"year":2009,"alt":1000,"count":4},{"year":2009,"alt":1200,"count":50},{"year":2009,"alt":1400,"count":60},{"year":2009,"alt":1600,"count":25},{"year":2009,"alt":1800,"count":23},{"year":2009,"alt":2000,"count":0},{"year":2010,"alt":200,"count":3},{"year":2010,"alt":400,"count":0},{"year":2010,"alt":600,"count":0},{"year":2010,"alt":800,"count":0},{"year":2010,"alt":1000,"count":0},{"year":2010,"alt":1200,"count":66},{"year":2010,"alt":1400,"count":108},{"year":2010,"alt":1600,"count":19},{"year":2010,"alt":1800,"count":14},{"year":2010,"alt":2000,"count":0},{"year":2011,"alt":200,"count":0},{"year":2011,"alt":400,"count":0},{"year":2011,"alt":600,"count":0},{"year":2011,"alt":800,"count":2},{"year":2011,"alt":1000,"count":10},{"year":2011,"alt":1200,"count":88},{"year":2011,"alt":1400,"count":82},{"year":2011,"alt":1600,"count":44},{"year":2011,"alt":1800,"count":23},{"year":2011,"alt":2000,"count":0},{"year":2012,"alt":200,"count":0},{"year":2012,"alt":400,"count":0},{"year":2012,"alt":600,"count":0},{"year":2012,"alt":800,"count":6},{"year":2012,"alt":1000,"count":13},{"year":2012,"alt":1200,"count":65},{"year":2012,"alt":1400,"count":42},{"year":2012,"alt":1600,"count":44},{"year":2012,"alt":1800,"count":23},{"year":2012,"alt":2000,"count":0},{"year":2013,"alt":200,"count":0},{"year":2013,"alt":400,"count":0},{"year":2013,"alt":600,"count":0},{"year":2013,"alt":800,"count":0},{"year":2013,"alt":1000,"count":0},{"year":2013,"alt":1200,"count":51},{"year":2013,"alt":1400,"count":26},{"year":2013,"alt":1600,"count":43},{"year":2013,"alt":1800,"count":24},{"year":2013,"alt":2000,"count":0},{"year":2014,"alt":200,"count":0},{"year":2014,"alt":400,"count":0},{"year":2014,"alt":600,"count":0},{"year":2014,"alt":800,"count":0},{"year":2014,"alt":1000,"count":0},{"year":2014,"alt":1200,"count":39},{"year":2014,"alt":1400,"count":24},{"year":2014,"alt":1600,"count":35},{"year":2014,"alt":1800,"count":15},{"year":2014,"alt":2000,"count":0},{"year":2015,"alt":200,"count":0},{"year":2015,"alt":400,"count":0},{"year":2015,"alt":600,"count":1},{"year":2015,"alt":800,"count":0},{"year":2015,"alt":1000,"count":0},{"year":2015,"alt":1200,"count":53},{"year":2015,"alt":1400,"count":73},{"year":2015,"alt":1600,"count":34},{"year":2015,"alt":1800,"count":18},{"year":2015,"alt":2000,"count":0},{"year":2016,"alt":200,"count":0},{"year":2016,"alt":400,"count":0},{"year":2016,"alt":600,"count":0},{"year":2016,"alt":800,"count":0},{"year":2016,"alt":1000,"count":0},{"year":2016,"alt":1200,"count":52},{"year":2016,"alt":1400,"count":71},{"year":2016,"alt":1600,"count":35},{"year":2016,"alt":1800,"count":17},{"year":2016,"alt":2000,"count":0},{"year":2017,"alt":200,"count":0},{"year":2017,"alt":400,"count":5},{"year":2017,"alt":600,"count":1},{"year":2017,"alt":800,"count":0},{"year":2017,"alt":1000,"count":0},{"year":2017,"alt":1200,"count":47},{"year":2017,"alt":1400,"count":67},{"year":2017,"alt":1600,"count":30},{"year":2017,"alt":1800,"count":15},{"year":2017,"alt":2000,"count":0},{"year":2018,"alt":200,"count":0},{"year":2018,"alt":400,"count":6},{"year":2018,"alt":600,"count":2},{"year":2018,"alt":800,"count":0},{"year":2018,"alt":1000,"count":2},{"year":2018,"alt":1200,"count":50},{"year":2018,"alt":1400,"count":79},{"year":2018,"alt":1600,"count":34},{"year":2018,"alt":1800,"count":21},{"year":2018,"alt":2000,"count":0},{"year":2019,"alt":200,"count":0},{"year":2019,"alt":400,"count":1},{"year":2019,"alt":600,"count":2},{"year":2019,"alt":800,"count":0},{"year":2019,"alt":1000,"count":17},{"year":2019,"alt":1200,"count":49},{"year":2019,"alt":1400,"count":63},{"year":2019,"alt":1600,"count":34},{"year":2019,"alt":1800,"count":20},{"year":2019,"alt":2000,"count":0},{"year":2020,"alt":200,"count":0},{"year":2020,"alt":400,"count":7},{"year":2020,"alt":600,"count":0},{"year":2020,"alt":800,"count":0},{"year":2020,"alt":1000,"count":15},{"year":2020,"alt":1200,"count":30},{"year":2020,"alt":1400,"count":59},{"year":2020,"alt":1600,"count":31},{"year":2020,"alt":1800,"count":15},{"year":2020,"alt":2000,"count":0},{"year":2021,"alt":200,"count":2},{"year":2021,"alt":400,"count":8},{"year":2021,"alt":600,"count":0},{"year":2021,"alt":800,"count":0},{"year":2021,"alt":1000,"count":16},{"year":2021,"alt":1200,"count":35},{"year":2021,"alt":1400,"count":52},{"year":2021,"alt":1600,"count":23},{"year":2021,"alt":1800,"count":6},{"year":2021,"alt":2000,"count":0},{"year":2022,"alt":200,"count":2},{"year":2022,"alt":400,"count":4},{"year":2022,"alt":600,"count":0},{"year":2022,"alt":800,"count":0},{"year":2022,"alt":1000,"count":4},{"year":2022,"alt":1200,"count":39},{"year":2022,"alt":1400,"count":51},{"year":2022,"alt":1600,"count":45},{"year":2022,"alt":1800,"count":3},{"year":2022,"alt":2000,"count":0},{"year":2023,"alt":200,"count":2},{"year":2023,"alt":400,"count":0},{"year":2023,"alt":600,"count":0},{"year":2023,"alt":800,"count":0},{"year":2023,"alt":1000,"count":5},{"year":2023,"alt":1200,"count":12},{"year":2023,"alt":1400,"count":73},{"year":2023,"alt":1600,"count":22},{"year":2023,"alt":1800,"count":14},{"year":2023,"alt":2000,"count":0},{"year":2024,"alt":200,"count":0},{"year":2024,"alt":400,"count":0},{"year":2024,"alt":600,"count":0},{"year":2024,"alt":800,"count":0},{"year":2024,"alt":1000,"count":4},{"year":2024,"alt":1200,"count":5},{"year":2024,"alt":1400,"count":53},{"year":2024,"alt":1600,"count":33},{"year":2024,"alt":1800,"count":12},{"year":2024,"alt":2000,"count":0},{"year":2025,"alt":200,"count":0},{"year":2025,"alt":400,"count":0},{"year":2025,"alt":600,"count":0},{"year":2025,"alt":800,"count":0},{"year":2025,"alt":1000,"count":6},{"year":2025,"alt":1200,"count":23},{"year":2025,"alt":1400,"count":1},{"year":2025,"alt":1600,"count":21},{"year":2025,"alt":1800,"count":20},{"year":2025,"alt":2000,"count":0}],"bands":[200,400,600,800,1000,1200,1400,1600,1800,2000]},
+  "noisetier": {"data":[{"year":2004,"alt":0,"count":0},{"year":2004,"alt":200,"count":0},{"year":2004,"alt":400,"count":0},{"year":2004,"alt":600,"count":0},{"year":2004,"alt":800,"count":0},{"year":2004,"alt":1000,"count":0},{"year":2004,"alt":1200,"count":0},{"year":2005,"alt":0,"count":0},{"year":2005,"alt":200,"count":0},{"year":2005,"alt":400,"count":0},{"year":2005,"alt":600,"count":0},{"year":2005,"alt":800,"count":6},{"year":2005,"alt":1000,"count":12},{"year":2005,"alt":1200,"count":2},{"year":2006,"alt":0,"count":0},{"year":2006,"alt":200,"count":27},{"year":2006,"alt":400,"count":26},{"year":2006,"alt":600,"count":27},{"year":2006,"alt":800,"count":34},{"year":2006,"alt":1000,"count":33},{"year":2006,"alt":1200,"count":3},{"year":2007,"alt":0,"count":0},{"year":2007,"alt":200,"count":22},{"year":2007,"alt":400,"count":59},{"year":2007,"alt":600,"count":15},{"year":2007,"alt":800,"count":42},{"year":2007,"alt":1000,"count":54},{"year":2007,"alt":1200,"count":16},{"year":2008,"alt":0,"count":24},{"year":2008,"alt":200,"count":37},{"year":2008,"alt":400,"count":42},{"year":2008,"alt":600,"count":90},{"year":2008,"alt":800,"count":44},{"year":2008,"alt":1000,"count":43},{"year":2008,"alt":1200,"count":18},{"year":2009,"alt":0,"count":24},{"year":2009,"alt":200,"count":45},{"year":2009,"alt":400,"count":43},{"year":2009,"alt":600,"count":98},{"year":2009,"alt":800,"count":59},{"year":2009,"alt":1000,"count":65},{"year":2009,"alt":1200,"count":36},{"year":2010,"alt":0,"count":0},{"year":2010,"alt":200,"count":40},{"year":2010,"alt":400,"count":45},{"year":2010,"alt":600,"count":92},{"year":2010,"alt":800,"count":47},{"year":2010,"alt":1000,"count":123},{"year":2010,"alt":1200,"count":54},{"year":2011,"alt":0,"count":24},{"year":2011,"alt":200,"count":77},{"year":2011,"alt":400,"count":88},{"year":2011,"alt":600,"count":93},{"year":2011,"alt":800,"count":59},{"year":2011,"alt":1000,"count":119},{"year":2011,"alt":1200,"count":51},{"year":2012,"alt":0,"count":24},{"year":2012,"alt":200,"count":53},{"year":2012,"alt":400,"count":45},{"year":2012,"alt":600,"count":96},{"year":2012,"alt":800,"count":39},{"year":2012,"alt":1000,"count":63},{"year":2012,"alt":1200,"count":41},{"year":2013,"alt":0,"count":0},{"year":2013,"alt":200,"count":37},{"year":2013,"alt":400,"count":30},{"year":2013,"alt":600,"count":46},{"year":2013,"alt":800,"count":30},{"year":2013,"alt":1000,"count":55},{"year":2013,"alt":1200,"count":51},{"year":2014,"alt":0,"count":0},{"year":2014,"alt":200,"count":17},{"year":2014,"alt":400,"count":45},{"year":2014,"alt":600,"count":22},{"year":2014,"alt":800,"count":25},{"year":2014,"alt":1000,"count":52},{"year":2014,"alt":1200,"count":51},{"year":2015,"alt":0,"count":0},{"year":2015,"alt":200,"count":15},{"year":2015,"alt":400,"count":27},{"year":2015,"alt":600,"count":21},{"year":2015,"alt":800,"count":19},{"year":2015,"alt":1000,"count":77},{"year":2015,"alt":1200,"count":42},{"year":2016,"alt":0,"count":0},{"year":2016,"alt":200,"count":9},{"year":2016,"alt":400,"count":28},{"year":2016,"alt":600,"count":16},{"year":2016,"alt":800,"count":9},{"year":2016,"alt":1000,"count":87},{"year":2016,"alt":1200,"count":44},{"year":2017,"alt":0,"count":0},{"year":2017,"alt":200,"count":11},{"year":2017,"alt":400,"count":23},{"year":2017,"alt":600,"count":23},{"year":2017,"alt":800,"count":31},{"year":2017,"alt":1000,"count":85},{"year":2017,"alt":1200,"count":45},{"year":2018,"alt":0,"count":0},{"year":2018,"alt":200,"count":17},{"year":2018,"alt":400,"count":33},{"year":2018,"alt":600,"count":37},{"year":2018,"alt":800,"count":26},{"year":2018,"alt":1000,"count":86},{"year":2018,"alt":1200,"count":49},{"year":2019,"alt":0,"count":0},{"year":2019,"alt":200,"count":17},{"year":2019,"alt":400,"count":34},{"year":2019,"alt":600,"count":22},{"year":2019,"alt":800,"count":12},{"year":2019,"alt":1000,"count":93},{"year":2019,"alt":1200,"count":45},{"year":2020,"alt":0,"count":0},{"year":2020,"alt":200,"count":7},{"year":2020,"alt":400,"count":40},{"year":2020,"alt":600,"count":9},{"year":2020,"alt":800,"count":10},{"year":2020,"alt":1000,"count":86},{"year":2020,"alt":1200,"count":33},{"year":2021,"alt":0,"count":0},{"year":2021,"alt":200,"count":9},{"year":2021,"alt":400,"count":45},{"year":2021,"alt":600,"count":15},{"year":2021,"alt":800,"count":11},{"year":2021,"alt":1000,"count":88},{"year":2021,"alt":1200,"count":43},{"year":2022,"alt":0,"count":0},{"year":2022,"alt":200,"count":7},{"year":2022,"alt":400,"count":16},{"year":2022,"alt":600,"count":12},{"year":2022,"alt":800,"count":9},{"year":2022,"alt":1000,"count":66},{"year":2022,"alt":1200,"count":41},{"year":2023,"alt":0,"count":0},{"year":2023,"alt":200,"count":6},{"year":2023,"alt":400,"count":13},{"year":2023,"alt":600,"count":13},{"year":2023,"alt":800,"count":9},{"year":2023,"alt":1000,"count":73},{"year":2023,"alt":1200,"count":42},{"year":2024,"alt":0,"count":0},{"year":2024,"alt":200,"count":0},{"year":2024,"alt":400,"count":21},{"year":2024,"alt":600,"count":26},{"year":2024,"alt":800,"count":11},{"year":2024,"alt":1000,"count":62},{"year":2024,"alt":1200,"count":29},{"year":2025,"alt":0,"count":0},{"year":2025,"alt":200,"count":3},{"year":2025,"alt":400,"count":28},{"year":2025,"alt":600,"count":17},{"year":2025,"alt":800,"count":3},{"year":2025,"alt":1000,"count":42},{"year":2025,"alt":1200,"count":22}],"bands":[0,200,400,600,800,1000,1200]}
+};
+
+const SPECIES_LABELS = {bouleau:"Bouleau", "mélèze":"Mélèze", sorbier:"Sorbier", noisetier:"Noisetier"};
+const SPECIES_ACCENT = {bouleau:"#4a7c59", "mélèze":"#c17817", sorbier:"#c25454", noisetier:"#7b5ea7"};
+
+// Unified altitude bands for ALL species (0–2000m)
+const UNIFIED_BANDS = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
+
+// Global max across ALL species for consistent colour scale
+const GLOBAL_MAX = (() => {
+  let m = 0;
+  Object.values(HEATMAP_DATA).forEach(sp => sp.data.forEach(d => { if (d.count > m) m = d.count; }));
+  return m;
+})();
+
+let currentHeatmapSpecies = "bouleau";
+
+function drawSingleHeatmap(sp) {
+  const container = document.getElementById("heatmap-single");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const spData = HEATMAP_DATA[sp];
+  const accent = SPECIES_ACCENT[sp];
+  const years = [];
+  for (let y = 2004; y <= 2025; y++) years.push(y);
+
+  // Build lookup — fill zeros for all UNIFIED_BANDS
+  const lookup = {};
+  UNIFIED_BANDS.forEach(b => years.forEach(y => { lookup[y + "_" + b] = 0; }));
+  spData.data.forEach(d => { lookup[d.year + "_" + d.alt] = d.count; });
+
+  // Recent vs peak stats
+  const recentTotal = years.filter(y => y >= 2022).reduce((s,y) => s + UNIFIED_BANDS.reduce((ss,b) => ss + (lookup[y+"_"+b]||0), 0), 0);
+  const peakTotal = years.filter(y => y >= 2010 && y <= 2012).reduce((s,y) => s + UNIFIED_BANDS.reduce((ss,b) => ss + (lookup[y+"_"+b]||0), 0), 0);
+  const declinePct = peakTotal > 0 ? Math.round((1 - recentTotal / peakTotal) * 100) : 0;
+
+  // Priority altitude bands = those with lowest recent obs
+  const bandRecent = {};
+  UNIFIED_BANDS.forEach(b => {
+    bandRecent[b] = years.filter(y => y >= 2022).reduce((s,y) => s + (lookup[y+"_"+b]||0), 0);
+  });
+  const sortedBands = [...UNIFIED_BANDS].sort((a,b) => bandRecent[a] - bandRecent[b]);
+  const topPriorityBands = sortedBands.slice(0, 3).filter(b => bandRecent[b] < 20);
+
+  // Header row
+  const header = document.createElement("div");
+  header.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;";
+  const titleEl = document.createElement("div");
+  titleEl.style.cssText = `font-family:'DM Serif Display',serif;font-size:17px;color:${accent};display:flex;align-items:center;gap:8px;`;
+  titleEl.innerHTML = `<span style="width:11px;height:11px;border-radius:50%;background:${accent};display:inline-block;"></span>${SPECIES_LABELS[sp]} — Alpes (0–2 000 m)`;
+  header.appendChild(titleEl);
+
+  if (declinePct > 5) {
+    const badge = document.createElement("div");
+    badge.style.cssText = "font-size:12px;font-weight:700;padding:5px 12px;border-radius:6px;background:rgba(229,57,53,0.15);color:#ef9a9a;border:1px solid rgba(229,57,53,0.3);";
+    badge.textContent = `📉 −${declinePct}% vs pic 2010–12`;
+    header.appendChild(badge);
+  }
+  container.appendChild(header);
+
+  // Priority alert
+  if (topPriorityBands.length > 0) {
+    const alert = document.createElement("div");
+    alert.style.cssText = "font-size:12px;color:#ffa726;background:rgba(255,167,38,0.08);border:1px solid rgba(255,167,38,0.25);border-radius:6px;padding:7px 12px;margin-bottom:10px;line-height:1.5;";
+    const bandLabels = topPriorityBands.map(b => b + "–" + (b+200) + " m").join(", ");
+    alert.innerHTML = `⚠️ <strong>Altitudes prioritaires :</strong> ${bandLabels} — quasi aucune observation récente`;
+    container.appendChild(alert);
+  }
+
+  // Canvas
+  const canvas = document.createElement("canvas");
+  const cellH = 30;
+  const labH = 14;        // small top margin — just enough for "déclin →" text
+  const labBottom = 58;   // space below cells for rotated year labels
+  const labLeft = 76;
+  const labRight = 12;
+  const nYears = years.length;
+  const nBands = UNIFIED_BANDS.length;
+  const legH = 28;
+  const canvasH = labH + nBands * cellH + labBottom + legH + 8;
+
+  canvas.width = 900;
+  canvas.height = canvasH;
+  canvas.style.cssText = "width:100%;display:block;";
+  container.appendChild(canvas);
+
+  requestAnimationFrame(() => {
+    const ctx = canvas.getContext("2d");
+    const cw = 900;
+    const drawW = cw - labLeft - labRight;
+    const cellW = drawW / nYears;
+    const gridTop = labH;
+    const gridBottom = labH + nBands * cellH;
+
+    ctx.clearRect(0, 0, cw, canvasH);
+
+    // Color: 0 = near-black, max = bright green
+    function countColor(c) {
+      if (c === 0) return "rgba(6,10,7,1)";
+      const t = Math.pow(Math.min(c / GLOBAL_MAX, 1), 0.45);
+      const r = Math.round(20 + (124 - 20) * t);
+      const g = Math.round(45 + (179 - 45) * t);
+      const b = Math.round(25 + (66 - 25) * t);
+      return `rgb(${r},${g},${b})`;
+    }
+
+    // --- Draw cells ---
+    UNIFIED_BANDS.forEach((band, bi) => {
+      const yPos = gridTop + bi * cellH;
+      const isPriority = topPriorityBands.includes(band);
+
+      years.forEach((year, yi) => {
+        const count = lookup[year + "_" + band] || 0;
+        const x = labLeft + yi * cellW;
+
+        // Cell fill
+        ctx.fillStyle = countColor(count);
+        ctx.fillRect(x + 0.5, yPos + 0.5, cellW - 1, cellH - 1);
+
+        // Count label — larger and bolder
+        if (count > 0) {
+          const fs = count >= 100 ? 10 : 11;
+          ctx.font = `700 ${fs}px 'DM Sans', sans-serif`;
+          const brightness = Math.pow(Math.min(count / GLOBAL_MAX, 1), 0.45);
+          ctx.fillStyle = brightness > 0.5 ? "rgba(0,0,0,0.85)" : "rgba(255,255,255,0.9)";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(count, x + cellW / 2, yPos + cellH / 2);
+        }
+      });
+
+      // Altitude label (left axis)
+      ctx.font = isPriority ? "bold 12px 'DM Sans', sans-serif" : "12px 'DM Sans', sans-serif";
+      ctx.fillStyle = isPriority ? "#ffa726" : "#8a9a7a";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillText(band + " m", labLeft - 7, yPos + cellH / 2);
+    });
+
+    // --- Year labels — drawn AFTER cells, below the grid ---
+    years.forEach((year, yi) => {
+      const x = labLeft + (yi + 0.5) * cellW;
+      ctx.save();
+      ctx.translate(x, gridBottom + 6);
+      ctx.rotate(-Math.PI / 2.5);   // ~72° rotation
+      ctx.font = "bold 12px 'DM Sans', sans-serif";
+      ctx.fillStyle = (year >= 2022) ? "rgba(239,154,154,0.95)" : "#c8d6be";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      ctx.fillText(year, 0, 0);
+      ctx.restore();
+    });
+
+    // --- Decline dashed line at 2022 ---
+    const yr2022idx = years.indexOf(2022);
+    if (yr2022idx >= 0) {
+      const x2022 = labLeft + yr2022idx * cellW;
+      ctx.strokeStyle = "rgba(239,154,154,0.6)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(x2022, gridTop);
+      ctx.lineTo(x2022, gridBottom + labBottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // "déclin →" annotation above grid
+      ctx.font = "bold 10px 'DM Sans', sans-serif";
+      ctx.fillStyle = "rgba(239,154,154,0.8)";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText("déclin →", x2022 + 4, gridTop + 3);
+    }
+
+    // --- Shared colour scale legend ---
+    const legY = gridBottom + labBottom + 12;
+    const legW = Math.min(200, drawW * 0.35);
+    const grad = ctx.createLinearGradient(labLeft, 0, labLeft + legW, 0);
+    grad.addColorStop(0, "rgba(6,10,7,1)");
+    grad.addColorStop(0.12, "rgb(20,45,25)");
+    grad.addColorStop(1, "rgb(124,179,66)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(labLeft, legY, legW, 9);
+    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(labLeft, legY, legW, 9);
+    ctx.font = "10px 'DM Sans', sans-serif";
+    ctx.fillStyle = "#6b7b6b";
+    ctx.textAlign = "left";
+    ctx.fillText("0 obs", labLeft, legY - 3);
+    ctx.textAlign = "right";
+    ctx.fillText(GLOBAL_MAX + " obs (max global)", labLeft + legW, legY - 3);
+
+    // Scale note
+    ctx.font = "10px 'DM Sans', sans-serif";
+    ctx.fillStyle = "#5a6a5a";
+    ctx.textAlign = "right";
+    ctx.fillText("Échelle identique pour toutes les espèces", cw - labRight, legY + 18);
+  });
+}
+
+function drawHeatmaps() {
+  drawSingleHeatmap(currentHeatmapSpecies);
+}
+
+// Species button listeners
+document.querySelectorAll("#heatmap-species-btns .pill").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#heatmap-species-btns .pill").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentHeatmapSpecies = btn.dataset.hsp;
+    drawSingleHeatmap(currentHeatmapSpecies);
+  });
+});
+
 
 const INSIGHTS = {
   "Débourrement": "Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.",
@@ -1194,13 +1440,13 @@ trendsCanvas.addEventListener("mouseleave", () => trendsTip.classList.remove("vi
 // ════════════════════════════════════════════
 //  INIT + RESIZE
 // ════════════════════════════════════════════
-function init() { drawTrends(); }
+function init() { drawImpact(); setTimeout(drawHeatmaps, 100); }
 window.addEventListener("resize", () => {
   const active = document.querySelector(".section.active")?.id;
   if (active === "sec-trends") drawTrends();
   if (active === "sec-altitude") drawAltitude();
   if (active === "sec-regions") drawRegions();
-  if (active === "sec-impact") drawImpact();
+  if (active === "sec-impact") { drawImpact(); setTimeout(drawHeatmaps, 50); }
 });
 init();
 </script>
