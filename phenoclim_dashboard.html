@@ -10,22 +10,26 @@
   :root {
     --green-deep: #1a3c24;
     --green-mid: #4a7c59;
-    --green-light: #7cb342;
-    --green-pale: #a5d6a7;
-    --green-ghost: #c8e6c9;
-    --amber: #c17817;
-    --amber-light: #e6a23c;
-    --bg-primary: #0a0f1a;
-    --bg-card: rgba(255,255,255,0.03);
-    --border-subtle: rgba(255,255,255,0.06);
-    --text-primary: #e8e6e1;
-    --text-secondary: #8a9a7a;
-    --text-muted: #6b7b6b;
-    --bouleau: #4a7c59;
+    --green-deep: #1f4d2e;
+    --green-mid: #3d7a4e;
+    --green-light: #5fa463;
+    --green-vivid: #4a9d5f;
+    --green-pale: #7fbf7f;
+    --green-ghost: #2f6b3d;
+    --amber: #e08a1e;
+    --amber-light: #f5b301;
+    --bg-primary: #eef4ea;
+    --bg-primary-2: #e2edda;
+    --bg-card: rgba(255,255,255,0.65);
+    --border-subtle: rgba(31,77,46,0.12);
+    --text-primary: #1c2e20;
+    --text-secondary: #4a5f4a;
+    --text-muted: #6a7d68;
+    --bouleau: #3d7a4e;
     --meleze: #c17817;
     --noisetier: #7b5ea7;
     --sorbier: #c25454;
-    --stage-debourrement: #7cb342;
+    --stage-debourrement: #5fa463;
     --stage-feuillaison: #2e7d32;
     --stage-floraison: #e91e63;
     --stage-couleur: #e65100;
@@ -34,7 +38,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: linear-gradient(160deg, var(--bg-primary) 0%, #111827 40%, #0f1a12 100%);
+    background: linear-gradient(165deg, #f2f7ee 0%, #e6f0dd 45%, #dcecd6 100%);
     color: var(--text-primary);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
@@ -43,49 +47,49 @@
 
   /* ─── HEADER ─── */
   .header {
-    background: linear-gradient(135deg, rgba(26,60,36,0.8), rgba(15,26,18,0.9));
-    border-bottom: 1px solid rgba(124,179,66,0.2);
-    padding: 28px 24px 20px;
+    background: linear-gradient(135deg, #1f4d2e 0%, #2d6b3f 55%, #3d7a4e 100%);
+    border-bottom: 3px solid var(--amber-light);
+    padding: 30px 24px 24px;
+    box-shadow: 0 2px 20px rgba(31,77,46,0.18);
   }
   .header-inner { max-width: 960px; margin: 0 auto; }
   .header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
   .header-icon { font-size: 28px; }
   .header h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 400;
-    background: linear-gradient(135deg, var(--green-light), var(--green-pale));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #f4fbef;
     letter-spacing: -0.3px;
   }
   .header-subtitle {
-    font-size: 11px; color: var(--text-secondary);
+    font-size: 11px; color: #b8d8bd;
     letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;
   }
-  .stats-strip { display: flex; gap: 28px; margin-top: 16px; flex-wrap: wrap; }
+  .stats-strip { display: flex; gap: 28px; margin-top: 18px; flex-wrap: wrap; }
   .stat { display: flex; align-items: center; gap: 8px; }
   .stat-icon { font-size: 16px; }
-  .stat-value { font-size: 18px; font-weight: 700; color: var(--green-ghost); }
-  .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-value { font-size: 20px; font-weight: 700; color: #ffffff; }
+  .stat-label { font-size: 10px; color: #a8ccae; text-transform: uppercase; letter-spacing: 0.5px; }
 
   /* ─── MAIN ─── */
   .main { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
   /* ─── TABS ─── */
-  .tabs { display: flex; gap: 4px; margin: 20px 0; }
+  .tabs { display: flex; gap: 8px; margin: 20px 0; }
   .tab {
-    flex: 1; padding: 10px 8px; border: 1px solid transparent;
-    border-radius: 8px; background: rgba(255,255,255,0.04);
-    color: var(--text-muted); font-size: 12px; font-weight: 600;
+    flex: 1; padding: 12px 8px; border: 1px solid var(--border-subtle);
+    border-radius: 10px; background: rgba(255,255,255,0.55);
+    color: var(--text-secondary); font-size: 13px; font-weight: 600;
     cursor: pointer; transition: all 0.25s; text-align: center;
     font-family: 'DM Sans', sans-serif;
   }
-  .tab:hover { background: rgba(255,255,255,0.07); }
+  .tab:hover { background: rgba(255,255,255,0.85); border-color: var(--green-light); }
   .tab.active {
-    background: rgba(124,179,66,0.2);
-    border-color: rgba(124,179,66,0.3);
+    background: linear-gradient(135deg, #3d7a4e, #4a9d5f);
+    border-color: var(--green-mid);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(61,122,78,0.25);
     color: var(--green-pale);
   }
   .tab-icon { display: block; font-size: 18px; margin-bottom: 2px; }
@@ -97,21 +101,23 @@
 
   .section-title {
     font-family: 'DM Serif Display', serif;
-    font-size: 19px; font-weight: 400; margin: 0 0 4px;
+    font-size: 20px; font-weight: 400; margin: 0 0 4px;
+    color: var(--green-deep);
   }
   .section-subtitle { font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5; }
+  .chart-note { font-size: 12px; color: var(--text-muted); margin: -8px 0 16px; line-height: 1.5; font-style: italic; }
 
   /* ─── FILTER PILLS ─── */
   .pills { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
   .pill {
     padding: 6px 14px; border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: transparent; color: #888;
+    border: 1px solid rgba(31,77,46,0.18);
+    background: transparent; color: #5a6d58;
     font-size: 12px; cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     transition: all 0.2s;
   }
-  .pill:hover { border-color: rgba(255,255,255,0.25); }
+  .pill:hover { border-color: rgba(31,77,46,0.35); }
   .pill.active { background: var(--pill-bg); border-color: var(--pill-color); color: var(--pill-color); }
 
   /* ─── CHART CONTAINER ─── */
@@ -128,17 +134,17 @@
     margin-bottom: 12px;
   }
   .pct-toggle-label {
-    font-size: 12px; color: #888; margin-right: 4px;
+    font-size: 12px; color: #5a6d58; margin-right: 4px;
   }
   .pct-btn {
     padding: 5px 14px; border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: transparent; color: #888;
+    border: 1px solid rgba(31,77,46,0.18);
+    background: transparent; color: #5a6d58;
     font-size: 12px; font-weight: 600; cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     transition: all 0.2s;
   }
-  .pct-btn:hover { border-color: rgba(255,255,255,0.25); color: #aaa; }
+  .pct-btn:hover { border-color: rgba(31,77,46,0.35); color: #4a5f4a; }
   .pct-btn.active {
     background: rgba(230,81,0,0.15);
     border-color: rgba(230,81,0,0.4);
@@ -148,31 +154,31 @@
   /* ─── INSIGHT BOX ─── */
   .insight {
     margin-top: 16px;
-    background: rgba(124,179,66,0.08);
-    border: 1px solid rgba(124,179,66,0.2);
+    background: rgba(95,164,99,0.12);
+    border: 1px solid rgba(61,122,78,0.28);
     border-radius: 10px; padding: 14px 16px;
   }
-  .insight-title { font-size: 13px; font-weight: 700; color: var(--green-pale); margin-bottom: 6px; }
-  .insight p { font-size: 13px; color: #c8d6be; line-height: 1.65; }
+  .insight-title { font-size: 13px; font-weight: 700; color: var(--green-deep); margin-bottom: 6px; }
+  .insight p { font-size: 13px; color: #2f4231; line-height: 1.65; }
 
   /* ─── IMPACT TAB ─── */
   .milestone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
   .milestone {
-    background: rgba(255,255,255,0.04); border-radius: 10px;
+    background: rgba(255,255,255,0.6); border-radius: 10px;
     padding: 16px; border: 1px solid var(--border-subtle); text-align: center;
   }
   .milestone-icon { font-size: 24px; }
-  .milestone-value { font-size: 18px; font-weight: 700; margin-top: 4px; }
-  .milestone-label { font-size: 11px; color: #888; margin-top: 2px; }
+  .milestone-value { font-size: 20px; font-weight: 700; margin-top: 4px; color: var(--green-deep); }
+  .milestone-label { font-size: 11px; color: #5a6d58; margin-top: 2px; }
 
   .motivation {
     margin-top: 20px;
-    background: linear-gradient(135deg, rgba(26,60,36,0.6), rgba(20,40,60,0.4));
-    border: 1px solid rgba(124,179,66,0.3);
+    background: linear-gradient(135deg, rgba(95,164,99,0.14), rgba(127,191,127,0.10));
+    border: 1px solid rgba(61,122,78,0.3);
     border-radius: 12px; padding: 20px;
   }
-  .motivation h3 { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--green-pale); margin-bottom: 12px; }
-  .motivation p { font-size: 13px; color: #c8d6be; line-height: 1.7; margin-bottom: 10px; }
+  .motivation h3 { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--green-deep); margin-bottom: 12px; }
+  .motivation p { font-size: 13px; color: #2f4231; line-height: 1.7; margin-bottom: 10px; }
   .motivation p:last-child { margin-bottom: 0; }
 
   .share-banner {
@@ -181,27 +187,27 @@
     border-radius: 10px;
   }
   .share-banner strong { font-size: 14px; color: var(--amber-light); }
-  .share-banner p { font-size: 12px; color: #bbb; margin-top: 6px; }
+  .share-banner p { font-size: 12px; color: #4a5f4a; margin-top: 6px; }
 
   /* ─── DATA GAPS ─── */
   .gaps-panel {
     margin-top: 20px;
-    background: linear-gradient(135deg, rgba(60,20,20,0.3), rgba(40,15,50,0.3));
-    border: 1px solid rgba(229,115,115,0.25);
+    background: linear-gradient(135deg, rgba(224,138,30,0.10), rgba(245,179,1,0.08));
+    border: 1px solid rgba(224,138,30,0.28);
     border-radius: 12px; padding: 20px; overflow: hidden;
   }
   .gaps-panel h3 {
     font-family: 'DM Serif Display', serif;
-    font-size: 17px; color: #ef9a9a; margin-bottom: 14px;
+    font-size: 18px; color: #a85e0c; margin-bottom: 14px;
   }
   .gaps-intro {
-    font-size: 13px; color: #c8b8b8; line-height: 1.6; margin-bottom: 16px;
+    font-size: 13px; color: #5a4a30; line-height: 1.6; margin-bottom: 16px;
   }
   .gap-section { margin-bottom: 18px; }
   .gap-section:last-child { margin-bottom: 0; }
   .gap-section-title {
     font-size: 12px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; color: #e57373; margin-bottom: 10px;
+    letter-spacing: 1px; color: #b06a12; margin-bottom: 10px;
     display: flex; align-items: center; gap: 8px;
   }
   .gap-bar-row {
@@ -209,12 +215,12 @@
     margin-bottom: 6px;
   }
   .gap-bar-label {
-    width: 105px; font-size: 12px; color: #bbb;
+    width: 105px; font-size: 12px; color: #4a5f4a;
     text-align: right; flex-shrink: 0;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .gap-bar-track {
-    flex: 1; height: 18px; background: rgba(255,255,255,0.04);
+    flex: 1; height: 18px; background: rgba(255,255,255,0.6);
     border-radius: 9px; position: relative; overflow: hidden;
   }
   .gap-bar-fill {
@@ -223,7 +229,7 @@
     position: relative;
   }
   .gap-bar-value {
-    font-size: 10px; color: #aaa; width: 55px; flex-shrink: 0;
+    font-size: 10px; color: #4a5f4a; width: 55px; flex-shrink: 0;
     font-variant-numeric: tabular-nums;
   }
   .gap-tag {
@@ -231,32 +237,32 @@
     font-size: 10px; font-weight: 700; text-transform: uppercase;
     letter-spacing: 0.5px; margin-left: 4px;
   }
-  .gap-tag-critical { background: rgba(229,57,53,0.2); color: #ef5350; }
-  .gap-tag-low { background: rgba(255,167,38,0.2); color: #ffa726; }
-  .gap-tag-new { background: rgba(66,165,245,0.2); color: #42a5f5; }
+  .gap-tag-critical { background: rgba(211,47,47,0.15); color: #c62828; }
+  .gap-tag-low { background: rgba(224,138,30,0.18); color: #b06a12; }
+  .gap-tag-new { background: rgba(30,120,190,0.15); color: #1565a0; }
 
   .gap-species-grid {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
   .gap-species-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(31,77,46,0.12);
     border-radius: 8px; padding: 10px 12px;
     display: flex; align-items: center; gap: 10px;
   }
   .gap-species-icon { font-size: 20px; }
-  .gap-species-name { font-size: 12px; color: #ccc; font-weight: 600; }
-  .gap-species-detail { font-size: 11px; color: #888; margin-top: 1px; }
+  .gap-species-name { font-size: 12px; color: #2f4231; font-weight: 600; }
+  .gap-species-detail { font-size: 11px; color: #5a6d58; margin-top: 1px; }
 
   .gap-callout {
     margin-top: 14px; padding: 12px 14px;
-    background: rgba(229,115,115,0.08);
-    border: 1px dashed rgba(229,115,115,0.3);
-    border-radius: 8px; font-size: 12px; color: #d4a9a9;
+    background: rgba(224,138,30,0.10);
+    border: 1px dashed rgba(224,138,30,0.4);
+    border-radius: 8px; font-size: 12px; color: #5a4a30;
     line-height: 1.6;
   }
-  .gap-callout strong { color: #ef9a9a; }
+  .gap-callout strong { color: #a85e0c; }
 
   @media (max-width: 600px) {
     .gap-species-grid { grid-template-columns: 1fr; }
@@ -265,14 +271,14 @@
 
   /* ─── LEGEND ─── */
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #aaa; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #4a5f4a; }
   .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
   .legend-line { width: 20px; height: 3px; border-radius: 2px; }
 
   /* ─── TOOLTIP ─── */
   .tooltip {
     position: absolute; pointer-events: none;
-    background: #1a1a2e; border: 1px solid rgba(255,255,255,0.15);
+    background: #ffffff; border: 1px solid rgba(31,77,46,0.18); color:#1c2e20;
     border-radius: 8px; padding: 10px 14px; font-size: 12px;
     z-index: 100; white-space: nowrap;
     opacity: 0; transition: opacity 0.15s;
@@ -304,10 +310,10 @@
       </div>
     </div>
     <div class="stats-strip">
-      <div class="stat"><span class="stat-icon">📋</span><div><div class="stat-value">51 801</div><div class="stat-label">Observations</div></div></div>
-      <div class="stat"><span class="stat-icon">📅</span><div><div class="stat-value">21 ans</div><div class="stat-label">De données</div></div></div>
-      <div class="stat"><span class="stat-icon">🌳</span><div><div class="stat-value">9 espèces</div><div class="stat-label">Suivies</div></div></div>
-      <div class="stat"><span class="stat-icon">🏔️</span><div><div class="stat-value">7 régions</div><div class="stat-label">Couvertes</div></div></div>
+      <div class="stat"><span class="stat-icon">📋</span><div><div class="stat-value" id="hStatObs">51 801</div><div class="stat-label">Observations</div></div></div>
+      <div class="stat"><span class="stat-icon">📅</span><div><div class="stat-value" id="hStatYears">21 ans</div><div class="stat-label">De données</div></div></div>
+      <div class="stat"><span class="stat-icon">🌳</span><div><div class="stat-value" id="hStatSpecies">9 espèces</div><div class="stat-label">Suivies</div></div></div>
+      <div class="stat"><span class="stat-icon">🏔️</span><div><div class="stat-value" id="hStatRegions">7 régions</div><div class="stat-label">Couvertes</div></div></div>
     </div>
   </div>
 </div>
@@ -325,6 +331,7 @@
   <div class="section" id="sec-trends">
     <h2 class="section-title" id="trends-title">🌱 Évolution du débourrement au fil des ans</h2>
     <p class="section-subtitle" id="trends-subtitle">Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues</p>
+    <p class="chart-note" id="note-trends"></p>
 
     <div class="pills" id="stage-pills">
       <button class="pill active" data-stage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement</button>
@@ -361,6 +368,7 @@
   <div class="section" id="sec-altitude">
     <h2 class="section-title" id="alt-title">⛰️ Le gradient altitudinal : la montagne retarde le printemps</h2>
     <p class="section-subtitle" id="alt-subtitle">Date moyenne du débourrement (10%) par tranche d'altitude — combien de jours gagne-t-on en montant ?</p>
+    <p class="chart-note" id="note-altitude"></p>
 
     <div class="pills" id="alt-stage-pills">
       <button class="pill active" data-altstage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement (10%)</button>
@@ -389,6 +397,7 @@
   <div class="section" id="sec-regions">
     <h2 class="section-title">🗺️ Comparaison entre massifs montagneux</h2>
     <p class="section-subtitle" id="regions-subtitle">Jour moyen du débourrement par région et par espèce</p>
+    <p class="chart-note" id="note-regions"></p>
 
     <div class="pills" id="region-stage-pills">
       <button class="pill active" data-rstage="Débourrement" style="--pill-color:#7cb342;--pill-bg:rgba(124,179,66,0.15)">🌱 Débourrement</button>
@@ -421,15 +430,15 @@
       <canvas class="chart-canvas" id="chart-impact" style="height:260px"></canvas>
       <div class="tooltip" id="tooltip-impact"></div>
     </div>
-    <div style="text-align:center;font-size:11px;color:#888;margin-top:6px">
-      <span style="color:#c17817">■</span> 2025 encore en cours
+    <div style="text-align:center;font-size:11px;color: #5a6d58;margin-top:6px">
+      <span style="color:#f5b301">■</span> <span id="latestYearCaption">2025</span> encore en cours
     </div>
 
     <div class="milestone-grid">
-      <div class="milestone"><div class="milestone-icon">🎯</div><div class="milestone-value" style="color:#7cb342">51 801</div><div class="milestone-label">observations depuis 2004</div></div>
-      <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" style="color:#64b5f6">98 — 2280 m</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
-      <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" style="color:#e6a23c">9 espèces</div><div class="milestone-label">d'arbres suivies</div></div>
-      <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" style="color:#e57373">~3 jours / 100 m</div><div class="milestone-label">retard du printemps en altitude</div></div>
+      <div class="milestone"><div class="milestone-icon">🎯</div><div class="milestone-value" id="mObs" style="color:#2f7a3f">51 801</div><div class="milestone-label">observations depuis 2004</div></div>
+      <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" id="mAlt" style="color:#1565a0">98 — 2280 m</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
+      <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" id="mSpecies" style="color:#b06a12">9 espèces</div><div class="milestone-label">d'arbres suivies</div></div>
+      <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" style="color:#c25454">~3 jours / 100 m</div><div class="milestone-label">retard du printemps en altitude</div></div>
     </div>
 
     <!-- ─── DATA GAPS PANEL ─── -->
@@ -589,9 +598,9 @@
       <h2 class="section-title">🏔️ Couverture des observations dans les Alpes</h2>
       <p class="section-subtitle">Nombre d'observations par année et par tranche d'altitude (200 m) — Région Alpes uniquement. La couleur révèle les lacunes : plus c'est sombre, moins il y a d'observateurs. Toutes les espèces sont sur la même échelle pour faciliter la comparaison.</p>
 
-      <div class="insight" style="margin-bottom:20px;background:rgba(229,57,53,0.08);border-color:rgba(229,57,53,0.3);">
-        <div class="insight-title" style="color:#ef9a9a;">🎯 Pourquoi ces cartes sont importantes pour CREA</div>
-        <p style="color:#d4a9a9;">Les observations dans les Alpes sont en déclin depuis 2021. Ces cartes montrent <strong style="color:#ef9a9a;">exactement où les données manquent</strong> — certaines espèces à des altitudes clés n'ont presque plus d'observateurs. Ce sont les zones prioritaires pour recruter de nouveaux bénévoles.</p>
+      <div class="insight" style="margin-bottom:20px;background:rgba(224,138,30,0.10);border-color:rgba(224,138,30,0.3);">
+        <div class="insight-title" style="color:#a85e0c;">🎯 Pourquoi ces cartes sont importantes pour CREA</div>
+        <p style="color:#5a4a30;">Les observations dans les Alpes sont en déclin depuis 2021. Ces cartes montrent <strong style="color:#ef9a9a;">exactement où les données manquent</strong> — certaines espèces à des altitudes clés n'ont presque plus d'observateurs. Ce sont les zones prioritaires pour recruter de nouveaux bénévoles.</p>
       </div>
 
       <!-- Species selector buttons -->
@@ -603,10 +612,12 @@
       </div>
 
       <!-- Single heatmap display -->
-      <div id="heatmap-single" style="background:rgba(255,255,255,0.02);border-radius:12px;border:1px solid rgba(255,255,255,0.06);padding:16px 16px 12px;"></div>
+      <div id="heatmap-single" style="background:rgba(255,255,255,0.5);border-radius:12px;border:1px solid rgba(31,77,46,0.10);padding:16px 16px 12px;"></div>
     </div>
 
   </div>
+
+  <div id="dataFooter" style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:24px;letter-spacing:0.3px;"></div>
 
   <div class="spacer"></div>
 </div>
@@ -615,69 +626,108 @@
 // ════════════════════════════════════════════
 //  DATA
 // ════════════════════════════════════════════
-const TIMING = [
-  // bouleau
-  {s:"bouleau",st:"Débourrement",y:2005,d:106.1},{s:"bouleau",st:"Débourrement",y:2006,d:108.6},{s:"bouleau",st:"Débourrement",y:2007,d:97.7},{s:"bouleau",st:"Débourrement",y:2008,d:104.8},{s:"bouleau",st:"Débourrement",y:2009,d:100.6},{s:"bouleau",st:"Débourrement",y:2010,d:108.6},{s:"bouleau",st:"Débourrement",y:2011,d:91.2},{s:"bouleau",st:"Débourrement",y:2012,d:100.8},{s:"bouleau",st:"Débourrement",y:2013,d:113.2},{s:"bouleau",st:"Débourrement",y:2014,d:100.8},{s:"bouleau",st:"Débourrement",y:2015,d:101.8},{s:"bouleau",st:"Débourrement",y:2016,d:107.6},{s:"bouleau",st:"Débourrement",y:2017,d:97.7},{s:"bouleau",st:"Débourrement",y:2018,d:110},{s:"bouleau",st:"Débourrement",y:2019,d:109.7},{s:"bouleau",st:"Débourrement",y:2020,d:100.1},{s:"bouleau",st:"Débourrement",y:2021,d:105.2},{s:"bouleau",st:"Débourrement",y:2022,d:105.6},{s:"bouleau",st:"Débourrement",y:2023,d:107.4},{s:"bouleau",st:"Débourrement",y:2024,d:102.1},{s:"bouleau",st:"Débourrement",y:2025,d:104.3},
-  {s:"bouleau",st:"Feuillaison",y:2005,d:118},{s:"bouleau",st:"Feuillaison",y:2006,d:119.6},{s:"bouleau",st:"Feuillaison",y:2007,d:108.6},{s:"bouleau",st:"Feuillaison",y:2008,d:121.7},{s:"bouleau",st:"Feuillaison",y:2009,d:116.9},{s:"bouleau",st:"Feuillaison",y:2010,d:122.1},{s:"bouleau",st:"Feuillaison",y:2011,d:102.9},{s:"bouleau",st:"Feuillaison",y:2012,d:117.2},{s:"bouleau",st:"Feuillaison",y:2013,d:129.1},{s:"bouleau",st:"Feuillaison",y:2014,d:117.2},{s:"bouleau",st:"Feuillaison",y:2015,d:122.6},{s:"bouleau",st:"Feuillaison",y:2016,d:128.4},{s:"bouleau",st:"Feuillaison",y:2017,d:116.4},{s:"bouleau",st:"Feuillaison",y:2018,d:121.9},{s:"bouleau",st:"Feuillaison",y:2019,d:126.9},{s:"bouleau",st:"Feuillaison",y:2020,d:113.8},{s:"bouleau",st:"Feuillaison",y:2021,d:126.7},{s:"bouleau",st:"Feuillaison",y:2022,d:122.1},{s:"bouleau",st:"Feuillaison",y:2023,d:124.3},{s:"bouleau",st:"Feuillaison",y:2024,d:118.2},{s:"bouleau",st:"Feuillaison",y:2025,d:115.8},
-  {s:"bouleau",st:"Floraison",y:2005,d:125.8},{s:"bouleau",st:"Floraison",y:2006,d:120.4},{s:"bouleau",st:"Floraison",y:2007,d:112.6},{s:"bouleau",st:"Floraison",y:2008,d:121.5},{s:"bouleau",st:"Floraison",y:2009,d:118.3},{s:"bouleau",st:"Floraison",y:2010,d:122},{s:"bouleau",st:"Floraison",y:2011,d:105.4},{s:"bouleau",st:"Floraison",y:2012,d:114.9},{s:"bouleau",st:"Floraison",y:2013,d:125.6},{s:"bouleau",st:"Floraison",y:2014,d:115.7},{s:"bouleau",st:"Floraison",y:2015,d:116.5},{s:"bouleau",st:"Floraison",y:2016,d:125.4},{s:"bouleau",st:"Floraison",y:2017,d:109.6},{s:"bouleau",st:"Floraison",y:2018,d:119.8},{s:"bouleau",st:"Floraison",y:2019,d:126.1},{s:"bouleau",st:"Floraison",y:2020,d:110.9},{s:"bouleau",st:"Floraison",y:2021,d:124.8},{s:"bouleau",st:"Floraison",y:2022,d:118.1},{s:"bouleau",st:"Floraison",y:2023,d:120.6},{s:"bouleau",st:"Floraison",y:2024,d:115.4},{s:"bouleau",st:"Floraison",y:2025,d:114.1},
-  {s:"bouleau",st:"Changement de couleur",y:2006,d:273.1},{s:"bouleau",st:"Changement de couleur",y:2007,d:267.4},{s:"bouleau",st:"Changement de couleur",y:2008,d:265.9},{s:"bouleau",st:"Changement de couleur",y:2009,d:264.6},{s:"bouleau",st:"Changement de couleur",y:2010,d:267},{s:"bouleau",st:"Changement de couleur",y:2011,d:267.8},{s:"bouleau",st:"Changement de couleur",y:2012,d:265.6},{s:"bouleau",st:"Changement de couleur",y:2013,d:267.7},{s:"bouleau",st:"Changement de couleur",y:2014,d:260.4},{s:"bouleau",st:"Changement de couleur",y:2015,d:257.3},{s:"bouleau",st:"Changement de couleur",y:2016,d:261.2},{s:"bouleau",st:"Changement de couleur",y:2017,d:258.2},{s:"bouleau",st:"Changement de couleur",y:2018,d:264.9},{s:"bouleau",st:"Changement de couleur",y:2019,d:262.2},{s:"bouleau",st:"Changement de couleur",y:2020,d:262.6},{s:"bouleau",st:"Changement de couleur",y:2021,d:261.7},{s:"bouleau",st:"Changement de couleur",y:2022,d:261},{s:"bouleau",st:"Changement de couleur",y:2023,d:268.5},{s:"bouleau",st:"Changement de couleur",y:2024,d:260.4},
-  // mélèze
-  {s:"mélèze",st:"Débourrement",y:2005,d:104.2},{s:"mélèze",st:"Débourrement",y:2006,d:111.6},{s:"mélèze",st:"Débourrement",y:2007,d:97.7},{s:"mélèze",st:"Débourrement",y:2008,d:106.9},{s:"mélèze",st:"Débourrement",y:2009,d:107.2},{s:"mélèze",st:"Débourrement",y:2010,d:112.1},{s:"mélèze",st:"Débourrement",y:2011,d:95.1},{s:"mélèze",st:"Débourrement",y:2012,d:100.7},{s:"mélèze",st:"Débourrement",y:2013,d:117.3},{s:"mélèze",st:"Débourrement",y:2014,d:102},{s:"mélèze",st:"Débourrement",y:2015,d:103.3},{s:"mélèze",st:"Débourrement",y:2016,d:107.1},{s:"mélèze",st:"Débourrement",y:2017,d:95.1},{s:"mélèze",st:"Débourrement",y:2018,d:106.2},{s:"mélèze",st:"Débourrement",y:2019,d:100.9},{s:"mélèze",st:"Débourrement",y:2020,d:97.3},{s:"mélèze",st:"Débourrement",y:2021,d:98.6},{s:"mélèze",st:"Débourrement",y:2022,d:103.7},{s:"mélèze",st:"Débourrement",y:2023,d:101},{s:"mélèze",st:"Débourrement",y:2024,d:100.1},{s:"mélèze",st:"Débourrement",y:2025,d:101},
-  {s:"mélèze",st:"Feuillaison",y:2005,d:126.7},{s:"mélèze",st:"Feuillaison",y:2006,d:126.9},{s:"mélèze",st:"Feuillaison",y:2007,d:113.6},{s:"mélèze",st:"Feuillaison",y:2008,d:127.1},{s:"mélèze",st:"Feuillaison",y:2009,d:126.5},{s:"mélèze",st:"Feuillaison",y:2010,d:131.2},{s:"mélèze",st:"Feuillaison",y:2011,d:112},{s:"mélèze",st:"Feuillaison",y:2012,d:126.1},{s:"mélèze",st:"Feuillaison",y:2013,d:132.9},{s:"mélèze",st:"Feuillaison",y:2014,d:124},{s:"mélèze",st:"Feuillaison",y:2015,d:120},{s:"mélèze",st:"Feuillaison",y:2016,d:130.1},{s:"mélèze",st:"Feuillaison",y:2017,d:118.8},{s:"mélèze",st:"Feuillaison",y:2018,d:124.6},{s:"mélèze",st:"Feuillaison",y:2019,d:125.8},{s:"mélèze",st:"Feuillaison",y:2020,d:119.6},{s:"mélèze",st:"Feuillaison",y:2021,d:127.9},{s:"mélèze",st:"Feuillaison",y:2022,d:123.6},{s:"mélèze",st:"Feuillaison",y:2023,d:123.4},{s:"mélèze",st:"Feuillaison",y:2024,d:126.3},{s:"mélèze",st:"Feuillaison",y:2025,d:125.7},
-  {s:"mélèze",st:"Floraison",y:2005,d:121.7},{s:"mélèze",st:"Floraison",y:2006,d:116.8},{s:"mélèze",st:"Floraison",y:2007,d:103.4},{s:"mélèze",st:"Floraison",y:2008,d:115.2},{s:"mélèze",st:"Floraison",y:2009,d:113.1},{s:"mélèze",st:"Floraison",y:2010,d:120.9},{s:"mélèze",st:"Floraison",y:2011,d:101.7},{s:"mélèze",st:"Floraison",y:2012,d:108.2},{s:"mélèze",st:"Floraison",y:2013,d:119.9},{s:"mélèze",st:"Floraison",y:2014,d:106.1},{s:"mélèze",st:"Floraison",y:2015,d:109.1},{s:"mélèze",st:"Floraison",y:2016,d:115.2},{s:"mélèze",st:"Floraison",y:2017,d:101.4},{s:"mélèze",st:"Floraison",y:2018,d:114.6},{s:"mélèze",st:"Floraison",y:2019,d:112.1},{s:"mélèze",st:"Floraison",y:2020,d:105.9},{s:"mélèze",st:"Floraison",y:2021,d:116.5},{s:"mélèze",st:"Floraison",y:2022,d:112.2},{s:"mélèze",st:"Floraison",y:2023,d:109.8},{s:"mélèze",st:"Floraison",y:2024,d:106.3},{s:"mélèze",st:"Floraison",y:2025,d:110.6},
-  {s:"mélèze",st:"Changement de couleur",y:2006,d:283.2},{s:"mélèze",st:"Changement de couleur",y:2007,d:277.9},{s:"mélèze",st:"Changement de couleur",y:2008,d:276.4},{s:"mélèze",st:"Changement de couleur",y:2009,d:278.4},{s:"mélèze",st:"Changement de couleur",y:2010,d:273.1},{s:"mélèze",st:"Changement de couleur",y:2011,d:281.9},{s:"mélèze",st:"Changement de couleur",y:2012,d:278.6},{s:"mélèze",st:"Changement de couleur",y:2013,d:281.2},{s:"mélèze",st:"Changement de couleur",y:2014,d:275.6},{s:"mélèze",st:"Changement de couleur",y:2015,d:267.2},{s:"mélèze",st:"Changement de couleur",y:2016,d:276.7},{s:"mélèze",st:"Changement de couleur",y:2017,d:276.3},{s:"mélèze",st:"Changement de couleur",y:2018,d:279.1},{s:"mélèze",st:"Changement de couleur",y:2019,d:280.9},{s:"mélèze",st:"Changement de couleur",y:2020,d:277.1},{s:"mélèze",st:"Changement de couleur",y:2021,d:281.7},{s:"mélèze",st:"Changement de couleur",y:2022,d:280.5},{s:"mélèze",st:"Changement de couleur",y:2023,d:275.5},{s:"mélèze",st:"Changement de couleur",y:2024,d:277.6},
-  // noisetier
-  {s:"noisetier",st:"Floraison",y:2006,d:72.3},{s:"noisetier",st:"Floraison",y:2007,d:41.6},{s:"noisetier",st:"Floraison",y:2008,d:42.1},{s:"noisetier",st:"Floraison",y:2009,d:62.9},{s:"noisetier",st:"Floraison",y:2010,d:70.6},{s:"noisetier",st:"Floraison",y:2011,d:43.9},{s:"noisetier",st:"Floraison",y:2012,d:55.6},{s:"noisetier",st:"Floraison",y:2013,d:59.1},{s:"noisetier",st:"Floraison",y:2014,d:51.2},{s:"noisetier",st:"Floraison",y:2015,d:54.7},{s:"noisetier",st:"Floraison",y:2016,d:40.8},{s:"noisetier",st:"Floraison",y:2017,d:52.6},{s:"noisetier",st:"Floraison",y:2018,d:51.3},{s:"noisetier",st:"Floraison",y:2019,d:48.2},{s:"noisetier",st:"Floraison",y:2020,d:35.4},{s:"noisetier",st:"Floraison",y:2021,d:49.5},{s:"noisetier",st:"Floraison",y:2022,d:42.1},{s:"noisetier",st:"Floraison",y:2023,d:46.5},{s:"noisetier",st:"Floraison",y:2024,d:40.4},{s:"noisetier",st:"Floraison",y:2025,d:48.6},
-  {s:"noisetier",st:"Débourrement",y:2006,d:98.4},{s:"noisetier",st:"Débourrement",y:2007,d:82.8},{s:"noisetier",st:"Débourrement",y:2008,d:84.6},{s:"noisetier",st:"Débourrement",y:2009,d:88.7},{s:"noisetier",st:"Débourrement",y:2010,d:94.3},{s:"noisetier",st:"Débourrement",y:2011,d:82.4},{s:"noisetier",st:"Débourrement",y:2012,d:82.7},{s:"noisetier",st:"Débourrement",y:2013,d:99.5},{s:"noisetier",st:"Débourrement",y:2014,d:86.5},{s:"noisetier",st:"Débourrement",y:2015,d:92},{s:"noisetier",st:"Débourrement",y:2016,d:90.5},{s:"noisetier",st:"Débourrement",y:2017,d:82.7},{s:"noisetier",st:"Débourrement",y:2018,d:98.1},{s:"noisetier",st:"Débourrement",y:2019,d:88.3},{s:"noisetier",st:"Débourrement",y:2020,d:84.9},{s:"noisetier",st:"Débourrement",y:2021,d:86.4},{s:"noisetier",st:"Débourrement",y:2022,d:88.8},{s:"noisetier",st:"Débourrement",y:2023,d:90.1},{s:"noisetier",st:"Débourrement",y:2024,d:83.1},{s:"noisetier",st:"Débourrement",y:2025,d:85.3},
-  {s:"noisetier",st:"Feuillaison",y:2005,d:110.7},{s:"noisetier",st:"Feuillaison",y:2006,d:114.4},{s:"noisetier",st:"Feuillaison",y:2007,d:105},{s:"noisetier",st:"Feuillaison",y:2008,d:111.5},{s:"noisetier",st:"Feuillaison",y:2009,d:106.4},{s:"noisetier",st:"Feuillaison",y:2010,d:117.1},{s:"noisetier",st:"Feuillaison",y:2011,d:99.5},{s:"noisetier",st:"Feuillaison",y:2012,d:103.5},{s:"noisetier",st:"Feuillaison",y:2013,d:118.1},{s:"noisetier",st:"Feuillaison",y:2014,d:105.7},{s:"noisetier",st:"Feuillaison",y:2015,d:116.8},{s:"noisetier",st:"Feuillaison",y:2016,d:119.6},{s:"noisetier",st:"Feuillaison",y:2017,d:108.7},{s:"noisetier",st:"Feuillaison",y:2018,d:116.5},{s:"noisetier",st:"Feuillaison",y:2019,d:118.6},{s:"noisetier",st:"Feuillaison",y:2020,d:111.2},{s:"noisetier",st:"Feuillaison",y:2021,d:116.3},{s:"noisetier",st:"Feuillaison",y:2022,d:116.1},{s:"noisetier",st:"Feuillaison",y:2023,d:117.2},{s:"noisetier",st:"Feuillaison",y:2024,d:110.2},{s:"noisetier",st:"Feuillaison",y:2025,d:106.7},
-  // sorbier
-  {s:"sorbier",st:"Débourrement",y:2006,d:111.9},{s:"sorbier",st:"Débourrement",y:2007,d:105.4},{s:"sorbier",st:"Débourrement",y:2008,d:104.8},{s:"sorbier",st:"Débourrement",y:2009,d:103.1},{s:"sorbier",st:"Débourrement",y:2010,d:111.4},{s:"sorbier",st:"Débourrement",y:2011,d:98.2},{s:"sorbier",st:"Débourrement",y:2012,d:111.9},{s:"sorbier",st:"Débourrement",y:2013,d:117.8},{s:"sorbier",st:"Débourrement",y:2014,d:111},{s:"sorbier",st:"Débourrement",y:2015,d:109.2},{s:"sorbier",st:"Débourrement",y:2016,d:113.1},{s:"sorbier",st:"Débourrement",y:2017,d:100.3},{s:"sorbier",st:"Débourrement",y:2018,d:112.7},{s:"sorbier",st:"Débourrement",y:2019,d:111.7},{s:"sorbier",st:"Débourrement",y:2020,d:99.4},{s:"sorbier",st:"Débourrement",y:2021,d:107.5},{s:"sorbier",st:"Débourrement",y:2022,d:99.4},{s:"sorbier",st:"Débourrement",y:2023,d:106.4},{s:"sorbier",st:"Débourrement",y:2024,d:104.4},{s:"sorbier",st:"Débourrement",y:2025,d:106.2},
-  {s:"sorbier",st:"Feuillaison",y:2006,d:131},{s:"sorbier",st:"Feuillaison",y:2007,d:119.3},{s:"sorbier",st:"Feuillaison",y:2008,d:128.2},{s:"sorbier",st:"Feuillaison",y:2009,d:126.7},{s:"sorbier",st:"Feuillaison",y:2010,d:133.7},{s:"sorbier",st:"Feuillaison",y:2011,d:117.4},{s:"sorbier",st:"Feuillaison",y:2012,d:133},{s:"sorbier",st:"Feuillaison",y:2013,d:137.8},{s:"sorbier",st:"Feuillaison",y:2014,d:132.6},{s:"sorbier",st:"Feuillaison",y:2015,d:129.2},{s:"sorbier",st:"Feuillaison",y:2016,d:141.3},{s:"sorbier",st:"Feuillaison",y:2017,d:123.7},{s:"sorbier",st:"Feuillaison",y:2018,d:131},{s:"sorbier",st:"Feuillaison",y:2019,d:137.9},{s:"sorbier",st:"Feuillaison",y:2020,d:121.8},{s:"sorbier",st:"Feuillaison",y:2021,d:138.2},{s:"sorbier",st:"Feuillaison",y:2022,d:128.1},{s:"sorbier",st:"Feuillaison",y:2023,d:129.4},{s:"sorbier",st:"Feuillaison",y:2024,d:128},{s:"sorbier",st:"Feuillaison",y:2025,d:127.3},
-  {s:"sorbier",st:"Floraison",y:2006,d:154.6},{s:"sorbier",st:"Floraison",y:2007,d:142.2},{s:"sorbier",st:"Floraison",y:2008,d:143.1},{s:"sorbier",st:"Floraison",y:2009,d:145.3},{s:"sorbier",st:"Floraison",y:2010,d:151.2},{s:"sorbier",st:"Floraison",y:2011,d:138.9},{s:"sorbier",st:"Floraison",y:2012,d:151.8},{s:"sorbier",st:"Floraison",y:2013,d:163.1},{s:"sorbier",st:"Floraison",y:2014,d:158.2},{s:"sorbier",st:"Floraison",y:2015,d:147.2},{s:"sorbier",st:"Floraison",y:2016,d:160.6},{s:"sorbier",st:"Floraison",y:2017,d:142.9},{s:"sorbier",st:"Floraison",y:2018,d:150},{s:"sorbier",st:"Floraison",y:2019,d:159.2},{s:"sorbier",st:"Floraison",y:2020,d:142.9},{s:"sorbier",st:"Floraison",y:2021,d:151.1},{s:"sorbier",st:"Floraison",y:2022,d:140},{s:"sorbier",st:"Floraison",y:2023,d:157.2},{s:"sorbier",st:"Floraison",y:2024,d:151.3},{s:"sorbier",st:"Floraison",y:2025,d:145.8},
-  {s:"sorbier",st:"Changement de couleur",y:2006,d:275.8},{s:"sorbier",st:"Changement de couleur",y:2007,d:260.9},{s:"sorbier",st:"Changement de couleur",y:2008,d:263.5},{s:"sorbier",st:"Changement de couleur",y:2009,d:265.6},{s:"sorbier",st:"Changement de couleur",y:2010,d:259.4},{s:"sorbier",st:"Changement de couleur",y:2011,d:263.3},{s:"sorbier",st:"Changement de couleur",y:2012,d:267.3},{s:"sorbier",st:"Changement de couleur",y:2013,d:271.6},{s:"sorbier",st:"Changement de couleur",y:2014,d:267.8},{s:"sorbier",st:"Changement de couleur",y:2015,d:262.1},{s:"sorbier",st:"Changement de couleur",y:2016,d:271.3},{s:"sorbier",st:"Changement de couleur",y:2017,d:262},{s:"sorbier",st:"Changement de couleur",y:2018,d:268.6},{s:"sorbier",st:"Changement de couleur",y:2019,d:263.1},{s:"sorbier",st:"Changement de couleur",y:2020,d:266.6},{s:"sorbier",st:"Changement de couleur",y:2021,d:257.9},{s:"sorbier",st:"Changement de couleur",y:2022,d:266.9},{s:"sorbier",st:"Changement de couleur",y:2023,d:264.8},{s:"sorbier",st:"Changement de couleur",y:2024,d:268.6},{s:"sorbier",st:"Changement de couleur",y:2025,d:261.5},
-];
+// ════════════════════════════════════════════
+//  DATA  (loaded at runtime from phenoclim_data.json,
+//         generated from the CREA Mont-Blanc API by build_phenoclim_data.py)
+// ════════════════════════════════════════════
+// Mutable bindings — populated by loadData() before init() runs.
+let TIMING = [];
+let TIMING50 = [];
+let ALT = [];
+let ALT50 = [];
+let OBS = [];
+let REGIONS = [];
+let META = null;
+let REGION_COUNTS = [];
+let SPECIES_COUNTS = [];
+let GENERATED = null;
+let LICENSE = null;
 
-const ALT = [
-  {s:"bouleau",a:200,d:84.5},{s:"bouleau",a:400,d:86.1},{s:"bouleau",a:600,d:95.1},{s:"bouleau",a:800,d:99.5},{s:"bouleau",a:1000,d:101.3},{s:"bouleau",a:1200,d:108.5},{s:"bouleau",a:1400,d:112},{s:"bouleau",a:1600,d:114},{s:"bouleau",a:1800,d:130.3},
-  {s:"mélèze",a:400,d:72.9},{s:"mélèze",a:600,d:76.5},{s:"mélèze",a:800,d:93.4},{s:"mélèze",a:1000,d:92.8},{s:"mélèze",a:1200,d:100.2},{s:"mélèze",a:1400,d:102.9},{s:"mélèze",a:1600,d:106.7},{s:"mélèze",a:1800,d:115.7},{s:"mélèze",a:2000,d:140.3},
-  {s:"noisetier",a:0,d:74.2},{s:"noisetier",a:200,d:75.5},{s:"noisetier",a:400,d:80.2},{s:"noisetier",a:600,d:87.8},{s:"noisetier",a:800,d:87.3},{s:"noisetier",a:1000,d:95.2},{s:"noisetier",a:1200,d:98.3},{s:"noisetier",a:1400,d:101.8},
-  {s:"sorbier",a:400,d:83.2},{s:"sorbier",a:800,d:92.2},{s:"sorbier",a:1000,d:95},{s:"sorbier",a:1200,d:111.5},{s:"sorbier",a:1400,d:105.8},{s:"sorbier",a:1600,d:107.5},{s:"sorbier",a:1800,d:119},{s:"sorbier",a:2000,d:130.9},
-  // Changement de couleur 10%
-  {s:"bouleau",st:"Changement de couleur",a:200,d:275.1},{s:"bouleau",st:"Changement de couleur",a:400,d:271},{s:"bouleau",st:"Changement de couleur",a:600,d:277.2},{s:"bouleau",st:"Changement de couleur",a:800,d:261.7},{s:"bouleau",st:"Changement de couleur",a:1000,d:262},{s:"bouleau",st:"Changement de couleur",a:1200,d:262.3},{s:"bouleau",st:"Changement de couleur",a:1400,d:260.5},{s:"bouleau",st:"Changement de couleur",a:1600,d:263.1},{s:"bouleau",st:"Changement de couleur",a:1800,d:266.4},{s:"bouleau",st:"Changement de couleur",a:2000,d:246},
-  {s:"mélèze",st:"Changement de couleur",a:600,d:291.4},{s:"mélèze",st:"Changement de couleur",a:800,d:284.9},{s:"mélèze",st:"Changement de couleur",a:1000,d:283.6},{s:"mélèze",st:"Changement de couleur",a:1200,d:279},{s:"mélèze",st:"Changement de couleur",a:1400,d:274},{s:"mélèze",st:"Changement de couleur",a:1600,d:277.5},{s:"mélèze",st:"Changement de couleur",a:1800,d:268.7},{s:"mélèze",st:"Changement de couleur",a:2000,d:281.1},
-  {s:"sorbier",st:"Changement de couleur",a:400,d:281.7},{s:"sorbier",st:"Changement de couleur",a:600,d:267.4},{s:"sorbier",st:"Changement de couleur",a:800,d:254.7},{s:"sorbier",st:"Changement de couleur",a:1000,d:261.4},{s:"sorbier",st:"Changement de couleur",a:1200,d:265.4},{s:"sorbier",st:"Changement de couleur",a:1400,d:264.5},{s:"sorbier",st:"Changement de couleur",a:1600,d:266},{s:"sorbier",st:"Changement de couleur",a:1800,d:268.2},{s:"sorbier",st:"Changement de couleur",a:2000,d:264},
-];
-
-const OBS = [{y:2004,c:66},{y:2005,c:275},{y:2006,c:981},{y:2007,c:1079},{y:2008,c:1374},{y:2009,c:1748},{y:2010,c:2467},{y:2011,c:2612},{y:2012,c:1782},{y:2013,c:1605},{y:2014,c:1335},{y:2015,c:1433},{y:2016,c:1535},{y:2017,c:1696},{y:2018,c:1907},{y:2019,c:1780},{y:2020,c:1543},{y:2021,c:1669},{y:2022,c:1665},{y:2023,c:1504},{y:2024,c:1477},{y:2025,c:1050}];
-
-const REGIONS = [
-  {r:"Alps",s:"bouleau",st:"Débourrement",d:103.7},{r:"Alps",s:"noisetier",st:"Débourrement",d:89.3},{r:"Alps",s:"mélèze",st:"Débourrement",d:104.3},{r:"Alps",s:"sorbier",st:"Débourrement",d:107.4},
-  {r:"Pyrenees",s:"bouleau",st:"Débourrement",d:109.6},{r:"Pyrenees",s:"noisetier",st:"Débourrement",d:91.2},{r:"Pyrenees",s:"mélèze",st:"Débourrement",d:101.5},{r:"Pyrenees",s:"sorbier",st:"Débourrement",d:113.3},
-  {r:"Mont-Blanc",s:"bouleau",st:"Débourrement",d:102.5},{r:"Mont-Blanc",s:"noisetier",st:"Débourrement",d:91.2},{r:"Mont-Blanc",s:"mélèze",st:"Débourrement",d:97.5},{r:"Mont-Blanc",s:"sorbier",st:"Débourrement",d:98.6},
-  {r:"Massif Central",s:"bouleau",st:"Débourrement",d:90.2},{r:"Massif Central",s:"noisetier",st:"Débourrement",d:72},{r:"Massif Central",s:"mélèze",st:"Débourrement",d:73.9},{r:"Massif Central",s:"sorbier",st:"Débourrement",d:93.9},
-  {r:"Jura",s:"bouleau",st:"Débourrement",d:92.9},{r:"Jura",s:"noisetier",st:"Débourrement",d:90},
-  {r:"Vosges",s:"bouleau",st:"Débourrement",d:84},{r:"Vosges",s:"noisetier",st:"Débourrement",d:82},
-  {r:"Alps",s:"bouleau",st:"Floraison",d:117.3},{r:"Alps",s:"noisetier",st:"Floraison",d:53.2},{r:"Alps",s:"mélèze",st:"Floraison",d:111.5},{r:"Alps",s:"sorbier",st:"Floraison",d:151.2},
-  {r:"Pyrenees",s:"bouleau",st:"Floraison",d:126.1},{r:"Pyrenees",s:"noisetier",st:"Floraison",d:41.4},{r:"Pyrenees",s:"sorbier",st:"Floraison",d:155.6},
-  {r:"Mont-Blanc",s:"bouleau",st:"Floraison",d:115.2},{r:"Mont-Blanc",s:"noisetier",st:"Floraison",d:57.9},{r:"Mont-Blanc",s:"mélèze",st:"Floraison",d:105.7},{r:"Mont-Blanc",s:"sorbier",st:"Floraison",d:139.2},
-  {r:"Massif Central",s:"bouleau",st:"Floraison",d:106.9},{r:"Massif Central",s:"noisetier",st:"Floraison",d:35.9},{r:"Massif Central",s:"sorbier",st:"Floraison",d:126.2},
-];
-
-const SPECIES_COLORS = {bouleau:"#4a7c59",mélèze:"#c17817",noisetier:"#7b5ea7",sorbier:"#c25454"};
+const SPECIES_COLORS = {bouleau:"#3d7a4e",mélèze:"#c17817",noisetier:"#7b5ea7",sorbier:"#c25454"};
 const SPECIES_LIST = ["bouleau","mélèze","noisetier","sorbier"];
 
-// 50% data (only available for Changement de couleur)
-const TIMING50 = [
-  {s:"bouleau",st:"Changement de couleur",y:2004,d:296.3},{s:"bouleau",st:"Changement de couleur",y:2005,d:299},{s:"bouleau",st:"Changement de couleur",y:2006,d:293.7},{s:"bouleau",st:"Changement de couleur",y:2007,d:284.9},{s:"bouleau",st:"Changement de couleur",y:2008,d:284},{s:"bouleau",st:"Changement de couleur",y:2009,d:288.2},{s:"bouleau",st:"Changement de couleur",y:2010,d:286.4},{s:"bouleau",st:"Changement de couleur",y:2011,d:287.4},{s:"bouleau",st:"Changement de couleur",y:2012,d:285.2},{s:"bouleau",st:"Changement de couleur",y:2013,d:290.5},{s:"bouleau",st:"Changement de couleur",y:2014,d:280},{s:"bouleau",st:"Changement de couleur",y:2015,d:276.4},{s:"bouleau",st:"Changement de couleur",y:2016,d:283.6},{s:"bouleau",st:"Changement de couleur",y:2017,d:276.4},{s:"bouleau",st:"Changement de couleur",y:2018,d:282},{s:"bouleau",st:"Changement de couleur",y:2019,d:280.9},{s:"bouleau",st:"Changement de couleur",y:2020,d:280.7},{s:"bouleau",st:"Changement de couleur",y:2021,d:283.2},{s:"bouleau",st:"Changement de couleur",y:2022,d:283.3},{s:"bouleau",st:"Changement de couleur",y:2023,d:287.5},{s:"bouleau",st:"Changement de couleur",y:2024,d:281.1},{s:"bouleau",st:"Changement de couleur",y:2025,d:274.4},
-  {s:"mélèze",st:"Changement de couleur",y:2004,d:306.4},{s:"mélèze",st:"Changement de couleur",y:2005,d:300.7},{s:"mélèze",st:"Changement de couleur",y:2006,d:301.6},{s:"mélèze",st:"Changement de couleur",y:2007,d:300.4},{s:"mélèze",st:"Changement de couleur",y:2008,d:293.4},{s:"mélèze",st:"Changement de couleur",y:2009,d:293.9},{s:"mélèze",st:"Changement de couleur",y:2010,d:289.6},{s:"mélèze",st:"Changement de couleur",y:2011,d:298.9},{s:"mélèze",st:"Changement de couleur",y:2012,d:296.4},{s:"mélèze",st:"Changement de couleur",y:2013,d:297.5},{s:"mélèze",st:"Changement de couleur",y:2014,d:292.9},{s:"mélèze",st:"Changement de couleur",y:2015,d:287.6},{s:"mélèze",st:"Changement de couleur",y:2016,d:298.2},{s:"mélèze",st:"Changement de couleur",y:2017,d:294.1},{s:"mélèze",st:"Changement de couleur",y:2018,d:297.8},{s:"mélèze",st:"Changement de couleur",y:2019,d:301.6},{s:"mélèze",st:"Changement de couleur",y:2020,d:292.7},{s:"mélèze",st:"Changement de couleur",y:2021,d:301.2},{s:"mélèze",st:"Changement de couleur",y:2022,d:301.7},{s:"mélèze",st:"Changement de couleur",y:2023,d:299.3},{s:"mélèze",st:"Changement de couleur",y:2024,d:297.4},{s:"mélèze",st:"Changement de couleur",y:2025,d:274},
-  {s:"sorbier",st:"Changement de couleur",y:2004,d:291.7},{s:"sorbier",st:"Changement de couleur",y:2005,d:283.7},{s:"sorbier",st:"Changement de couleur",y:2006,d:286.3},{s:"sorbier",st:"Changement de couleur",y:2007,d:269.5},{s:"sorbier",st:"Changement de couleur",y:2008,d:277.4},{s:"sorbier",st:"Changement de couleur",y:2009,d:280.5},{s:"sorbier",st:"Changement de couleur",y:2010,d:273},{s:"sorbier",st:"Changement de couleur",y:2011,d:278.8},{s:"sorbier",st:"Changement de couleur",y:2012,d:277.5},{s:"sorbier",st:"Changement de couleur",y:2013,d:286.5},{s:"sorbier",st:"Changement de couleur",y:2014,d:278.6},{s:"sorbier",st:"Changement de couleur",y:2015,d:274.4},{s:"sorbier",st:"Changement de couleur",y:2016,d:283.8},{s:"sorbier",st:"Changement de couleur",y:2017,d:273.9},{s:"sorbier",st:"Changement de couleur",y:2018,d:279.5},{s:"sorbier",st:"Changement de couleur",y:2019,d:279.8},{s:"sorbier",st:"Changement de couleur",y:2020,d:281.2},{s:"sorbier",st:"Changement de couleur",y:2021,d:277},{s:"sorbier",st:"Changement de couleur",y:2022,d:279.2},{s:"sorbier",st:"Changement de couleur",y:2023,d:279},{s:"sorbier",st:"Changement de couleur",y:2024,d:279.8},{s:"sorbier",st:"Changement de couleur",y:2025,d:275.6},
-];
+async function loadData() {
+  try {
+    const res = await fetch("phenoclim_data.json", {cache: "no-cache"});
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const d = await res.json();
+    TIMING = d.TIMING || [];
+    TIMING50 = d.TIMING50 || [];
+    ALT = d.ALT || [];
+    ALT50 = d.ALT50 || [];
+    OBS = d.OBS || [];
+    REGIONS = d.REGIONS || [];
+    META = d.META || null;
+    REGION_COUNTS = d.REGION_COUNTS || [];
+    SPECIES_COUNTS = d.SPECIES_COUNTS || [];
+    GENERATED = d.GENERATED || null;
+    LICENSE = d.LICENSE || null;
+    if (typeof applyMeta === "function") applyMeta();
+    return true;
+  } catch (e) {
+    console.error("Could not load phenoclim_data.json:", e);
+    const host = document.querySelector(".main");
+    if (host) {
+      const warn = document.createElement("div");
+      warn.style.cssText = "margin:16px 0;padding:14px 16px;border-radius:10px;background:rgba(229,115,115,0.12);border:1px solid rgba(229,115,115,0.35);color:#ef9a9a;font-size:13px";
+      warn.textContent = "Les données n'ont pas pu être chargées (phenoclim_data.json). Réessayez plus tard.";
+      host.prepend(warn);
+    }
+    return false;
+  }
+}
 
-const ALT50 = [
-  {s:"bouleau",st:"Changement de couleur",a:200,d:295.5},{s:"bouleau",st:"Changement de couleur",a:400,d:294.3},{s:"bouleau",st:"Changement de couleur",a:600,d:296.2},{s:"bouleau",st:"Changement de couleur",a:800,d:285.6},{s:"bouleau",st:"Changement de couleur",a:1000,d:282},{s:"bouleau",st:"Changement de couleur",a:1200,d:280.2},{s:"bouleau",st:"Changement de couleur",a:1400,d:282.6},{s:"bouleau",st:"Changement de couleur",a:1600,d:282.4},{s:"bouleau",st:"Changement de couleur",a:1800,d:284.5},{s:"bouleau",st:"Changement de couleur",a:2000,d:270.5},
-  {s:"mélèze",st:"Changement de couleur",a:600,d:309.1},{s:"mélèze",st:"Changement de couleur",a:800,d:303.7},{s:"mélèze",st:"Changement de couleur",a:1000,d:301.1},{s:"mélèze",st:"Changement de couleur",a:1200,d:298.1},{s:"mélèze",st:"Changement de couleur",a:1400,d:294},{s:"mélèze",st:"Changement de couleur",a:1600,d:297.4},{s:"mélèze",st:"Changement de couleur",a:1800,d:287.8},{s:"mélèze",st:"Changement de couleur",a:2000,d:291.4},
-  {s:"sorbier",st:"Changement de couleur",a:400,d:295.8},{s:"sorbier",st:"Changement de couleur",a:600,d:282.1},{s:"sorbier",st:"Changement de couleur",a:800,d:272.8},{s:"sorbier",st:"Changement de couleur",a:1000,d:276.5},{s:"sorbier",st:"Changement de couleur",a:1200,d:279.2},{s:"sorbier",st:"Changement de couleur",a:1400,d:277.7},{s:"sorbier",st:"Changement de couleur",a:1600,d:279.1},{s:"sorbier",st:"Changement de couleur",a:1800,d:279.4},{s:"sorbier",st:"Changement de couleur",a:2000,d:277.5},
-];
+// ════════════════════════════════════════════
+//  META → headline numbers
+// ════════════════════════════════════════════
+function applyMeta() {
+  if (!META) return;
+  const fmt = n => (n == null ? "—" : n.toLocaleString("fr-FR").replace(/\u202f|,/g, " "));
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  const years = (META.year_min && META.year_max) ? (META.year_max - META.year_min + 1) : null;
+  set("hStatObs", fmt(META.total_obs));
+  set("hStatYears", years ? years + " ans" : "—");
+  set("hStatSpecies", (META.n_species ?? "—") + " espèces");
+  set("hStatRegions", (META.n_regions ?? "—") + " régions");
+  set("mObs", fmt(META.total_obs));
+  set("mSpecies", (META.n_species ?? "—") + " espèces");
+  const capEl = document.getElementById("latestYearCaption");
+  if (capEl && META.year_max) capEl.textContent = META.year_max;
+  if (META.alt_min != null && META.alt_max != null)
+    set("mAlt", META.alt_min + " — " + META.alt_max + " m");
+  const sub = document.querySelector("#sec-impact .section-subtitle");
+  if (sub && years) sub.textContent = years + " ans de science participative — chaque observation renforce la connaissance. Découvrez aussi où nous avons le plus besoin de vous.";
+
+  // Explanatory note near the analytical charts: why the analysed count is
+  // smaller than the headline "observations" total.
+  if (META.cleaned_obs != null && META.total_obs != null) {
+    const rawN = fmt(META.total_obs);
+    const cleanN = fmt(META.cleaned_obs);
+    const noteTxt = "Sur les " + rawN + " observations collectées, "
+      + cleanN + " sont utilisées pour ces graphiques : on ne retient ici que "
+      + "les stades phénologiques validés (débourrement, feuillaison, floraison, "
+      + "changement de couleur) rattachés à une espèce et une date exploitables.";
+    ["note-trends", "note-altitude", "note-regions"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = noteTxt;
+    });
+  }
+
+  const footer = document.getElementById("dataFooter");
+  if (footer) {
+    let txt = "";
+    if (GENERATED) {
+      let pretty = GENERATED;
+      const dt = new Date(GENERATED);
+      if (!isNaN(dt)) {
+        pretty = dt.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+      }
+      txt = "Données mises à jour le " + pretty;
+    }
+    if (LICENSE) txt += (txt ? " · " : "") + "Licence " + LICENSE + " — CREA Mont-Blanc / Phénoclim";
+    footer.textContent = txt;
+  }
+}
 
 // ════════════════════════════════════════════
 //  UTILITIES
@@ -694,12 +744,34 @@ function getPixelRatio() { return window.devicePixelRatio || 1; }
 
 function setupCanvas(canvas) {
   const r = getPixelRatio();
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width * r;
-  canvas.height = rect.height * r;
+  let rect = canvas.getBoundingClientRect();
+  // If the canvas hasn't been laid out yet (width 0), fall back to the
+  // parent element's width and the canvas's CSS/attribute height so we
+  // never draw into a zero-sized buffer (which shows as a blank chart).
+  let w = rect.width, h = rect.height;
+  if (!w) {
+    const parent = canvas.parentElement;
+    w = (parent && parent.getBoundingClientRect().width) || 640;
+  }
+  if (!h) {
+    h = parseInt(canvas.style.height) || canvas.clientHeight || 300;
+  }
+  canvas.width = w * r;
+  canvas.height = h * r;
   const ctx = canvas.getContext("2d");
   ctx.scale(r, r);
-  return { ctx, w: rect.width, h: rect.height };
+  return { ctx, w, h };
+}
+
+// If a canvas isn't laid out yet (0 width), retry shortly. Returns true if
+// the caller should bail out now and let the retry handle drawing.
+function needsLayoutRetry(canvas, drawFn) {
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width) {
+    setTimeout(drawFn, 60);
+    return true;
+  }
+  return false;
 }
 
 // ════════════════════════════════════════════
@@ -713,6 +785,7 @@ let currentTrendsPct = "10"; // "10" or "50"
 
 function drawTrends() {
   const canvas = document.getElementById("chart-trends");
+  if (needsLayoutRetry(canvas, drawTrends)) return;
   const { ctx, w, h } = setupCanvas(canvas);
   const pad = { l: 60, r: 20, t: 15, b: 35 };
   const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
@@ -744,7 +817,7 @@ function drawTrends() {
   };
 
   // Grid
-  ctx.strokeStyle = "rgba(255,255,255,0.06)";
+  ctx.strokeStyle = "rgba(31,77,46,0.10)";
   ctx.lineWidth = 1;
   for (let y = minY; y <= maxY; y += 3) {
     const x = xScale(y);
@@ -757,7 +830,7 @@ function drawTrends() {
   }
 
   // Axes labels
-  ctx.fillStyle = "#888";
+  ctx.fillStyle = "#5a6d58";
   ctx.font = "11px 'DM Sans', sans-serif";
   ctx.textAlign = "center";
   for (let y = minY; y <= maxY; y += 3) {
@@ -799,6 +872,7 @@ let currentAltStage = "Débourrement";
 
 function drawAltitude() {
   const canvas = document.getElementById("chart-altitude");
+  if (needsLayoutRetry(canvas, drawAltitude)) return;
   const { ctx, w, h } = setupCanvas(canvas);
   const pad = { l: 65, r: 20, t: 15, b: 40 };
   const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
@@ -813,7 +887,7 @@ function drawAltitude() {
     pts = ALT.filter(d => d.s === currentSpecies && d.st === "Changement de couleur").sort((a,b) => a.a - b.a);
     // Noisetier has no Changement de couleur data
     if (!pts.length) {
-      ctx.fillStyle = "#888"; ctx.font = "14px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+      ctx.fillStyle = "#5a6d58"; ctx.font = "14px 'DM Sans', sans-serif"; ctx.textAlign = "center";
       ctx.fillText("Pas de données « changement de couleur » pour cette espèce", w/2, h/2);
       return;
     }
@@ -836,7 +910,7 @@ function drawAltitude() {
   const yScale = v => pad.t + ch - ((v - minD) / (maxD - minD)) * ch;
 
   // Grid
-  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(31,77,46,0.10)"; ctx.lineWidth = 1;
   for (let a = 0; a <= 2200; a += 400) {
     if (a < minA || a > maxA) continue;
     const x = xScale(a);
@@ -849,7 +923,7 @@ function drawAltitude() {
   }
 
   // Axis labels
-  ctx.fillStyle = "#888"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+  ctx.fillStyle = "#5a6d58"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
   for (let a = 0; a <= 2200; a += 400) {
     if (a < minA || a > maxA) continue;
     ctx.fillText(a + " m", xScale(a), pad.t + ch + 20);
@@ -940,6 +1014,7 @@ function drawAltitude() {
 
 function drawRegions() {
   const canvas = document.getElementById("chart-regions");
+  if (needsLayoutRetry(canvas, drawRegions)) return;
   const { ctx, w, h } = setupCanvas(canvas);
   const pad = { l: 110, r: 30, t: 15, b: 35 };
   const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
@@ -963,7 +1038,7 @@ function drawRegions() {
   const xScale = v => pad.l + ((v - minD) / (maxD - minD)) * cw;
 
   // Grid
-  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(31,77,46,0.10)"; ctx.lineWidth = 1;
   const step = maxD - minD > 100 ? 20 : 15;
   for (let d = Math.ceil(minD / step) * step; d <= maxD; d += step) {
     const x = xScale(d);
@@ -971,7 +1046,7 @@ function drawRegions() {
   }
 
   // X axis labels
-  ctx.fillStyle = "#888"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+  ctx.fillStyle = "#5a6d58"; ctx.font = "11px 'DM Sans', sans-serif"; ctx.textAlign = "center";
   for (let d = Math.ceil(minD / step) * step; d <= maxD; d += step) {
     ctx.fillText(doyToDate(d), xScale(d), pad.t + ch + 20);
   }
@@ -1002,6 +1077,7 @@ function drawRegions() {
 
 function drawImpact() {
   const canvas = document.getElementById("chart-impact");
+  if (needsLayoutRetry(canvas, drawImpact)) return;
   const { ctx, w, h } = setupCanvas(canvas);
   const pad = { l: 50, r: 15, t: 15, b: 35 };
   const cw = w - pad.l - pad.r, ch = h - pad.t - pad.b;
@@ -1012,21 +1088,23 @@ function drawImpact() {
   const gap = (cw - barW * OBS.length) / (OBS.length);
 
   // Grid
-  ctx.strokeStyle = "rgba(255,255,255,0.06)"; ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(31,77,46,0.10)"; ctx.lineWidth = 1;
   for (let v = 500; v <= maxC; v += 500) {
     const y = pad.t + ch - (v / maxC) * ch;
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + cw, y); ctx.stroke();
-    ctx.fillStyle = "#888"; ctx.font = "10px 'DM Sans', sans-serif"; ctx.textAlign = "right";
+    ctx.fillStyle = "#5a6d58"; ctx.font = "10px 'DM Sans', sans-serif"; ctx.textAlign = "right";
     ctx.fillText(v.toLocaleString(), pad.l - 6, y + 4);
   }
 
+  const latestYear = OBS.length ? Math.max(...OBS.map(o => o.y)) : null;
   OBS.forEach((d, i) => {
     const x = pad.l + i * (barW + gap) + gap / 2;
     const barH = (d.c / maxC) * ch;
     const y = pad.t + ch - barH;
 
-    ctx.fillStyle = d.y === 2025 ? "#c17817" : "#4a7c59";
-    ctx.globalAlpha = d.y === 2025 ? 0.7 : 0.8;
+    const isLatest = d.y === latestYear;
+    ctx.fillStyle = isLatest ? "#f5b301" : "#6db56d";
+    ctx.globalAlpha = isLatest ? 0.95 : 0.9;
     ctx.beginPath();
     ctx.roundRect(x, y, barW, barH, [3, 3, 0, 0]);
     ctx.fill();
@@ -1034,7 +1112,7 @@ function drawImpact() {
 
     // Year label
     if (i % 2 === 0 || OBS.length < 15) {
-      ctx.fillStyle = "#888"; ctx.font = "9px 'DM Sans', sans-serif"; ctx.textAlign = "center";
+      ctx.fillStyle = "#5a6d58"; ctx.font = "9px 'DM Sans', sans-serif"; ctx.textAlign = "center";
       ctx.save(); ctx.translate(x + barW / 2, pad.t + ch + 16); ctx.rotate(-0.3);
       ctx.fillText(d.y, 0, 0); ctx.restore();
     }
@@ -1072,7 +1150,7 @@ const HEATMAP_DATA = {
 };
 
 const SPECIES_LABELS = {bouleau:"Bouleau", "mélèze":"Mélèze", sorbier:"Sorbier", noisetier:"Noisetier"};
-const SPECIES_ACCENT = {bouleau:"#4a7c59", "mélèze":"#c17817", sorbier:"#c25454", noisetier:"#7b5ea7"};
+const SPECIES_ACCENT = {bouleau:"#3d7a4e", "mélèze":"#c17817", sorbier:"#c25454", noisetier:"#7b5ea7"};
 
 // Unified altitude bands for ALL species (0–2000m)
 const UNIFIED_BANDS = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
@@ -1253,7 +1331,7 @@ function drawSingleHeatmap(sp) {
     grad.addColorStop(1, "rgb(124,179,66)");
     ctx.fillStyle = grad;
     ctx.fillRect(labLeft, legY, legW, 9);
-    ctx.strokeStyle = "rgba(255,255,255,0.1)";
+    ctx.strokeStyle = "rgba(31,77,46,0.14)";
     ctx.lineWidth = 0.5;
     ctx.strokeRect(labLeft, legY, legW, 9);
     ctx.font = "10px 'DM Sans', sans-serif";
@@ -1426,8 +1504,8 @@ trendsCanvas.addEventListener("mousemove", (e) => {
   if (closest) {
     const labels = {bouleau:"Bouleau",mélèze:"Mélèze",noisetier:"Noisetier",sorbier:"Sorbier"};
     const pctLabel = data.pct || "10%";
-    trendsTip.innerHTML = `<div style="color:#aaa;font-weight:600;margin-bottom:3px">${closest.y}</div>
-      <div style="color:${SPECIES_COLORS[closest.sp]}"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SPECIES_COLORS[closest.sp]};margin-right:5px"></span>${labels[closest.sp]}: <strong>${doyToDate(closest.d)}</strong> <span style="color:#888;font-size:10px">(${pctLabel})</span></div>`;
+    trendsTip.innerHTML = `<div style="color: #4a5f4a;font-weight:600;margin-bottom:3px">${closest.y}</div>
+      <div style="color:${SPECIES_COLORS[closest.sp]}"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${SPECIES_COLORS[closest.sp]};margin-right:5px"></span>${labels[closest.sp]}: <strong>${doyToDate(closest.d)}</strong> <span style="color: #5a6d58;font-size:10px">(${pctLabel})</span></div>`;
     trendsTip.style.left = (closest.px + 15) + "px";
     trendsTip.style.top = (closest.py - 30) + "px";
     trendsTip.classList.add("visible");
@@ -1448,7 +1526,12 @@ window.addEventListener("resize", () => {
   if (active === "sec-regions") drawRegions();
   if (active === "sec-impact") { drawImpact(); setTimeout(drawHeatmaps, 50); }
 });
-init();
+// Boot: load data first, then render once layout is ready.
+loadData().then(() => {
+  // Two rAFs ensure the browser has completed a layout pass so canvases
+  // have a real width before we measure them in setupCanvas().
+  requestAnimationFrame(() => requestAnimationFrame(() => init()));
+});
 </script>
 </body>
 </html>
