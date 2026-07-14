@@ -330,6 +330,34 @@ def aggregate(df, raw_items=None):
         })
     out["REGIONS"] = regions
 
+    # ---- HEATMAP: Alps observation counts per species × year × 200 m band ----
+    # Drives the "Où avons-nous besoin de vous ?" heatmaps. Alps region only,
+    # counting ALL observations (any stage) for each charted species, in 200 m
+    # bands from 200 m upward (0–200 m excluded — see ALT above).
+    heatmap = {}
+    # "Alps" here means the greater Alps, which includes the Mont-Blanc massif
+    # (our region boxes split Mont-Blanc out separately, but it is part of the Alps).
+    alps_regions = ["Alps", "Mont-Blanc Massif"]
+    hd = df[
+        df["species"].isin(DASHBOARD_SPECIES)
+        & df["Region"].isin(alps_regions)
+        & df["altitude"].notna()
+        & df["visit_year"].notna()
+    ].copy()
+    hd["band"] = (hd["altitude"] // 200 * 200).astype(int)
+    hd = hd[hd["band"] >= 200]
+    for sp in DASHBOARD_SPECIES:
+        sp_rows = hd[hd["species"] == sp]
+        counts = (
+            sp_rows.groupby(["visit_year", "band"]).size().reset_index(name="count")
+        )
+        data = [
+            {"year": int(r.visit_year), "alt": int(r.band), "count": int(r.count)}
+            for r in counts.itertuples()
+        ]
+        heatmap[sp] = {"data": data}
+    out["HEATMAP"] = heatmap
+
     # ---- headline stats for the cards ----
     alt_series = df["altitude"].dropna()
     raw_total = int(len(raw_items)) if raw_items is not None else int(len(df))
