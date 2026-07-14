@@ -1,0 +1,72 @@
+name: Update Phénoclim data
+
+# Regenerates phenoclim_data.json from the CREA Mont-Blanc API.
+# Runs monthly (1st, 05:00 UTC) and on manual dispatch.
+
+on:
+  schedule:
+    # Weekly (every Monday 05:00 UTC) during the active phenology seasons:
+    #   spring  = March, April, May       (budburst, leafing, flowering)
+    #   autumn  = September, October, Nov  (colour change, fruiting)
+    - cron: "0 5 * * 1"
+      # NOTE: GitHub cron can't filter by month on one line, so the job runs
+      # every Monday all year, and a step below decides whether to proceed:
+      # it always proceeds in Mar-May & Sep-Nov, and only on the 1st Monday
+      # of other months (≈ monthly off-season).
+  workflow_dispatch:   # lets you run it manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Decide whether to run
+        id: gate
+        run: |
+          # Always run when triggered manually.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          month=$(date -u +%m)
+          day=$(date -u +%d)
+          # In-season months (Mar-May, Sep-Nov): run every week.
+          case "$month" in
+            03|04|05|09|10|11) echo "run=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
+          esac
+          # Off-season: only the first Monday of the month (day 1-7) → ~monthly.
+          if [ "$day" -le 07 ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Off-season, not the first Monday — skipping."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.run == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.run == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: pip install requests pandas
+
+      - name: Rebuild data
+        if: steps.gate.outputs.run == 'true'
+        run: python build_phenoclim_data.py
+
+      - name: Commit if changed
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet phenoclim_data.json; then
+            git add phenoclim_data.json
+            git commit -m "Auto-update Phénoclim data ($(date -u +%Y-%m-%d))"
+            git push
+          else
+            echo "No change in phenoclim_data.json"
+          fi
