@@ -272,8 +272,10 @@ def aggregate(df, raw_items=None):
     out["TIMING50"] = timing50
 
     # ---- ALT: mean doy by species × 200 m altitude band ----
+    # Exclude the 0–200 m band: not a meaningful altitude in the Alps.
     da = d[d["altitude"].notna()].copy()
     da["band"] = (da["altitude"] // 200 * 200).astype(int)
+    da = da[da["band"] >= 200]
     alt, alt50 = [], []
     # Débourrement bands (no st field in dashboard's ALT for débourrement)
     for (sp, band), sub in da[da["pheno_etape"] == "Débourrement"].groupby(["species", "band"]):

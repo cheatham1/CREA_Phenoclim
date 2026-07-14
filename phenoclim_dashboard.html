@@ -884,7 +884,7 @@ function drawAltitude() {
   // Get 10% data
   let pts;
   if (isCouleur) {
-    pts = ALT.filter(d => d.s === currentSpecies && d.st === "Changement de couleur").sort((a,b) => a.a - b.a);
+    pts = ALT.filter(d => d.s === currentSpecies && d.st === "Changement de couleur" && d.a >= 200).sort((a,b) => a.a - b.a);
     // Noisetier has no Changement de couleur data
     if (!pts.length) {
       ctx.fillStyle = "#5a6d58"; ctx.font = "14px 'DM Sans', sans-serif"; ctx.textAlign = "center";
@@ -893,12 +893,12 @@ function drawAltitude() {
     }
   } else {
     // Débourrement: entries without st field or with st=Débourrement
-    pts = ALT.filter(d => d.s === currentSpecies && (!d.st)).sort((a,b) => a.a - b.a);
+    pts = ALT.filter(d => d.s === currentSpecies && (!d.st) && d.a >= 200).sort((a,b) => a.a - b.a);
   }
   if (!pts.length) return;
 
   // Get 50% data if couleur
-  const pts50 = isCouleur ? ALT50.filter(d => d.s === currentSpecies).sort((a,b) => a.a - b.a) : [];
+  const pts50 = isCouleur ? ALT50.filter(d => d.s === currentSpecies && d.a >= 200).sort((a,b) => a.a - b.a) : [];
 
   // Compute ranges
   let allDoys = pts.map(d => d.d);
@@ -996,17 +996,28 @@ function drawAltitude() {
     ctx.setLineDash([]);
   }
 
-  // Labels for 10%/50% if couleur
+  // Labels for 10%/50% if couleur — placed so they never overflow the canvas.
   if (isCouleur && pts.length && pts50.length) {
     ctx.font = "bold 10px 'DM Sans', sans-serif";
-    ctx.textAlign = "left";
-    const lastPt10 = pts[pts.length - 1];
+    const rightEdge = pad.l + cw;
+
+    const drawLabel = (pt, text) => {
+      const px = xScale(pt.a), py = yScale(pt.d) + 4;
+      const textW = ctx.measureText(text.replace(/^←\s*|\s*→$/g, "")).width + 18;
+      // If there isn't room to the right of the point, put the label on the left.
+      if (px + 12 + textW > rightEdge) {
+        ctx.textAlign = "right";
+        ctx.fillText(text.replace(/^←\s*/, "") + " →", px - 12, py);
+      } else {
+        ctx.textAlign = "left";
+        ctx.fillText("← " + text.replace(/^←\s*/, ""), px + 12, py);
+      }
+    };
+
     ctx.fillStyle = color;
-    ctx.fillText("← 10% (début)", xScale(lastPt10.a) + 12, yScale(lastPt10.d) + 4);
-    if (pts50.length) {
-      const lastPt50 = pts50[pts50.length - 1];
-      ctx.fillText("← 50%", xScale(lastPt50.a) + 12, yScale(lastPt50.d) + 4);
-    }
+    drawLabel(pts[pts.length - 1], "10% (début)");
+    if (pts50.length) drawLabel(pts50[pts50.length - 1], "50%");
+    ctx.textAlign = "left";
   }
 
   canvas._data = { pts, xScale, yScale };
@@ -1152,8 +1163,10 @@ const HEATMAP_DATA = {
 const SPECIES_LABELS = {bouleau:"Bouleau", "mélèze":"Mélèze", sorbier:"Sorbier", noisetier:"Noisetier"};
 const SPECIES_ACCENT = {bouleau:"#3d7a4e", "mélèze":"#c17817", sorbier:"#c25454", noisetier:"#7b5ea7"};
 
-// Unified altitude bands for ALL species (0–2000m)
-const UNIFIED_BANDS = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
+// Unified altitude bands for ALL species. The 0–200 m band is intentionally
+// excluded: it is not a meaningful altitude in the Alps, so it is omitted from
+// the heatmaps, the priority-altitude text, and all four species plots.
+const UNIFIED_BANDS = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
 
 // Global max across ALL species for consistent colour scale
 const GLOBAL_MAX = (() => {
@@ -1190,14 +1203,19 @@ function drawSingleHeatmap(sp) {
     bandRecent[b] = years.filter(y => y >= 2022).reduce((s,y) => s + (lookup[y+"_"+b]||0), 0);
   });
   const sortedBands = [...UNIFIED_BANDS].sort((a,b) => bandRecent[a] - bandRecent[b]);
-  const topPriorityBands = sortedBands.slice(0, 3).filter(b => bandRecent[b] < 20);
+  // Exclude the 0–200 m band: essentially inaccessible in the Alps, so it's not
+  // a meaningful recruitment target even when it has few observations.
+  const topPriorityBands = sortedBands
+    .filter(b => b >= 200)
+    .slice(0, 3)
+    .filter(b => bandRecent[b] < 20);
 
   // Header row
   const header = document.createElement("div");
   header.style.cssText = "display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;";
   const titleEl = document.createElement("div");
   titleEl.style.cssText = `font-family:'DM Serif Display',serif;font-size:17px;color:${accent};display:flex;align-items:center;gap:8px;`;
-  titleEl.innerHTML = `<span style="width:11px;height:11px;border-radius:50%;background:${accent};display:inline-block;"></span>${SPECIES_LABELS[sp]} — Alpes (0–2 000 m)`;
+  titleEl.innerHTML = `<span style="width:11px;height:11px;border-radius:50%;background:${accent};display:inline-block;"></span>${SPECIES_LABELS[sp]} — Alpes (200–2 000 m)`;
   header.appendChild(titleEl);
 
   if (declinePct > 5) {
