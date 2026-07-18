@@ -229,13 +229,16 @@
     position: relative;
   }
   .gap-bar-value {
-    font-size: 10px; color: #4a5f4a; width: 55px; flex-shrink: 0;
+    font-size: 10px; color: #4a5f4a; width: 150px; flex-shrink: 0;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 4px;
   }
   .gap-tag {
     display: inline-block; padding: 3px 8px; border-radius: 4px;
     font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.5px; margin-left: 4px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
   }
   .gap-tag-critical { background: rgba(211,47,47,0.15); color: #c62828; }
   .gap-tag-low { background: rgba(224,138,30,0.18); color: #b06a12; }
@@ -267,6 +270,7 @@
   @media (max-width: 600px) {
     .gap-species-grid { grid-template-columns: 1fr; }
     .gap-bar-label { width: 80px; }
+    .gap-bar-value { width: 120px; font-size: 9px; }
   }
 
   /* ─── LEGEND ─── */
@@ -306,14 +310,14 @@
       <span class="header-icon">🌿</span>
       <div>
         <h1>Phénoclim — Les Saisons en Montagne</h1>
-        <div class="header-subtitle">CREA Mont-Blanc · Science Participative · 2004–2025</div>
+        <div class="header-subtitle">CREA Mont-Blanc · Science Participative · <span id="hYearRange">—</span></div>
       </div>
     </div>
     <div class="stats-strip">
-      <div class="stat"><span class="stat-icon">📋</span><div><div class="stat-value" id="hStatObs">51 801</div><div class="stat-label">Observations</div></div></div>
-      <div class="stat"><span class="stat-icon">📅</span><div><div class="stat-value" id="hStatYears">21 ans</div><div class="stat-label">De données</div></div></div>
-      <div class="stat"><span class="stat-icon">🌳</span><div><div class="stat-value" id="hStatSpecies">9 espèces</div><div class="stat-label">Suivies</div></div></div>
-      <div class="stat"><span class="stat-icon">🏔️</span><div><div class="stat-value" id="hStatRegions">7 régions</div><div class="stat-label">Couvertes</div></div></div>
+      <div class="stat"><span class="stat-icon">📋</span><div><div class="stat-value" id="hStatObs">—</div><div class="stat-label">Observations</div></div></div>
+      <div class="stat"><span class="stat-icon">📅</span><div><div class="stat-value" id="hStatYears">—</div><div class="stat-label">De données</div></div></div>
+      <div class="stat"><span class="stat-icon">🌳</span><div><div class="stat-value" id="hStatSpecies">—</div><div class="stat-label">Suivies</div></div></div>
+      <div class="stat"><span class="stat-icon">🏔️</span><div><div class="stat-value" id="hStatRegions">—</div><div class="stat-label">Couvertes</div></div></div>
     </div>
   </div>
 </div>
@@ -360,7 +364,7 @@
 
     <div class="insight">
       <div class="insight-title">💡 Ce que montrent vos données</div>
-      <p id="trends-insight">Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.</p>
+      <p id="trends-insight"></p>
     </div>
   </div>
 
@@ -389,7 +393,7 @@
 
     <div class="insight">
       <div class="insight-title">💡 Le gradient altitudinal</div>
-      <p id="altitude-insight">Le bouleau débourre près de 46 jours plus tard à 1800 m qu'à 200 m d'altitude, soit environ 2,9 jours de retard par 100 m de dénivelé. C'est votre travail d'observation sur le terrain qui permet de quantifier précisément ce gradient !</p>
+      <p id="altitude-insight"></p>
     </div>
   </div>
 
@@ -424,21 +428,21 @@
   <!-- ═══════════ IMPACT ═══════════ -->
   <div class="section active" id="sec-impact">
     <h2 class="section-title">🤝 Votre contribution compte</h2>
-    <p class="section-subtitle">21 ans de science participative — chaque observation renforce la connaissance. Découvrez aussi où nous avons le plus besoin de vous.</p>
+    <p class="section-subtitle">Des années de science participative — chaque observation renforce la connaissance. Découvrez aussi où nous avons le plus besoin de vous.</p>
 
     <div class="chart-box">
       <canvas class="chart-canvas" id="chart-impact" style="height:260px"></canvas>
       <div class="tooltip" id="tooltip-impact"></div>
     </div>
     <div style="text-align:center;font-size:11px;color: #5a6d58;margin-top:6px">
-      <span style="color:#f5b301">■</span> <span id="latestYearCaption">2025</span> encore en cours
+      <span style="color:#f5b301">■</span> <span id="latestYearCaption">—</span> encore en cours
     </div>
 
     <div class="milestone-grid">
-      <div class="milestone"><div class="milestone-icon">🎯</div><div class="milestone-value" id="mObs" style="color:#2f7a3f">51 801</div><div class="milestone-label">observations depuis 2004</div></div>
-      <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" id="mAlt" style="color:#1565a0">98 — 2280 m</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
-      <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" id="mSpecies" style="color:#b06a12">9 espèces</div><div class="milestone-label">d'arbres suivies</div></div>
-      <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" style="color:#c25454">~3 jours / 100 m</div><div class="milestone-label">retard du printemps en altitude</div></div>
+      <div class="milestone"><div class="milestone-icon">🎯</div><div class="milestone-value" id="mObs" style="color:#2f7a3f">—</div><div class="milestone-label">observations depuis 2004</div></div>
+      <div class="milestone"><div class="milestone-icon">🏔️</div><div class="milestone-value" id="mAlt" style="color:#1565a0">—</div><div class="milestone-label">gamme d'altitudes couverte</div></div>
+      <div class="milestone"><div class="milestone-icon">🌳</div><div class="milestone-value" id="mSpecies" style="color:#b06a12">—</div><div class="milestone-label">d'arbres suivies</div></div>
+      <div class="milestone"><div class="milestone-icon">📊</div><div class="milestone-value" id="mGradient" style="color:#c25454">—</div><div class="milestone-label">retard du printemps en altitude</div></div>
     </div>
 
     <!-- ─── DATA GAPS PANEL ─── -->
@@ -454,41 +458,7 @@
         <div class="gap-section-title">
           <span>🗺️</span> Couverture par région
         </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Alpes</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:100%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">37 301 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Pyrénées</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:16.7%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">6 224 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Mont-Blanc</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:10.9%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">4 074 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Massif Central</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:7.3%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
-          <div class="gap-bar-value">2 718 obs <span class="gap-tag gap-tag-low">à renforcer</span></div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Jura</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:3.4%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
-          <div class="gap-bar-value">1 273 obs <span class="gap-tag gap-tag-low">à renforcer</span></div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Vosges</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:0.8%;background:linear-gradient(90deg,#ef5350,#e53935);min-width:4px"></div></div>
-          <div class="gap-bar-value">197 obs <span class="gap-tag gap-tag-critical">critique</span></div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">Corse</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:0.1%;background:linear-gradient(90deg,#ef5350,#e53935);min-width:4px"></div></div>
-          <div class="gap-bar-value">14 obs <span class="gap-tag gap-tag-critical">critique</span></div>
-        </div>
+        <div id="gapRegions"></div>
       </div>
 
       <!-- Species gaps -->
@@ -496,111 +466,21 @@
         <div class="gap-section-title">
           <span>🌳</span> Espèces sous-représentées
         </div>
-        <div class="gap-species-grid">
-          <div class="gap-species-card">
-            <div class="gap-species-icon">🌲</div>
-            <div>
-              <div class="gap-species-name">Pin sylvestre <span class="gap-tag gap-tag-critical">38 obs</span></div>
-              <div class="gap-species-detail">5 années · 4 régions — quasi inexploré</div>
-            </div>
-          </div>
-          <div class="gap-species-card">
-            <div class="gap-species-icon">🌲</div>
-            <div>
-              <div class="gap-species-name">Épicéa <span class="gap-tag gap-tag-critical">103 obs</span></div>
-              <div class="gap-species-detail">8 années · 3 régions — très insuffisant</div>
-            </div>
-          </div>
-          <div class="gap-species-card">
-            <div class="gap-species-icon">🌲</div>
-            <div>
-              <div class="gap-species-name">Sapin <span class="gap-tag gap-tag-low">172 obs</span></div>
-              <div class="gap-species-detail">8 années · 6 régions — à renforcer</div>
-            </div>
-          </div>
-          <div class="gap-species-card">
-            <div class="gap-species-icon">🌳</div>
-            <div>
-              <div class="gap-species-name">Frêne <span class="gap-tag gap-tag-low">370 obs</span></div>
-              <div class="gap-species-detail">9 années · 5 régions — à renforcer</div>
-            </div>
-          </div>
-          <div class="gap-species-card">
-            <div class="gap-species-icon">🌳</div>
-            <div>
-              <div class="gap-species-name">Hêtre <span class="gap-tag gap-tag-low">389 obs</span></div>
-              <div class="gap-species-detail">8 années · 7 régions — prometteur mais jeune</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Observation trend concern -->
-      <div class="gap-section">
-        <div class="gap-section-title">
-          <span>📉</span> Tendance récente des contributions
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2020</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:78%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">2 673 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2021</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:100%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">3 453 obs ✨</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2022</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:79%;background:linear-gradient(90deg,#4a7c59,#7cb342)"></div></div>
-          <div class="gap-bar-value">2 731 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2023</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:69%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
-          <div class="gap-bar-value">2 392 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2024</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:62%;background:linear-gradient(90deg,#e6a23c,#c17817)"></div></div>
-          <div class="gap-bar-value">2 150 obs</div>
-        </div>
-        <div class="gap-bar-row">
-          <div class="gap-bar-label">2025 (en cours)</div>
-          <div class="gap-bar-track"><div class="gap-bar-fill" style="width:49%;background:linear-gradient(90deg,#ef5350,#e53935)"></div></div>
-          <div class="gap-bar-value">1 697 obs</div>
-        </div>
+        <div class="gap-species-grid" id="gapSpecies"></div>
       </div>
 
       <!-- Call to action -->
-      <div class="gap-callout">
-        <strong>🎯 Les 3 priorités pour les observateurs :</strong><br>
-        1. <strong>Corse et Vosges</strong> — Ces massifs sont quasi invisibles dans les données. Même quelques arbres suivis régulièrement feraient une différence majeure.<br>
-        2. <strong>Conifères (pin sylvestre, épicéa, sapin)</strong> — Ces espèces ont trop peu de données pour détecter des tendances fiables. Si vous en avez près de chez vous, vos observations sont précieuses.<br>
-        3. <strong>Maintenir l'effort</strong> — Les contributions baissent depuis 2021. Chaque année manquée affaiblit la série temporelle. Continuez, et recrutez un voisin !
-      </div>
-    </div>
-
-    <div class="motivation">
-      <h3>🌱 Pourquoi continuer ?</h3>
-      <p><strong>Chaque observation est une donnée scientifique.</strong> Grâce à vos relevés, les chercheurs du CREA mesurent l'impact du changement climatique sur les écosystèmes de montagne avec une précision que les satellites seuls ne permettent pas.</p>
-      <p><strong>Les longues séries temporelles sont irremplaçables.</strong> Avec plus de 20 ans de données, Phénoclim est l'une des plus longues séries phénologiques citoyennes en montagne. Chaque année supplémentaire renforce la robustesse des tendances.</p>
-      <p><strong>Vos observations couvrent des endroits uniques.</strong> De 98 m à 2280 m, des Vosges à la Corse, votre réseau donne accès à des données qu'aucune station automatique ne pourrait fournir.</p>
-    </div>
-
-    <div class="share-banner">
-      <strong>📣 Partagez ces résultats !</strong>
-      <p>Montrez à vos proches l'impact de vos observations. Chaque nouvel observateur enrichit le réseau.</p>
+      <div class="gap-callout" id="gapCallout"></div>
     </div>
 
     <!-- ═══════════ HEATMAPS SECTION (inside sec-impact) ═══════════ -->
     <div id="heatmaps-section" style="margin-top:32px;">
-      <h2 class="section-title">🏔️ Couverture des observations dans les Alpes</h2>
+      <h2 class="section-title">🏔️ Heatmaps montrant la couverture des observations dans les Alpes</h2>
       <p class="section-subtitle">Nombre d'observations par année et par tranche d'altitude (200 m) — Région Alpes uniquement. La couleur révèle les lacunes : plus c'est sombre, moins il y a d'observateurs. Toutes les espèces sont sur la même échelle pour faciliter la comparaison.</p>
 
       <div class="insight" style="margin-bottom:20px;background:rgba(224,138,30,0.10);border-color:rgba(224,138,30,0.3);">
-        <div class="insight-title" style="color:#a85e0c;">🎯 Pourquoi ces cartes sont importantes pour CREA</div>
-        <p style="color:#5a4a30;">Les observations dans les Alpes sont en déclin depuis 2021. Ces cartes montrent <strong style="color:#ef9a9a;">exactement où les données manquent</strong> — certaines espèces à des altitudes clés n'ont presque plus d'observateurs. Ce sont les zones prioritaires pour recruter de nouveaux bénévoles.</p>
+        <div class="insight-title" style="color:#a85e0c;">🎯 Pourquoi ces heatmaps sont importantes pour CREA</div>
+        <p style="color:#5a4a30;" id="heatmapNarrative"></p>
       </div>
 
       <!-- Species selector buttons -->
@@ -615,6 +495,18 @@
       <div id="heatmap-single" style="background:rgba(255,255,255,0.5);border-radius:12px;border:1px solid rgba(31,77,46,0.10);padding:16px 16px 12px;"></div>
     </div>
 
+  </div>
+
+  <div class="motivation" style="margin-top:32px;">
+    <h3>🌱 Pourquoi continuer ?</h3>
+    <p><strong>Chaque observation est une donnée scientifique.</strong> Grâce à vos relevés, les chercheurs du CREA mesurent l'impact du changement climatique sur les écosystèmes de montagne avec une précision que les satellites seuls ne permettent pas.</p>
+    <p id="motivSeries"></p>
+    <p id="motivPlaces"></p>
+  </div>
+
+  <div class="share-banner">
+    <strong>📣 Partagez ces résultats !</strong>
+    <p>Montrez à vos proches l'impact de vos observations. Chaque nouvel observateur enrichit le réseau.</p>
   </div>
 
   <div id="dataFooter" style="text-align:center;font-size:11px;color:var(--text-muted);margin-top:24px;letter-spacing:0.3px;"></div>
@@ -642,6 +534,7 @@ let REGION_COUNTS = [];
 let SPECIES_COUNTS = [];
 let GENERATED = null;
 let LICENSE = null;
+let INSIGHTS = {};
 
 const SPECIES_COLORS = {bouleau:"#3d7a4e",mélèze:"#c17817",noisetier:"#7b5ea7",sorbier:"#c25454"};
 const SPECIES_LIST = ["bouleau","mélèze","noisetier","sorbier"];
@@ -662,6 +555,7 @@ async function loadData() {
     SPECIES_COUNTS = d.SPECIES_COUNTS || [];
     GENERATED = d.GENERATED || null;
     LICENSE = d.LICENSE || null;
+    INSIGHTS = d.INSIGHTS || {};
     if (d.HEATMAP) HEATMAP_DATA = d.HEATMAP;
     if (typeof applyMeta === "function") applyMeta();
     return true;
@@ -687,6 +581,7 @@ function applyMeta() {
   const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   const years = (META.year_min && META.year_max) ? (META.year_max - META.year_min + 1) : null;
   set("hStatObs", fmt(META.total_obs));
+  if (META.year_min && META.year_max) set("hYearRange", META.year_min + "–" + META.year_max);
   set("hStatYears", years ? years + " ans" : "—");
   set("hStatSpecies", (META.n_species ?? "—") + " espèces");
   set("hStatRegions", (META.n_regions ?? "—") + " régions");
@@ -728,6 +623,188 @@ function applyMeta() {
     if (LICENSE) txt += (txt ? " · " : "") + "Licence " + LICENSE + " — CREA Mont-Blanc / Phénoclim";
     footer.textContent = txt;
   }
+}
+
+
+// ════════════════════════════════════════════
+//  GAP PANEL RENDERERS  (all values from phenoclim_data.json)
+// ════════════════════════════════════════════
+const REGION_FR = {
+  "Alps": "Alpes", "Pyrenees": "Pyrénées", "Mont-Blanc": "Mont-Blanc",
+  "Massif Central": "Massif Central", "Jura": "Jura", "Vosges": "Vosges",
+  "Corse": "Corse",
+};
+const SPECIES_FR = {
+  bouleau: "Bouleau", "mélèze": "Mélèze", noisetier: "Noisetier", sorbier: "Sorbier",
+  "frêne": "Frêne", "hêtre": "Hêtre", sapin: "Sapin", "épicéa": "Épicéa",
+  "pin sylvestre": "Pin sylvestre",
+};
+const CONIFERS = ["pin sylvestre", "épicéa", "sapin", "mélèze"];
+
+function fmtNum(n) {
+  return (n == null) ? "—" : n.toLocaleString("fr-FR").replace(/\u202f|,/g, " ");
+}
+
+// Coverage is judged against the SHARE of all observations, so a single
+// dominant region doesn't push every other one into the red.
+function gradForShare(share) {
+  if (share >= 0.05) return "linear-gradient(90deg,#4a7c59,#7cb342)";
+  if (share >= 0.01) return "linear-gradient(90deg,#e6a23c,#c17817)";
+  return "linear-gradient(90deg,#ef5350,#e53935)";
+}
+function tagForShare(share) {
+  if (share >= 0.05) return "";
+  if (share >= 0.01) return ' <span class="gap-tag gap-tag-low">à renforcer</span>';
+  return ' <span class="gap-tag gap-tag-critical">critique</span>';
+}
+
+function renderGapRegions() {
+  const host = document.getElementById("gapRegions");
+  if (!host || !REGION_COUNTS.length) return;
+  const rows = REGION_COUNTS.slice().sort((a, b) => b.obs - a.obs);
+  const max = rows[0].obs || 1;
+  const total = rows.reduce((sum, r) => sum + r.obs, 0) || 1;
+  host.innerHTML = rows.map(r => {
+    const share = r.obs / total;
+    const pct = Math.max((r.obs / max) * 92, 0.1);
+    const minW = pct < 1 ? ";min-width:4px" : "";
+    return '<div class="gap-bar-row">'
+      + '<div class="gap-bar-label">' + (REGION_FR[r.region] || r.region) + '</div>'
+      + '<div class="gap-bar-track"><div class="gap-bar-fill" style="width:'
+      + pct.toFixed(1) + '%;background:' + gradForShare(share) + minW + '"></div></div>'
+      + '<div class="gap-bar-value">' + fmtNum(r.obs) + ' obs' + tagForShare(share) + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+function renderGapSpecies() {
+  const host = document.getElementById("gapSpecies");
+  if (!host || !SPECIES_COUNTS.length) return;
+  const sorted = SPECIES_COUNTS.slice().sort((a, b) => b.obs - a.obs);
+  const total = sorted.reduce((sum, x) => sum + x.obs, 0) || 1;
+  // Show the least-covered species: under 5% of all species observations.
+  let weak = sorted.filter(s => s.obs / total < 0.05);
+  if (!weak.length) weak = sorted.slice(-3);
+  weak = weak.sort((a, b) => a.obs - b.obs).slice(0, 5);
+  host.innerHTML = weak.map(s => {
+    const share = s.obs / total;
+    const icon = CONIFERS.includes(s.species) ? "🌲" : "🌳";
+    const tagCls = share < 0.01 ? "gap-tag-critical" : "gap-tag-low";
+    const verdict = share < 0.002 ? "quasi inexploré"
+                  : share < 0.01 ? "très insuffisant"
+                  : "à renforcer";
+    const detail = (s.n_years != null && s.n_regions != null)
+      ? s.n_years + " année" + (s.n_years > 1 ? "s" : "") + " · "
+        + s.n_regions + " région" + (s.n_regions > 1 ? "s" : "") + " — " + verdict
+      : verdict;
+    return '<div class="gap-species-card">'
+      + '<div class="gap-species-icon">' + icon + '</div><div>'
+      + '<div class="gap-species-name">' + (SPECIES_FR[s.species] || s.species)
+      + ' <span class="gap-tag ' + tagCls + '">' + fmtNum(s.obs) + ' obs</span></div>'
+      + '<div class="gap-species-detail">' + detail + '</div>'
+      + '</div></div>';
+  }).join("");
+}
+
+function renderGapRecent() {
+  const host = document.getElementById("gapRecent");
+  if (!host || !OBS.length) return;
+  const rows = (INSIGHTS.RECENT_OBS && INSIGHTS.RECENT_OBS.length)
+    ? INSIGHTS.RECENT_OBS : OBS.slice(-6);
+  const max = Math.max.apply(null, rows.map(r => r.c)) || 1;
+  const latest = META && META.year_max;
+  host.innerHTML = rows.map(r => {
+    const ratio = r.c / max;
+    const label = r.y + (r.y === latest ? " (en cours)" : "");
+    const star = (r.c === max) ? " ✨" : "";
+    return '<div class="gap-bar-row">'
+      + '<div class="gap-bar-label">' + label + '</div>'
+      + '<div class="gap-bar-track"><div class="gap-bar-fill" style="width:'
+      + (ratio * 92).toFixed(0) + '%;background:' + gradForShare(ratio >= 0.75 ? 1 : ratio >= 0.5 ? 0.02 : 0) + '"></div></div>'
+      + '<div class="gap-bar-value">' + fmtNum(r.c) + ' obs' + star + '</div>'
+      + '</div>';
+  }).join("");
+}
+
+function renderGapCallout() {
+  const host = document.getElementById("gapCallout");
+  if (!host) return;
+  const weakR = (INSIGHTS.WEAKEST_REGIONS || []).map(r => REGION_FR[r] || r);
+  const weakS = (INSIGHTS.WEAKEST_SPECIES || []).map(x => (SPECIES_FR[x] || x).toLowerCase());
+  const t = INSIGHTS.ALPS_TREND;
+  let third;
+  if (t && t.declining_since_peak) {
+    third = "<strong>Maintenir l'effort</strong> — Dans les Alpes, les contributions "
+      + "sont à " + nf(t.pct_vs_peak, 0) + " % de leur niveau record de " + t.peak_year
+      + ". Chaque année manquée affaiblit la série temporelle. Continuez, et recrutez un voisin !";
+  } else {
+    third = "<strong>Maintenir l'effort</strong> — Chaque année supplémentaire "
+      + "renforce la série temporelle. Continuez, et recrutez un voisin !";
+  }
+  host.innerHTML = "<strong>🎯 Les 3 priorités pour les observateurs :</strong><br>"
+    + "1. <strong>" + (weakR.join(" et ") || "Les massifs les moins couverts")
+    + "</strong> — Ces massifs sont quasi invisibles dans les données. Même quelques arbres "
+    + "suivis régulièrement feraient une différence majeure.<br>"
+    + "2. <strong>" + (weakS.join(", ") || "Les espèces les moins suivies")
+    + "</strong> — Ces espèces ont trop peu de données pour détecter des tendances fiables. "
+    + "Si vous en avez près de chez vous, vos observations sont précieuses.<br>"
+    + "3. " + third;
+}
+
+function renderNarratives() {
+  const t = INSIGHTS.ALPS_TREND;
+  const hn = document.getElementById("heatmapNarrative");
+  if (hn) {
+    let lead = "";
+    if (t) {
+      lead = t.declining_since_peak
+        ? "Les observations dans les Alpes sont à " + nf(t.pct_vs_peak, 0)
+          + " % de leur niveau record de " + t.peak_year + ". "
+        : "Les observations dans les Alpes se maintiennent (record en " + t.peak_year + "). ";
+    }
+    hn.innerHTML = lead + 'Ces heatmaps montrent <strong style="color:#ef9a9a;">exactement '
+      + 'où les données manquent</strong> — certaines espèces à des altitudes clés n\'ont '
+      + "presque plus d'observateurs. Ce sont les zones prioritaires pour recruter de "
+      + "nouveaux bénévoles.";
+  }
+
+  if (META) {
+    const years = (META.year_min && META.year_max) ? (META.year_max - META.year_min + 1) : null;
+    const ms = document.getElementById("motivSeries");
+    if (ms && years) {
+      ms.innerHTML = "<strong>Les longues séries temporelles sont irremplaçables.</strong> Avec "
+        + years + " ans de données, Phénoclim est l'une des plus longues séries phénologiques "
+        + "citoyennes en montagne. Chaque année supplémentaire renforce la robustesse des tendances.";
+    }
+    const mp = document.getElementById("motivPlaces");
+    if (mp && META.alt_min != null && META.alt_max != null) {
+      const names = REGION_COUNTS.slice().sort((a, b) => a.obs - b.obs)
+        .slice(0, 2).map(r => REGION_FR[r.region] || r.region);
+      mp.innerHTML = "<strong>Vos observations couvrent des endroits uniques.</strong> De "
+        + META.alt_min + " m à " + META.alt_max + " m, "
+        + (names.length ? "y compris dans des massifs peu suivis (" + names.join(", ") + "), " : "")
+        + "votre réseau donne accès à des données qu'aucune station automatique ne pourrait fournir.";
+    }
+  }
+
+  // Mean altitude gradient across the charted species -> milestone card
+  const g = INSIGHTS.ALT_GRADIENT || {};
+  const slopes = Object.keys(g).map(k => g[k].days_per_100m).filter(v => isFinite(v));
+  const mg = document.getElementById("mGradient");
+  if (mg && slopes.length) {
+    const avg = slopes.reduce((a, b) => a + b, 0) / slopes.length;
+    mg.textContent = "~" + nf(avg) + " jours / 100 m";
+  }
+}
+
+function renderAll() {
+  renderGapRegions();
+  renderGapSpecies();
+  renderGapRecent();
+  renderGapCallout();
+  renderNarratives();
+  if (typeof updateTrendsUI === "function") updateTrendsUI();
+  updateAltInsight();
 }
 
 // ════════════════════════════════════════════
@@ -889,7 +966,19 @@ function drawAltitude() {
     // Noisetier has no Changement de couleur data
     if (!pts.length) {
       ctx.fillStyle = "#5a6d58"; ctx.font = "14px 'DM Sans', sans-serif"; ctx.textAlign = "center";
-      ctx.fillText("Pas de données « changement de couleur » pour cette espèce", w/2, h/2);
+      const msg = "Le noisetier prend une teinte jaune caractéristique en automne, mais ce changement de couleur est progressif et peu contrasté : la date reste trop imprécise pour être exploitable. Ce stade n'est donc volontairement pas suivi pour cette espèce.";
+      const maxW = Math.min(w - 80, 560);
+      const lines = [];
+      let line = "";
+      msg.split(" ").forEach(word => {
+        const test = line ? line + " " + word : word;
+        if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = word; }
+        else { line = test; }
+      });
+      if (line) lines.push(line);
+      const lh = 22;
+      const startY = h/2 - ((lines.length - 1) * lh) / 2;
+      lines.forEach((l, i) => ctx.fillText(l, w/2, startY + i * lh));
       return;
     }
   } else {
@@ -1393,13 +1482,59 @@ document.querySelectorAll("#heatmap-species-btns .pill").forEach(btn => {
 });
 
 
-const INSIGHTS = {
-  "Débourrement": "Le débourrement (ouverture des bourgeons) montre une variabilité interannuelle importante. Les années 2011, 2017 et 2020 ont été particulièrement précoces, avec des écarts de près de 3 semaines entre années extrêmes. Le noisetier est le premier arbre à débourrer, dès fin mars.",
-  "Feuillaison": "La mise en feuilles suit le débourrement. On observe 3 à 4 semaines de différence entre les espèces précoces (noisetier) et tardives (sorbier). L'année 2011 reste exceptionnellement précoce pour toutes les espèces.",
-  "Floraison": "La floraison du noisetier est remarquablement précoce (dès février !) et tend à avancer. En 2020, elle a été observée en moyenne dès le 4 février. Les autres espèces fleurissent plus classiquement en avril-mai.",
-  "Changement de couleur 10": "Début du changement de couleur : quand les premières feuilles (10% de la canopée) changent de couleur. Le bouleau tend à commencer plus tôt qu'il y a 20 ans, une tendance cohérente avec le raccourcissement de la saison de végétation observé en montagne.",
-  "Changement de couleur 50": "Mi-canopée (50%) : quand la moitié des feuilles ont changé de couleur. Le mélèze atteint ce stade début novembre, le plus tardif des arbres suivis. Comparez avec « Début (10%) » pour voir la vitesse de progression — le sorbier passe de 10% à 50% en ~14 jours, le bouleau en ~18 jours."
-};
+// Per-stage insight text, computed from TIMING/TIMING50 rather than hard-coded.
+function stageInsightText(stage, pct) {
+  const isCouleur = stage === "Changement de couleur";
+  const src = (isCouleur && pct === "50") ? TIMING50 : TIMING;
+  const rows = src.filter(t => t.st === stage);
+  if (!rows.length) return "Pas encore assez de données pour ce stade. Vos observations sont les bienvenues !";
+
+  // Mean day-of-year per species, and per year (to find extremes).
+  const bySp = {}, byYear = {};
+  rows.forEach(t => {
+    (bySp[t.s] = bySp[t.s] || []).push(t.d);
+    (byYear[t.y] = byYear[t.y] || []).push(t.d);
+  });
+  const spMean = Object.keys(bySp).map(k => ({
+    s: k, d: bySp[k].reduce((x, y) => x + y, 0) / bySp[k].length
+  })).sort((x, y) => x.d - y.d);
+  const yrMean = Object.keys(byYear).map(k => ({
+    y: +k, d: byYear[k].reduce((x, y) => x + y, 0) / byYear[k].length
+  })).sort((x, y) => x.d - y.d);
+
+  const first = spMean[0], last = spMean[spMean.length - 1];
+  const gap = Math.round(last.d - first.d);
+  const early = yrMean[0], late = yrMean[yrMean.length - 1];
+
+  if (isCouleur) {
+    const label = pct === "50" ? "Mi-canopée (50%)" : "Début du changement de couleur (10%)";
+    const desc = pct === "50"
+      ? "quand la moitié des feuilles ont changé de couleur"
+      : "quand les premières feuilles (10% de la canopée) changent de couleur";
+    let extra = "";
+    const cp = INSIGHTS.COLOUR_PROGRESSION || {};
+    const widths = Object.keys(cp).filter(k => cp[k])
+      .map(k => ({s: k, w: cp[k].mean_width_days})).sort((x, y) => x.w - y.w);
+    if (pct === "50" && widths.length) {
+      extra = " Comparez avec « Début (10%) » pour voir la vitesse de progression — "
+        + SPECIES_FR[widths[0].s].toLowerCase() + " passe de 10% à 50% en ~"
+        + nf(widths[0].w, 0) + " jours, "
+        + SPECIES_FR[widths[widths.length - 1].s].toLowerCase() + " en ~"
+        + nf(widths[widths.length - 1].w, 0) + " jours.";
+    }
+    return label + " : " + desc + ". " + (SPECIES_LABEL[last.s] || SPECIES_FR[last.s])
+      + " atteint ce stade le plus tard, vers le " + doyToDate(last.d)
+      + " en moyenne." + extra;
+  }
+
+  return "Le stade « " + stage.toLowerCase() + " » s'étale sur environ " + gap
+    + " jours entre les espèces précoces (" + SPECIES_FR[first.s].toLowerCase()
+    + ", vers le " + doyToDate(first.d) + ") et tardives ("
+    + SPECIES_FR[last.s].toLowerCase() + ", vers le " + doyToDate(last.d) + "). "
+    + "L'année " + early.y + " a été la plus précoce et " + late.y + " la plus tardive, "
+    + "soit " + Math.round(late.d - early.d) + " jours d'écart.";
+}
+
 const STAGE_ICONS = {"Débourrement":"🌱","Feuillaison":"🍃","Floraison":"🌸","Changement de couleur":"🍂"};
 
 function updateTrendsUI() {
@@ -1409,7 +1544,7 @@ function updateTrendsUI() {
   if (isCouleur) {
     const pctLabel = currentTrendsPct === "50" ? "mi-canopée (50%)" : "début (10%)";
     document.getElementById("trends-subtitle").textContent = "Jour moyen du changement de couleur — " + pctLabel + " — toutes altitudes confondues";
-    document.getElementById("trends-insight").textContent = INSIGHTS["Changement de couleur " + currentTrendsPct];
+    document.getElementById("trends-insight").textContent = stageInsightText("Changement de couleur", currentTrendsPct);
     // Update noisetier legend note
     const noisetierLegend = document.getElementById("legend-trends");
     const note = document.getElementById("legend-note-couleur");
@@ -1423,7 +1558,7 @@ function updateTrendsUI() {
     }
   } else {
     document.getElementById("trends-subtitle").textContent = "Jour moyen où le stade phénologique est d'abord observé (10%) — toutes altitudes confondues";
-    document.getElementById("trends-insight").textContent = INSIGHTS[currentStage];
+    document.getElementById("trends-insight").textContent = stageInsightText(currentStage, null);
     const note = document.getElementById("legend-note-couleur");
     if (note) note.remove();
   }
@@ -1453,24 +1588,42 @@ document.querySelectorAll("#pct-toggle .pct-btn").forEach(btn => {
   });
 });
 
-const ALT_INSIGHTS = {
-  bouleau: "Le bouleau débourre près de 46 jours plus tard à 1800 m qu'à 200 m d'altitude, soit environ 2,9 jours de retard par 100 m de dénivelé. C'est votre travail d'observation qui permet de quantifier ce gradient !",
-  mélèze: "Le mélèze montre un gradient spectaculaire : de mi-mars à 400 m jusqu'à mi-mai à 2000 m, soit ~67 jours de différence ! Cette espèce de haute montagne est particulièrement sensible à l'altitude.",
-  noisetier: "Le noisetier débourre dès mi-mars en plaine et début avril en altitude. Son gradient est plus modéré (~2 jours/100 m) car il pousse surtout à des altitudes basses à moyennes.",
-  sorbier: "Le sorbier montre un retard d'environ 48 jours entre 400 m et 2000 m. Cette espèce est suivie jusqu'en haute altitude, rendant vos observations particulièrement précieuses.",
-};
+// ════════════════════════════════════════════
+//  DATA-DRIVEN INSIGHT TEXT
+//  Every figure below is computed from INSIGHTS (phenoclim_data.json),
+//  so the prose stays in sync with the API data automatically.
+// ════════════════════════════════════════════
+const SPECIES_LABEL = {bouleau:"Le bouleau", "mélèze":"Le mélèze", noisetier:"Le noisetier", sorbier:"Le sorbier"};
 
-const ALT_INSIGHTS_COULEUR = {
-  bouleau: "Les ronds pleins = début du changement de couleur (10%). Les cercles tiretés = 50% de la canopée colorée. La bande ombrée montre la durée de progression. Fait intéressant : en altitude, le bouleau commence ET atteint 50% plus tôt — la montagne raccourcit l'automne.",
-  mélèze: "Le mélèze montre un gradient automnal inversé : en haute altitude, les couleurs arrivent plus tôt. La bande 10%→50% reste assez constante (~15 jours) quelle que soit l'altitude, ce qui suggère une vitesse de sénescence similaire.",
-  noisetier: "Le noisetier n'a pas assez de données de changement de couleur pour cette visualisation. C'est un arbre caducifolié de basse altitude dont le changement de couleur est rarement observé dans le protocole.",
-  sorbier: "Le sorbier montre un changement de couleur précoce et rapide en altitude. La bande 10%→50% est relativement étroite, indiquant une progression rapide de la coloration automnale chez cette espèce.",
-};
+function nf(x, dec) {
+  if (x == null || !isFinite(x)) return "—";
+  return Number(x).toFixed(dec == null ? 1 : dec).replace(".", ",").replace(/,0$/, "");
+}
+
+function altInsightText(sp) {
+  const g = (INSIGHTS.ALT_GRADIENT || {})[sp];
+  if (!g) return "Pas encore assez de données de débourrement pour cette espèce à différentes altitudes. Vos observations peuvent combler ce manque !";
+  return SPECIES_LABEL[sp] + " débourre en moyenne " + nf(g.span_days)
+    + " jours plus tard à " + g.alt_max + " m qu'à " + g.alt_min + " m d'altitude, "
+    + "soit environ " + nf(g.days_per_100m) + " jours de retard par 100 m de dénivelé. "
+    + "C'est votre travail d'observation qui permet de quantifier ce gradient !";
+}
+
+function colourInsightText(sp) {
+  const c = (INSIGHTS.COLOUR_PROGRESSION || {})[sp];
+  if (!c) return "Le changement de couleur n'est pas suivi chez le noisetier : sa coloration trop diffuse ne permet pas de dater ce stade de façon fiable. Nos efforts se portent sur les espèces où la mesure est robuste.";
+  const dir = c.trend_days < 0 ? "plus tôt" : "plus tard";
+  return "Ronds pleins = début du changement de couleur (10%). Cercles tiretés = 50% de la canopée colorée. "
+    + "La bande ombrée montre la durée de progression, en moyenne " + nf(c.mean_width_days)
+    + " jours sur " + c.n_bands + " tranches d'altitude. "
+    + "À " + c.alt_max + " m, la coloration démarre " + nf(Math.abs(c.trend_days))
+    + " jours " + dir + " qu'à " + c.alt_min + " m.";
+}
 
 function updateAltInsight() {
   const isCouleur = currentAltStage === "Changement de couleur";
-  const insights = isCouleur ? ALT_INSIGHTS_COULEUR : ALT_INSIGHTS;
-  document.getElementById("altitude-insight").textContent = insights[currentSpecies];
+  document.getElementById("altitude-insight").textContent =
+    isCouleur ? colourInsightText(currentSpecies) : altInsightText(currentSpecies);
   document.getElementById("alt-title").textContent = isCouleur
     ? "🍂 Gradient altitudinal du changement de couleur"
     : "⛰️ Le gradient altitudinal : la montagne retarde le printemps";
@@ -1557,6 +1710,7 @@ window.addEventListener("resize", () => {
 });
 // Boot: load data first, then render once layout is ready.
 loadData().then(() => {
+  renderAll();
   // Two rAFs ensure the browser has completed a layout pass so canvases
   // have a real width before we measure them in setupCanvas().
   requestAnimationFrame(() => requestAnimationFrame(() => init()));

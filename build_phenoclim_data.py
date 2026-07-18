@@ -388,9 +388,122 @@ def aggregate(df, raw_items=None):
         {"region": region_label.get(k, k), "obs": int(v)} for k, v in reg_counts.items()
     ]
 
-    # ---- species coverage counts ----
-    sp_counts = df[df["species"].notna()].groupby("species").size().sort_values(ascending=False)
-    out["SPECIES_COUNTS"] = [{"species": k, "obs": int(v)} for k, v in sp_counts.items()]
+    # ---- species coverage counts (+ breadth: how many years / regions) ----
+    sp_df = df[df["species"].notna()]
+    sp_counts = sp_df.groupby("species").size().sort_values(ascending=False)
+    sp_years = sp_df.groupby("species")["visit_year"].nunique()
+    sp_regions = sp_df.groupby("species")["Region"].nunique()
+    out["SPECIES_COUNTS"] = [
+        {
+            "species": k,
+            "obs": int(v),
+            "n_years": int(sp_years.get(k, 0)),
+            "n_regions": int(sp_regions.get(k, 0)),
+        }
+        for k, v in sp_counts.items()
+    ]
+
+    # ---- derived numbers for the narrative insight texts ----
+    # Everything here is computed from the data so no prose in the dashboard
+    # has to hard-code a figure.
+    insights = {}
+
+    # Altitude gradient per species: slope in days per 100 m, plus the span
+    # between the lowest and highest band actually observed (Débourrement).
+    grad = {}
+    for sp in DASHBOARD_SPECIES:
+        pts = sorted(
+            [(a["a"], a["d"]) for a in alt if a["s"] == sp and "st" not in a],
+            key=lambda t: t[0],
+        )
+        if len(pts) < 2:
+            continue
+        xs = [p[0] for p in pts]
+        ys = [p[1] for p in pts]
+        n = len(xs)
+        mx = sum(xs) / n
+        my = sum(ys) / n
+        denom = sum((x - mx) ** 2 for x in xs)
+        slope = (sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / denom) if denom else 0.0
+        grad[sp] = {
+            "alt_min": int(xs[0]),
+            "alt_max": int(xs[-1]),
+            "doy_min": round(ys[0], 1),
+            "doy_max": round(ys[-1], 1),
+            "span_days": round(ys[-1] - ys[0], 1),
+            "days_per_100m": round(slope * 100, 2),
+        }
+    insights["ALT_GRADIENT"] = grad
+
+    # Autumn colour: mean 10%->50% progression width per species.
+    colour = {}
+    for sp in DASHBOARD_SPECIES:
+        b10 = {a["a"]: a["d"] for a in alt if a["s"] == sp and a.get("st") == "Changement de couleur"}
+        b50 = {a["a"]: a["d"] for a in alt50 if a["s"] == sp}
+        common = sorted(set(b10) & set(b50))
+        if not common:
+            colour[sp] = None
+            continue
+        widths = [b50[a] - b10[a] for a in common]
+        lo, hi = common[0], common[-1]
+        colour[sp] = {
+            "n_bands": len(common),
+            "mean_width_days": round(sum(widths) / len(widths), 1),
+            "alt_min": int(lo),
+            "alt_max": int(hi),
+            "trend_days": round(b10[hi] - b10[lo], 1),  # <0 = earlier up high
+        }
+    insights["COLOUR_PROGRESSION"] = colour
+
+    # Débourrement: earliest species overall, and the most extreme years.
+    deb = [t for t in timing if t["st"] == "Débourrement"]
+    if deb:
+        by_sp = {}
+        for t in deb:
+            by_sp.setdefault(t["s"], []).append(t["d"])
+        means = {k: sum(v) / len(v) for k, v in by_sp.items()}
+        earliest = min(means, key=means.get)
+        by_year = {}
+        for t in deb:
+            by_year.setdefault(t["y"], []).append(t["d"])
+        ymeans = {y: sum(v) / len(v) for y, v in by_year.items()}
+        ranked = sorted(ymeans.items(), key=lambda kv: kv[1])
+        insights["DEBOURREMENT"] = {
+            "earliest_species": earliest,
+            "earliest_species_doy": round(means[earliest], 1),
+            "early_years": [int(y) for y, _ in ranked[:3]],
+            "late_years": [int(y) for y, _ in ranked[-3:]],
+            "spread_days": round(ranked[-1][1] - ranked[0][1], 1),
+        }
+
+    # Recent contribution trend (last 6 years of the OBS series) + whether the
+    # Alps heatmap totals are actually declining, and since when.
+    obs_list = out["OBS"]
+    insights["RECENT_OBS"] = obs_list[-6:]
+    alps_by_year = {}
+    for sp_data in heatmap.values():
+        for r in sp_data["data"]:
+            alps_by_year[r["year"]] = alps_by_year.get(r["year"], 0) + r["count"]
+    if alps_by_year:
+        peak_year = max(alps_by_year, key=alps_by_year.get)
+        yrs = sorted(alps_by_year)
+        last = yrs[-1]
+        insights["ALPS_TREND"] = {
+            "peak_year": int(peak_year),
+            "peak_count": int(alps_by_year[peak_year]),
+            "last_year": int(last),
+            "last_count": int(alps_by_year[last]),
+            "declining_since_peak": bool(alps_by_year[last] < alps_by_year[peak_year]),
+            "pct_vs_peak": round(100.0 * alps_by_year[last] / alps_by_year[peak_year], 1),
+        }
+
+    # Weakest regions / species, for the call-to-action list.
+    insights["WEAKEST_REGIONS"] = [
+        region_label.get(k, k) for k in reg_counts.index[-2:]
+    ][::-1]
+    insights["WEAKEST_SPECIES"] = [k for k in sp_counts.index[-3:]][::-1]
+
+    out["INSIGHTS"] = insights
 
     return out
 
