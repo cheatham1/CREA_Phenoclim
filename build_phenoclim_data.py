@@ -219,14 +219,17 @@ def clean(items):
         df.loc[df["base_site_name_lc"].str.contains(tree, na=False), "species"] = tree
     df["species"] = df["species"].str.replace("frene", "frêne", case=False)
 
-    # region from bounding boxes
-    df["Region"] = None
-    for name, la_min, la_max, lo_min, lo_max in REGION_DEFINITION:
-        df.loc[
-            (df["latitude"] > la_min) & (df["latitude"] < la_max)
-            & (df["longitude"] > lo_min) & (df["longitude"] < lo_max),
-            "Region",
-        ] = name
+    # region via exact point-in-polygon assignment (commune -> massif, with the
+    # Alps split into Alpes du Nord / Alpes du Sud and Mont-Blanc
+    # pulled out). Cached per nom_zone. See region_assign.py.
+    from region_assign import assign_regions  # local module
+    refresh = "--refresh-regions" in sys.argv
+    # assign_regions needs the raw Lambert-93 + WGS84 coords; pass the columns
+    # it expects (coord_x/y_2154 and coord_x/y_4326 are still on df here).
+    lookup = assign_regions(df, refresh=refresh)
+    df = df.merge(lookup[["nom_zone", "region"]], on="nom_zone", how="left")
+    df["Region"] = df["region"]
+    df.drop(columns=["region"], inplace=True)
 
     return df
 
@@ -315,9 +318,10 @@ def aggregate(df, raw_items=None):
     dr = d[d["Region"].notna()].copy()
     # normalise region label to the dashboard's short names
     region_label = {
-        "Alps": "Alps", "Pyrenees": "Pyrenees", "Mont-Blanc Massif": "Mont-Blanc",
-        "Massif Central": "Massif Central", "Jura": "Jura", "Vosges": "Vosges",
-        "Corsica": "Corse",
+        "Alps": "Alps", "Alpes du Nord": "Alpes du Nord", "Alpes du Sud": "Alpes du Sud",
+        "Mont-Blanc": "Mont-Blanc",
+        "Pyrenees": "Pyrenees", "Massif Central": "Massif Central", "Jura": "Jura",
+        "Vosges": "Vosges", "Corse": "Corse", "Other": "Other",
     }
     for (reg, sp, st), sub in dr.groupby(["Region", "species", "pheno_etape"]):
         if st not in ("Débourrement", "Floraison"):
@@ -337,7 +341,7 @@ def aggregate(df, raw_items=None):
     heatmap = {}
     # "Alps" here means the greater Alps, which includes the Mont-Blanc massif
     # (our region boxes split Mont-Blanc out separately, but it is part of the Alps).
-    alps_regions = ["Alps", "Mont-Blanc Massif"]
+    alps_regions = ["Alps", "Alpes du Nord", "Alpes du Sud", "Mont-Blanc"]
     hd = df[
         df["species"].isin(DASHBOARD_SPECIES)
         & df["Region"].isin(alps_regions)
@@ -512,8 +516,22 @@ def aggregate(df, raw_items=None):
 # MAIN
 # ──────────────────────────────────────────────────────────────────────────
 def main():
-    print("1/3  Fetching from CREA API ...")
-    items, license_name = fetch_all()
+    # --raw PATH reads a cached raw_items.json instead of hitting the API.
+    # Handy for reruns/testing and when the API is unavailable.
+    raw_path = None
+    if "--raw" in sys.argv:
+        i = sys.argv.index("--raw")
+        raw_path = sys.argv[i + 1] if i + 1 < len(sys.argv) else "raw_items.json"
+
+    if raw_path:
+        print(f"1/3  Loading cached raw export from {raw_path} ...")
+        payload = json.load(open(raw_path, encoding="utf-8"))
+        items = payload["items"] if isinstance(payload, dict) else payload
+        license_name = (payload.get("license", {}).get("name")
+                        if isinstance(payload, dict) else None)
+    else:
+        print("1/3  Fetching from CREA API ...")
+        items, license_name = fetch_all()
     print(f"     got {len(items)} raw rows")
 
     print("2/3  Cleaning ...")

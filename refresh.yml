@@ -1,0 +1,89 @@
+name: Refresh Phénoclim data
+
+# ---------------------------------------------------------------------------
+# Runs the build pipeline against the live CREA API and commits the refreshed
+# phenoclim_data.json back to the repo. GitHub Pages then serves the new file.
+#
+# Seasonal cadence (matching the phenology calendar):
+#   - Spring  (Mar–May) and Autumn (Sep–Nov): weekly
+#   - Rest of the year: monthly (first run of the month only)
+#
+# GitHub cron has no concept of seasons, so we trigger WEEKLY year-round and
+# decide at runtime whether to actually rebuild (see the "Decide" step).
+# ---------------------------------------------------------------------------
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"     # every Monday 04:17 UTC
+  workflow_dispatch:          # allow manual runs from the Actions tab
+    inputs:
+      force:
+        description: "Rebuild even if this week would normally be skipped"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write             # needed to commit the refreshed JSON
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decide whether to run this week
+        id: decide
+        run: |
+          month=$(date -u +%m)
+          dom=$(date -u +%d)      # day of month (this Monday's date)
+          force="${{ github.event.inputs.force }}"
+          run="no"
+          # Active seasons: March(03) April(04) May(05), Sept(09) Oct(10) Nov(11) -> weekly
+          case "$month" in
+            03|04|05|09|10|11) run="yes" ;;
+            *)
+              # Off-season: only the first Monday of the month (dom <= 07)
+              if [ "$dom" -le 07 ]; then run="yes"; fi
+              ;;
+          esac
+          if [ "$force" = "true" ]; then run="yes"; fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+          echo "Month=$month DayOfMonth=$dom Force=$force -> run=$run"
+
+      - name: Set up Python
+        if: steps.decide.outputs.run == 'yes'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        if: steps.decide.outputs.run == 'yes'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build data from the CREA API
+        if: steps.decide.outputs.run == 'yes'
+        env:
+          PHENO_COMMUNES: ./a-com2022-topo-2154.json
+          PHENO_MASSIF: ./diffusion-zonages-massifs-cog2021.xls
+        run: |
+          # Fetches the full export live, assigns regions, writes phenoclim_data.json.
+          python build_phenoclim_data.py
+
+      - name: Commit refreshed data (only if it changed)
+        if: steps.decide.outputs.run == 'yes'
+        run: |
+          git config user.name  "phenoclim-bot"
+          git config user.email "actions@github.com"
+          git add phenoclim_data.json zone_regions.csv
+          if git diff --cached --quiet; then
+            echo "No change in data — nothing to commit."
+          else
+            git commit -m "chore: refresh Phénoclim data ($(date -u +%Y-%m-%d))"
+            git push
+          fi
