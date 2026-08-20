@@ -145,8 +145,10 @@ def clean(items):
     # rename coordinates
     df = df.rename(columns={"coord_y_4326": "latitude", "coord_x_4326": "longitude"})
 
-    # keep only the phenological stages of interest
-    df = df[df["pheno_etape_value"].isin(KEEP_PHENO)].copy()
+    # NOTE: the phenophase filter (KEEP_PHENO) used to happen here. It is now
+    # applied *after* region assignment (see end of clean()), so REGION_COUNTS
+    # can be computed from the full, unfiltered set of observations while every
+    # downstream chart still works off the filtered frame.
 
     # split "Débourrement - Ok 10%" -> pheno_etape="Débourrement", Percentage=10
     split_values = df["pheno_etape_value"].str.split(" - ", expand=True)
@@ -230,6 +232,23 @@ def clean(items):
     df = df.merge(lookup[["nom_zone", "region"]], on="nom_zone", how="left")
     df["Region"] = df["region"]
     df.drop(columns=["region"], inplace=True)
+
+    # ---- FULL (unfiltered) region counts ----------------------------------
+    # Computed here, before the phenophase filter, so the dashboard's
+    # "Couverture par région" bars reflect every observation in a region, not
+    # just the charted phenophases. Stashed on the frame's attrs and read back
+    # in aggregate().
+    full_reg_counts = (
+        df[df["Region"].notna()].groupby("Region").size()
+        .sort_values(ascending=False)
+    )
+    region_counts_full = [
+        {"region": k, "obs": int(v)} for k, v in full_reg_counts.items()
+    ]
+
+    # ---- now apply the phenophase filter for all charted aggregates -------
+    df = df[df["pheno_etape_value"].isin(KEEP_PHENO)].copy()
+    df.attrs["REGION_COUNTS_FULL"] = region_counts_full
 
     return df
 
@@ -384,13 +403,23 @@ def aggregate(df, raw_items=None):
     }
 
     # ---- region coverage counts (for the "où avons-nous besoin de vous" panel) ----
-    reg_counts = (
-        df[df["Region"].notna()].groupby("Region").size()
-        .sort_values(ascending=False)
-    )
-    out["REGION_COUNTS"] = [
-        {"region": region_label.get(k, k), "obs": int(v)} for k, v in reg_counts.items()
-    ]
+    # Prefer the FULL, unfiltered counts computed in clean() (every observation
+    # in a region, across all phenophases). Fall back to counting the filtered
+    # frame only if they weren't attached.
+    region_counts_full = df.attrs.get("REGION_COUNTS_FULL")
+    if region_counts_full:
+        out["REGION_COUNTS"] = [
+            {"region": region_label.get(r["region"], r["region"]), "obs": int(r["obs"])}
+            for r in region_counts_full
+        ]
+    else:
+        reg_counts = (
+            df[df["Region"].notna()].groupby("Region").size()
+            .sort_values(ascending=False)
+        )
+        out["REGION_COUNTS"] = [
+            {"region": region_label.get(k, k), "obs": int(v)} for k, v in reg_counts.items()
+        ]
 
     # ---- species coverage counts (+ breadth: how many years / regions) ----
     sp_df = df[df["species"].notna()]
