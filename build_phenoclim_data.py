@@ -531,8 +531,12 @@ def aggregate(df, raw_items=None):
         }
 
     # Weakest regions / species, for the call-to-action list.
+    # Build an ordered (descending) index of regions from the counts we already
+    # computed, so this works whether REGION_COUNTS came from the full or the
+    # fallback path.
+    _reg_order = [r["region"] for r in out["REGION_COUNTS"]]
     insights["WEAKEST_REGIONS"] = [
-        region_label.get(k, k) for k in reg_counts.index[-2:]
+        region_label.get(k, k) for k in _reg_order[-2:]
     ][::-1]
     insights["WEAKEST_SPECIES"] = [k for k in sp_counts.index[-3:]][::-1]
 
