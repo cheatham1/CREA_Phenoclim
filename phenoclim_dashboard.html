@@ -66,8 +66,8 @@
     font-size: 11px; color: #b8d8bd;
     letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;
   }
-  .stats-strip { display: flex; gap: 28px; margin-top: 18px; flex-wrap: wrap; }
-  .stat { display: flex; align-items: center; gap: 8px; }
+  .stats-strip { display: flex; gap: 28px; margin-top: 18px; flex-wrap: wrap; width: 100%; justify-content: space-between; }
+  .stat { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
   .stat-icon { font-size: 16px; }
   .stat-value { font-size: 20px; font-weight: 700; color: #ffffff; }
   .stat-label { font-size: 10px; color: #a8ccae; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -78,13 +78,13 @@
   /* ─── TABS ─── */
   .tabs { display: flex; gap: 8px; margin: 20px 0; }
   .tab {
-    flex: 1; padding: 12px 8px; border: 1px solid var(--border-subtle);
+    flex: 1; padding: 12px 8px; border: 2px solid var(--green-mid);
     border-radius: 10px; background: rgba(255,255,255,0.55);
     color: var(--text-secondary); font-size: 13px; font-weight: 600;
     cursor: pointer; transition: all 0.25s; text-align: center;
     font-family: 'DM Sans', sans-serif;
   }
-  .tab:hover { background: rgba(255,255,255,0.85); border-color: var(--green-light); }
+  .tab:hover { background: rgba(255,255,255,0.85); border-color: var(--green-mid); box-shadow: 0 2px 6px rgba(61,122,78,0.15); }
   .tab.active {
     background: linear-gradient(135deg, #3d7a4e, #4a9d5f);
     border-color: var(--green-mid);
@@ -328,7 +328,7 @@
   <!-- TABS -->
   <div class="tabs">
     <button class="tab active" data-tab="impact"><span class="tab-icon">🤝</span>Votre impact</button>
-    <button class="tab" data-tab="altitude"><span class="tab-icon">⛰️</span>Altitude</button>
+    <button class="tab" data-tab="altitude"><span class="tab-icon">⛰️</span>Les effets de l'altitude</button>
   </div>
 
   <!-- ═══════════ TRENDS ═══════════ -->
